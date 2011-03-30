@@ -1,0 +1,137 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf350
+{\fonttbl\f0\fnil\fcharset0 Georgia;}
+{\colortbl;\red255\green255\blue255;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid101\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid2}
+{\list\listtemplateid3\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid201\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid3}
+{\list\listtemplateid4\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid301\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid4}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}{\listoverride\listid3\listoverridecount0\ls3}{\listoverride\listid4\listoverridecount0\ls4}}
+\margl1440\margr1440\vieww7280\viewh12800\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs28 \cf0 Bigger todo:\
+-Finish Dov's site\
+-Create a portfolio page for myself, maybe on my new Webfaction account using Django\
+-Put C+R, Dov's site, and Readsr on the portfolio page\
+-Ask Chris/Puccuo for freelance work, or the django meetup, or post on boards\
+\
+http://www.google.com/search?q=%22if%20each%20person%22%20%22we%20could%20save%22&hl=en\
+\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\ql\qnatural\pardirnatural
+\ls1\ilvl0\cf0 X	\'95	Homepage that shows all the upcoming readings in an easy to view form\
+X	\'95	Detail page for a particular reading\
+{\listtext	\'95	}Venue-based view \
+{\listtext	\'95	}Genre-based view\
+X	\'95	Edit reading page, after login\
+X	\'95	Time picker\
+X	\'95	Add/edit venues, affiliates, contacts\
+{\listtext	\'95	}Modal login dialog and other dialogs\
+X\'95	Validate code\
+X	\'95	use django-registration for registration\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\ql\qnatural\pardirnatural
+\ls2\ilvl0\cf0 {\listtext	\'95	}write change email functionality\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\ql\qnatural\pardirnatural
+\ls3\ilvl0\cf0 X	\'95	capability of multiple site installations for different cities\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\ql\qnatural\pardirnatural
+\ls4\ilvl0\cf0 {\listtext	\'95	}tweet changes to readings\
+{\listtext	\'95	}comment code so I can show it off\
+X	\'95	Rework URLS to form /contact/1/edit and pass edit as argument to view to decide what to do with? that way only have to use one view method\
+{\listtext	\'95	}display reading map/details/photos/venue details on the right side\
+{\listtext	\'95	}mouse enter into details dd turns it into an input\'97fix bugs\
+\pard\tx560\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+\cf0 -how to refactor so that i don't have to write several similar views and templates?\
+-how to generalize so that any city name can be plugged in as a global variable?\
+-how to reduce reliance on hardcoded path names for media in the templates (and anywhere else they are used)?\
+-how to generalize so that it can be installed and run on different serves for different cities, or installed on one server and run for different cities? probably the latter, since it's cheaper and I will be the overall admin\
+-store a timestamp of creation and last updated\
+**** When adding new contact/venue/affiliate, need a way to get back to the page from which they were adding it ****\
+\
+**** Need to add a Wiki or Locked column to Series to control whether anyone can update it/individual readings, or only the contact ****\
+things that users can create/edit:\
+-Contacts:\
+type in, autocomplete, click button to add a new one\
+\
+-Venues\
+type in, autocomplete, choose from a list, click to add new \
+\
+-Affiliations\
+type in, autocomplete, choose from a list, click to add new \
+\
+-Readings\
+\
+=====\
+so when a new Series is created, we need to look at the day and time, and then create a list of Reading objects for one year ahead of now\
+\
+when a Series is updated, the list of Reading objects for that series will have to be destroyed and a new list to replace it (even better would be to somehow change the dates of the Reading objects to reflect the closest new date to them)\
+\
+when a Series is removed, the list of Reading objects for that series will have to be destroyed\
+\
+need a way for the contact for a Series to log in and update the readers, and change the time/venue for that particular instance\
+\
+===\
+\
+** write up a quick little python module/library for dealing with days of weeks as a recurring type of date\
+\
+===\
+\
+generic_list extends base\
+used by: detail_contact, detail_series, edit_contact, edit_series\
+\
+edit_reading extends only base. is generic_list necessary?\
+\
+form_snippet\
+used by: about.html\
+\
+detail_series includes list_readings\
+\
+===\
+steps to launch\
+-create a virtualenv and understand all the dependencies and libraries\
+-strip out sensitive login information, accounts, cities\
+-create git repository\
+-signup for webfaction account\
+-use git or fabric to readsr on webfaction\
+\
+===\
+\
+How do I want to handle authentication?\
+1. Wiki style, where anyone can edit anything\
+2. Locked down, where only the Contact can edit a given series\
+3. Hybrid, where Contact can edit series, but anyone can add a description of a reading\
+\
+*** Big question is, does a Contact map onto a User? Can a visito only create a series with themselves as a contact, or can they create one with someone else as a contact? \
+\
+Can you only edit a series that you created and put yourself as a contact, or can you edit a series that you created and put someone else as a contact? etc. *** For now, I think visitors should only be able to create a series that they are the contact for. "Tell us about your reading" In the future, perhaps the form could ask "Are you the best contact for this series, or is someone else?" and then allow that with a confirmation email to the person who is designated as the contact. 
+\b So does that mean Contact becomes a child class of User? Or perhaps it has a field that associates it one to one with a User?
+\b0 \
+\
+What is supposed to go into a description of a reading? A list of readers, what about bios for each/all of them? Some readings have bios, some don't. Some don't even list their readers. Need a default message. \
+\
+Need to think about flow. Visitor profiles.\
+1. Casual visitor just looking for information about readings\
+-wants to see a list of readings and info sortable by date\
+-wants to be able to filter by series, location, genre, date\
+-wants links to series pages\
+-doesn't want to change anything\
+\
+2. Reading owner who wants to create/update their reading\
+-wants to add their series \
+-wants to update their series \
+-wants to change/delete their series\
+-doesn't want anybody to mess with their series\
+\
+3. Helpful visitor who wants to update the info for a favorite reading\
+-like casual visitor\
+-also wants to edit their favorite series\
+\
+4. Malicious visitor who wants to change whatever they can\
+-wants to mess up whatever they can change\
+\
+\
+=== People to test it \
+Jared Joven\
+Keith Philpot\
+Bill Couch\
+Nick Folts\
+David Backer\
+Dan Starin}

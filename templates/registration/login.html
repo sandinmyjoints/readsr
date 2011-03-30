@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<h2>Please log in to create or update readings or series. </h2>
+	<h3>If you don't have an account yet, <a href="/accounts/register">you can create one here</a>.</h2>
+  {% if form.errors %}
+    <p class="error">Sorry, that's not a valid username and/or password.</p>
+  {% endif %}
+
+	<div class="formWrapper">
+  <form action="" method="post">
+	{% csrf_token %}
+	<div class="formFieldWrapper">
+    <label for="id_username">User name:</label>
+    <input type="text" name="username" value="" id="id_username">
+	</div>
+
+	<div class="formFieldWrapper">	
+    <label for="id_password">Password:</label>
+    <input type="password" name="password" value="" id="id_password">
+	</div>
+	
+    <div class="submit-row"><input type="submit" value="Login" /></div>
+    <input type="hidden" name="next" value="{{ next|escape }}" />
+  </form>
+</div>
+
+	<!--><a href="/accounts/register">Register to use the site</a>.-->
+
+{% endblock %}
+
+{% block script %}
+	{{ super.script}}
+	<script type="text/javascript">document.getElementById("id_username").focus();</script>
+{% endblock script %}

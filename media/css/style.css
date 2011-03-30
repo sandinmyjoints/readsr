@@ -1,0 +1,533 @@
+/* body and headers */
+body {
+	background-color: #FFFFFF;
+	background: url("/readsr/media/background.png");
+	background-repeat: repeat-x;
+	/* font-family: Georgia, Palatino, "Palatino Linotype", Times, "Times New Roman", serif; */
+	font-family: Garamond, "Hoefler Text", "Times New Roman", Times, serif;
+	font-size: 100%;
+	line-height: 1.5em;
+}
+#header h1 {
+/*	background-image:url("/readsr/media/Readsr4-logo-noshadow.png");
+	background-position: left-top;
+	background-repeat: no-repeat;
+	background-color: transparent;
+	*/
+	height: 2em;
+	text-indent: -5000px;
+	padding-left: 0em;
+	margin-left: 0em;
+	float: left;
+}
+
+#header_link {
+	background-image:url("/readsr/media/Readsr4-logo-noshadow.png");
+    display:block;
+    height:53px;
+    width:209px;
+}
+
+#header h2, #header h3 {
+	position: relative;
+	top: 46px;
+	color: #626795;
+	float: right;
+	top: 36px;
+}
+#header {
+	height: 53px;
+	padding: 10px 0px 10px;
+}
+h1, h2, h3 {
+	/* font-family: Georgia, Times, "Times New Roman", serif; */
+	font-family: Garamond, "Hoefler Text", Palatino, "Palatino Linotype", serif
+	
+}
+h1 {
+	font-size: 2em;
+}
+h2 {
+	font-size: 1.5em;
+}
+h3 {
+	font-size: 1em;
+}
+h1.reading_name {
+	/*display: inline;*/
+	margin-bottom: 0px;
+}
+
+/* header */
+div#header {
+	width:900px;
+	margin-left: auto;
+	margin-right: auto;
+}
+/* navbar */
+
+div#navbar {  
+	clear: both;
+	width: 900px;
+	margin-left: auto;
+	margin-right: auto;
+	height: 1.5em;
+	font-size: 1.125em;
+	
+    background-color: #7094DB;  
+    padding: 10px 0;  
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+	border: 2px solid #6083CA;
+}
+
+div#navbar ul {
+	list-style: none;
+	display: block;
+	margin: 0 10px;
+	
+}
+
+div#navbar ul li {
+	float: left;
+	/* margin: 0 1.5em; */
+	list-style-type: none;
+	margin-left: 0px;
+	width: 20%;
+}
+
+#navbar a:link, #navbar a:visited
+{
+	display:block;
+	font-weight:bold;
+	color:#FFFFFF;
+	background-color:#7094DB;
+	text-align:center;
+	/* padding:4px; */
+	text-decoration:none;
+	text-transform:uppercase;
+	margin: 0em 1.2em;
+	/*padding: 0em .5em;*/
+}
+
+#navbar a:hover, #navbar a:active
+{
+	background-color:#00297A;
+}
+
+div#navbar a.long_nav {
+	width: 110%;
+}
+
+
+#navbar #logout {
+	width: auto;
+	padding: 0px 15px;
+}
+/* messages */
+div#messages {
+	width: 900px;
+	margin-left: auto;
+	margin-right: auto;
+	
+	background-color: #A67A26;
+}
+
+/* page */
+
+div#page {
+	width: 900px;
+	margin-left: auto;
+	margin-right: auto;
+	
+	/*background-color: #96B3ED;*/
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+	
+}
+
+/* content */
+div#content {
+	font-size: 1em;
+	float: left;
+	width: 68%;
+}
+
+#content h1, #content h2, #content h3, #content h4 {
+	padding: 0px 2px;
+}
+
+/* sidebar */
+div#sidebar {
+	float: right;
+	width: 30%;
+}
+
+#sidebar h1, #sidebar h2, #sidebar h3, #sidebar h4, #banner h2 {
+	padding: 4px 4px;
+}
+
+#banner h1 {
+	padding: .5em .5em;
+}
+
+#sidebar h2, #banner h1, #banner h2 {
+	font-style: italic;
+	text-align: center;
+}
+
+.sidebar_element {
+	width: 100%;
+	background: #BF9371;
+	margin-bottom: 10px;
+	margin-right: .5em;
+	border: 2px solid #AE8260;
+	
+}
+
+div.spacer { 
+	clear: both; 
+	width: 900px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	
+    background-color: #7094DB;  
+    height: 1em;  
+	border: 2px solid #7094DB;
+}
+
+div.spacerblank {
+	width: 900px;
+	margin-left: auto;
+	margin-right: auto;
+	
+    height: 1em;  
+	margin-bottom: 10px;	
+}
+
+/* footer */
+div#footer {
+	clear: both;
+	width: 900px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	
+	background-color: #CCCCCC;
+	border:  2px solid #BBBBBB;
+}
+
+
+/* other */
+a:link, a:visited {
+	color:#774E00; 
+	/* color: #ADC3ED; */
+	text-decoration: none;
+}
+a:visited: {
+	color:#BFA471;
+}
+
+
+/* classes */
+
+.errorlist {
+    margin: 0;
+    padding: 0;
+}
+.errorlist li {
+    background-color: #B77800;
+    color: white;
+    display: block;
+    font-size: .75em;
+    margin: 0 0 3px;
+    padding: 4px 5px;
+}
+
+th {
+	text-align: left;
+}
+
+}
+
+ul.form, ul.errorlist, {
+	width: 100%;
+	overflow: hidden;
+}
+
+ul.form li, ul.errorlist li {
+	float: left;
+	width: 100%;
+	clear: left;
+	list-style-type: none;
+	margin-left: 0px;
+	
+}
+
+ul.reading_list {
+	
+}
+
+li.reading_list {
+	/*background: #ADC3ED;*/
+	margin: .7em;
+	padding: .3em;
+}
+
+.hl {
+	background: #FFD4B3;
+}
+
+/* dl and its elements are used (for now) on the edit_series.html template */
+dl {
+	
+}
+
+dl dt {
+	float: left;
+	width: 30%;
+	/* background: #ADC3ED; */
+	clear: left;
+	font-weight: bold;
+	padding: 10px 10px;
+}
+dl dd {
+	float: left;
+	/* background: #96B3ED; */
+	padding: 10px 10px;
+}
+
+dd ul {
+	float: left;
+}
+
+#sidebar dl dd {
+	float: left;
+	width: 50%;
+}
+
+li {
+	margin-left: 0px;
+	list-style-type: none;
+}
+.clear {
+	clear: both;
+}
+
+.external-icon {
+	width:24 px;
+	height: 24px;
+}
+
+.edit-icon {
+	position: relative;
+	top: 4px;
+	width:20px;
+	height:20px;
+}
+.delete-icon{
+	position: relative;
+	top: 4px;
+	width: 20px;
+	height: 20px;
+}
+.add-icon{
+	position: relative;
+	top: 4px;
+	width: 16px;
+	height: 16px;
+}
+
+#sidebar .add-icon{
+	position: relative;
+	top: 1px;
+	width: 16px;
+	height: 16px;
+}
+
+ul.messages {
+	list-style-type: none;
+	padding: 5px 0px;
+}
+
+li.message {
+	color: #FFFFFF;
+	font-weight: bold;
+	padding-left: 10px;
+}
+
+/* set the look and feel of all input elements */
+#page input, #page select, #page textarea, #page button {
+	border-bottom-color: #CCCCCC;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #CCCCCC;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #CCCCCC;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #CCCCCC;
+    border-top-style: solid;
+    border-top-width: 1px;
+    color: #4C4C4C;
+	font-size: 1em;
+	font-family: Garamond, "Hoefler Text", "Times New Roman", Times, serif;
+}
+
+/*  formFieldWrapper wraps the elements on the generic edit pages */
+.formWrapper > li, .formWrapper > label {
+	float: left;
+}
+
+.formFieldWrapper {
+	/*background: #ADC3ED;*/
+}
+
+.formFieldWrapper label {
+	float: left;
+	width: 30%;
+	/* background: #ADC3ED; */
+	clear: left;
+	font-weight: bold;
+	padding: 10px 10px;	
+}
+
+.formFieldWrapper input, .formFieldWrapper select, .formFieldWrapper textarea {
+    padding-bottom: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    position: relative;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.formWrapper {
+	margin-bottom: 1em;
+	
+}
+
+.submit-row {
+	clear: both;
+}
+
+.tooltip {
+	display:none;
+	background:transparent url(/readsr/media/black_arrow.png);
+	font-size:.75em;
+	height:70px;
+	width:160px;
+	padding:25px;
+	color:#fff;	
+}
+
+.reading_info {
+	float: left;
+}
+.reading_description {
+	display: block;
+	width: 60%;
+	float:right;
+	/*height: 4em;*/
+}
+
+.reading_description textarea {
+	width: 98%;
+	height: 80%;
+}
+
+.reading_description button {
+	
+}
+
+li.reading_list {
+	clear:both;
+}
+
+.datepicker_nb {
+	font-style: italic;
+	padding: .5em 1em;
+}
+
+.datepicker {
+	padding: .5em 1em;
+	font-weight: bold;
+}
+
+#datepicker_start, #datepicker_end {
+	margin-left: .5em;
+}
+
+.series_list li {
+	padding: 0px 4px;
+}
+
+div#choose_date, div#banner {
+	background: #DDDDDD;
+	margin: 0em .5em;
+	/*padding: .2em;*/
+	text-align: center;
+}
+
+div#choose_date {
+	padding: .2em;
+}
+
+div#banner {
+	border: 2px solid #CCCCCC;
+}
+
+div.inside_banner {
+	padding: 1em;
+}
+
+.ui-state-hover {
+	background-color: #000000;
+}
+
+span.reading_description textarea {
+	width: 340px;
+}
+
+.map {
+	float: left;
+	width: 50%;
+	margin-bottom: 1em;
+}
+
+#content ul {
+	padding: .5em 0 .5em 0;
+}
+
+.profile ul {
+	
+}
+
+p {
+	padding: .5em 0 .5em 0;
+}
+
+.blank_reading_description {
+	font-style: italic;
+}
+
+.venue_name {
+}
+
+.edit_list {
+	display: block;
+}

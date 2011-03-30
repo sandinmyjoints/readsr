@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Readsr - DC{% endblock title %}
+
+{% block content %}
+
+
+<div class="demo">
+
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Week</a></li>
+		<li><a href="{% url list-readings-by-months-ajax 2 1 1 %}">Month</a></li>
+		<li><a href="{% url list-readings-by-months-ajax 12 1 1 %}">Year</a></li>
+	</ul>
+	<div id="tabs-1">
+		{% include "list_readings.html" %}
+	</div>
+	<div id="tabs-2">
+		<span></span>
+	</div>
+</div>
+
+</div>
+
+
+
+{% endblock content %}
+
+{% block sidebar %}
+	<h2>Reading Series <a href="{% url create-series %}"><img src="/readsr/media/add.png" alt="Add new venue" class="add-icon" /></a></h2>
+	{% include "list_series.html" %}
+{% endblock %}
+
+{% block script %}
+{{ super.script }}
+
+<script type="text/javascript">
+$(function() {
+	$( "#tabs" ).tabs();
+});
+
+</script>
+
+{% endblock script %}

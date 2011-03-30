@@ -1,0 +1,36 @@
+{% extends "generic_list.html" %}
+
+{% block name %}
+<h1 class="venue_name">{{ venue.name }}
+	{% if user.is_authenticated %}
+	<a href="edit/?next={{ request.path }}"><img src="/readsr/media/edit.png" alt="Edit" class="edit-icon"></a>
+	{% endif %}
+	 </h1>
+{% endblock name %}
+
+
+{% block details %}
+<div style="width: 40%; float: left">
+<ul class="">
+	<li>
+		{{ venue.address.street_address }}
+		{{ venue.address.city_address }}
+	</li>
+	<li><a href="http://{{ venue.website }}">{{ venue.website }}</a></li>
+	<li>{{ venue.phone }}</li>
+
+</ul>
+
+	
+	
+<h2>Series at {{ venue.name }}</h2>
+{% include "list_series.html" %}
+</div>
+
+<div style="width: 55%; float: left">
+	<p>
+	<iframe width="300" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://local.google.com/maps?q={{ venue.address.street_address}}+{{ venue.addrerss.city_address}}&amp;f=q&amp;hl=en&amp;ie=UTF8&amp;hq={{ venue.address.street_address}}+{{ venue.addrerss.city_address}}&amp;ll=38.912808,-77.012444&amp;spn=0.040071,0.051498&amp;z=13&amp;iwloc=A&amp;output=embed"></iframe><br /><small><a href="http://local.google.com/maps?q={{ venue.address.street_address}}+{{ venue.addrerss.city_address}}&amp;f=q&amp;hl=en&amp;ie=UTF8&amp;hq={{ venue.address.street_address}}+{{ venue.addrerss.city_address}}&amp;ll=38.912808,-77.012444&amp;spn=0.040071,0.051498&amp;z=13&amp;iwloc=A&amp;source=embed" style="color:#0000FF;text-align:left">View Larger Map</a></small>
+	</p>
+	</div>
+
+{% endblock details %}

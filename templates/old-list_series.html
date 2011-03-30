@@ -1,0 +1,54 @@
+{% if series_list %}
+    <table id="series_table" style="width: 100%;">
+	<thead>
+		<tr>
+		<th class="{sorter: 'text'}">Name</th>
+		<th class="{sorter: 'text'}">Genre</th>
+		<th class="{sorter: 'text'}">Where</th>
+		<th class="{sorter: 'text'}">When</th>
+		</tr>
+	</thead>
+	<tbody>
+    {% for series in series_list %}
+        <tr>
+			<td><a href="{% url detail-series series.id %}">{{ series.primary_name }}</a>
+			</td>
+			<td>
+				{% for genre in series.genre.all %}
+				{{ genre.get_genre_display }}{% if not forloop.last %},{% endif %}
+				{% endfor %}
+			</td>
+			<td>
+				{% if series.venue.website %}
+				<a href="{{ series.venue.website }}">{{ series.venue }}</a>
+				{% else %}
+				{{ series.venue }}
+				{% endif %}
+			</td>
+			<td>
+				{% if series.regular %}
+				{{ series.week_within_month.get_week_within_month_display }} {{ series.day_of_week.get_day_display }}, {{ series.time }}
+				{% else %}
+				{{ series.irregular_date_description }}
+				{% endif %}
+			</td>
+		</tr>
+
+    {% endfor %}
+	</tbody>
+    </table>
+{% else %}
+    <p>We don't know about any reading series here yet. <a href="edit/">Add one!</a></p>
+{% endif %}
+
+{% block script %}
+<script type="text/javascript" src="/readsr/media/js/jquery.tablesorter.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() 
+    { 
+        $("#series_table").tablesorter(); 
+    } 
+);
+</script>
+{% endblock script %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Create an account{% endblock %}
+
+{% block content %}
+  <h1>Create an account with Readsr</h1>
+
+	<div class="formWrapper">
+  <form action="" method="post">
+	{% csrf_token %}
+	{{ form.non_field_errors }}
+	<dl>
+		<dt>Username:</dt>
+		<dd>{{ form.username }} 
+			<br />{{ form.username.errors }}</dd>
+		<dt>First name:</dt>
+		<dd>{{ form.first_name }} 
+			<br />{{ form.first_name.errors }}</dd>
+		<dt>Last name:</dt>
+		<dd>{{ form.last_name }} 
+			<br />{{ form.last_name.errors }}</dd>
+		<dt>Email:</dt>
+		<dd>{{ form.email }}
+			<br />{{ form.email.errors }}</dd>	
+		<dt>Password:</dt>
+		<dd>{{ form.password1 }}
+			<br />{{ form.password1.errors }}</dd>
+		<dt>Confirm:</dt>
+		<dd>{{ form.password2 }}
+			<br />{{ form.password2.errors }}</dd>
+	</dl>
+      <div class="submit-row"><input type="submit" value="Submit"></div>
+  </form>
+</div>
+{% endblock %}
+
+{% block script %}
+	{{ super.script}}
+	<script type="text/javascript">document.getElementById("id_username").focus();</script>
+{% endblock script %}

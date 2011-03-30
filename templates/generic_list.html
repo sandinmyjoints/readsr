@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% block name %}
+{% endblock name %}
+
+{% block update_listing %}
+{% endblock update_listing %}
+
+{% block details %}
+{% if object_list %}
+    <table id="list_table" style="width: 100%;">
+	<tbody>
+    {% for object in object_list %}
+        <tr>
+			<td>{{ object }}</td>
+		</tr>
+
+    {% endfor %}
+	</tbody>
+    </table>
+{% else %}
+    <p>No objects. <a href="edit/">Add one!</a></p>
+{% endif %}
+{% endblock details %}
+
+{% endblock content %}

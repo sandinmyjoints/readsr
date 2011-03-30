@@ -1,0 +1,100 @@
+[
+    {
+        "pk": 1, 
+        "model": "series.genre", 
+        "fields": {
+            "genre": "F"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "series.genre", 
+        "fields": {
+            "genre": "P"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "series.genre", 
+        "fields": {
+            "genre": "N"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "series.dayofweek", 
+        "fields": {
+            "day": "MO"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "series.dayofweek", 
+        "fields": {
+            "day": "TU"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "series.dayofweek", 
+        "fields": {
+            "day": "WE"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "series.dayofweek", 
+        "fields": {
+            "day": "TH"
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "series.dayofweek", 
+        "fields": {
+            "day": "FR"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "series.dayofweek", 
+        "fields": {
+            "day": "SA"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "series.dayofweek", 
+        "fields": {
+            "day": "SU"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "series.weekwithinmonth", 
+        "fields": {
+            "week_within_month": "1"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "series.weekwithinmonth", 
+        "fields": {
+            "week_within_month": "2"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "series.weekwithinmonth", 
+        "fields": {
+            "week_within_month": "3"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "series.weekwithinmonth", 
+        "fields": {
+            "week_within_month": "4"
+        }
+    }
+]

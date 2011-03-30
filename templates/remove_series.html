@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Remove series{% endblock title %}
+
+{% block content %}
+<p>You requested to remove <strong>{{ series.primary_name }}</strong>. Send us a little note about why, and we'll look into it.</p>
+<div id="contact_form" class="formWrapper">
+	<form action="" method="post">
+		{% csrf_token %}
+	
+		<ul class="form">
+			<div class="formFieldWrapper">
+			<li>Your username: {{ user.username }}</li>
+			</div>
+			<div class="formFieldWrapper">
+			<li>Your email: {{ user.email }}</li>
+			</div>
+			<div class="formFieldWrapper">
+			{{ form.as_ul }}
+			</div>
+		</ul>
+	<div class="submit-row"><input type="submit" value="Send" /></div>
+	</form>
+	{% if message_success %}
+	Thanks for sending your message.
+	{% endif %}
+</div>
+{% endblock content %}

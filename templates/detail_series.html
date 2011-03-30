@@ -1,0 +1,83 @@
+{% extends "generic_list.html" %}
+
+{% block content %}
+
+{% block name %}
+<div id="banner">
+<h1 class="reading_name">{{ series.primary_name }}{% if series.website %}
+<a href="{{ series.website }}" class="external"><img src="/readsr/media/external-link.png" class="external-icon" ></a>
+{% endif %}</h1>
+
+	{% if series.secondary_name %}
+<h2 class="reading_name">{{ series.secondary_name }}</h2>
+{% endif %}
+</div>
+{% endblock name %}
+
+{% include "list_readings.html" %}
+
+{% endblock content %}
+
+{% block sidebar %}
+{{ block.super }}
+<div class="sidebar_element">
+<h2>{{ series.primary_name }}
+	{% if user.is_authenticated %}
+<a href="edit/"><img src="/readsr/media/edit.png" alt="Edit" class="edit-icon"></a>
+<a href="remove/"><img src="/readsr/media/delete.png" alt="Request removal" class="delete-icon"></a>
+{% endif %}
+</h2>
+
+<dl>
+	<dt>Contact</dt>
+	<dd><a href="{% url detail-contact series.contact.id %}">{{ series.contact }}</a></dd>
+	<dt>Genre{% if series.genre.all|length > 1 %}s{% endif %}</dt>
+	<dd>
+	{% for genre in series.genre.all %}
+		{{ genre.get_genre_display }}{% if not forloop.last %},{% endif %} 
+	{% endfor %}
+	</dd>
+	<dt>Venue</dt>
+	<dd>
+		<ul>
+		<li><a href="{% url detail-venue series.venue.id %}">{{ series.venue }}</a>
+		{% if series.venue.secondary_name %}
+		, {{ series.venue.secondary_name }}
+		{% endif %}
+		</li>
+		<li>{{ series.venue.address.street_address }},</li>
+		<li>{{ series.venue.address.city_address }} <a href="http://maps.google.com/?q=loc%3A+{{ series.venue.address.street_address }}+{{ series.venue.address.city_address }}+US">(map)</a></li>
+		</ul>
+	</dd>
+	{% if series.regular %}
+		<dt>When</dt>
+		<dd>{{ series.week_within_month.get_week_within_month_display }} {{ series.day_of_week.get_day_display }}s, {{ series.time }}</dd>
+	{% else %}
+		<dt>When</dt>
+		<dd>{{ series.irregular_date_description }}</dd>
+	{% endif %}
+	{% if series.affiliation.all %}
+	<dt>Affiliation</dt>
+	<dd>
+	{% for affiliate in series.affiliation.all %}
+		{% if affiliate.website %}
+		<a href="{{ affiliate.website.url }}">
+		{% endif %}
+		{{ affiliate.name }}
+		{% if affiliate.website %}
+		</a>
+		{% endif %}
+		{% if not forloop.last %},{% endif %}
+		
+	{% endfor %}
+	</dd>
+	{% endif %}
+	<dt>Admission</dt>
+	<dd>{{ series.admission_description|default:"Free" }}</dd>
+	{% if series.notes %}
+	<dt>Notes</dt>
+	<dd>{{ series.notes|default:"None" }}</dd>
+	{% endif %}
+</dl>
+</div>
+{% endblock sidebar %}

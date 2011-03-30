@@ -1,0 +1,30 @@
+{% extends "generic_list.html" %}
+
+{% load hideemail %}
+
+{% block name %}
+<h1 class="reading_name">{{ contact.first_name }} {{ contact.last_name }}</h1>
+{% endblock name %}
+
+{% block update_listing %}
+{% if user.is_authenticated %}
+<a href="edit/"><img src="/readsr/media/edit.png" alt="Edit" class="edit-icon"></a>
+{% endif %}
+{% endblock update_listing %}
+
+{% block details %}
+<dl>
+	<dt>Email</dt>
+	<dd>{{ contact.email|hide_email }}
+	</dd>
+	<dt>Readsrs</dt>
+	<dd>
+		<ul>
+			{% for series in contact.series_set.all %}
+	<li><a href="{% url detail-series series.id %}">{{ series.primary_name }}</a>{% if not forloop.last %}, {% endif %} 
+		</li>
+	{% endfor %}
+	</dd>
+
+</dl>
+{% endblock details %}

@@ -1,0 +1,113 @@
+{% load humanize %}
+{% if reading_list %}
+
+    <ul class="reading_list">
+		{% for reading in reading_list %}
+		<li class="reading_list {% cycle 'hl' '' %}">
+			
+			{% if index %}  <!-- if index ************************** -->
+			<div class="reading_info">
+			<h1><a href="{% url detail-series reading.series.id %}">{{ reading.series.primary_name }}</a>
+			</h1>
+
+			<h3>
+				{% for genre in reading.series.genre.all %}
+				{{ genre.get_genre_display }}{% if not forloop.last %},{% endif %}
+				{% endfor %}
+			</h3>			
+			<h3>
+				<a href="{% url detail-venue reading.series.venue.id %}">{{ reading.series.venue }}</a>
+			</h3>
+			<h3>
+				{% if reading.series.regular %}
+				{{ reading.date|naturalday|capfirst }}, {{ reading.time }}
+				{% else %}
+				Irregular
+				{% endif %}
+			</h3>
+			</div>
+			<div class="reading_description" id="{{ reading.id }}">
+				{% if reading.description %}
+				{{ reading.description }}
+				{% endif %}
+			</div>
+			<div class="clear"></div>
+			
+			{% else %} <!-- if not index ******************************** -->
+
+			<div class="reading_info">
+			<h3>
+				{% if reading.series.regular %}
+				{{ reading.date|naturalday|capfirst }}, {{ reading.time }}
+				{% else %}
+				Irregular
+				{% endif %}
+			</h3>			
+			<h3>
+				<a href="{% url detail-venue reading.series.venue.id %}">{{ reading.series.venue }}</a>
+			</h3>			
+			<h3>
+				{% for genre in reading.series.genre.all %}
+				{{ genre.get_genre_display }}{% if not forloop.last %},{% endif %}
+				{% endfor %}
+			</h3>	
+			</div>	
+			<div class="reading_description" id="{{ reading.id }}">
+				{% if reading.description %}
+				{{ reading.description }}
+				{% endif %}
+			</div>
+			
+			<div class="clear"></div>
+			{% endif %}
+				
+		</li>
+
+	{% endfor %}
+	</ul>
+	
+{% else %}
+<div id="reading_list">
+	<ul>
+		<li class="reading_list">
+			<h1>No upcoming readings.</h1> {% if index %}<h3><a href="{% url create-series %}">Add a reading series!</a></h3>{% endif %}
+		</li>
+	</ul>
+</div>
+
+{% endif %}
+
+
+{% block script %}
+{{ super.script }}
+
+{% if user.is_authenticated %}
+<script type="text/javascript" src="/readsr/media/js/jquery.inlineedit.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() 
+    { 
+
+		$(".reading_description").inlineEdit({
+			buttonText: 'Update',
+		    save: function(e, data) {
+				/* need to figure out if there is a better way to do this*/
+				$.ajax({
+					type: 'POST',
+					url: {% if not index %}'../' + {% endif %}'readings/' + this.id + '/' + 'edit/',
+					data: {'reading_id': this.id, 'description': data.value},
+					success: function() {
+						
+					}
+				})
+		
+		    },
+			control: 'textarea',
+		});
+    } 
+);
+</script>
+{% endif %}
+
+
+{% endblock script %}

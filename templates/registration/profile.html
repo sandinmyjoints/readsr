@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Hi, {{ user.username }}.</h1>
+<p>
+<ul>
+	<li><a href="/accounts/email/change/">Change your email address</a>.</li>
+	<li><a href="/accounts/password/change/">Change your password</a>.</li>	
+</ul>
+
+{% if user_series %}
+<h2>Your Readsrs</h2>
+<ul>
+	{% for series in user_series %}
+	<li><a href="{% url detail-series series.id %}">{{ series.primary_name }}</a></li>
+	{% endfor %}
+</ul>
+{% else %}
+<p>
+Want to a <a href="{% url create-series %}">submit a series that we aren't tracking yet</a>?
+</p>
+{% endif %}
+
+<p>Feel free to <a href="{% url about %}">contact us</a> if you have any questions or comments.</p>
+
+{% endblock content %}

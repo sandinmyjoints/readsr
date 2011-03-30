@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Readsr - DC{% endblock title %}
+
+{% block content %}
+
+
+<div id="banner">
+	<h2>Upcoming readings in {{ city_site.city}}, {{ city_site.state }}</h2>
+
+<div id="choose_date">
+	<!--
+	need some kind date picker for start date
+	then another for end date
+	whenever one of them is changed, do an ajax request for the readings from that
+	but for now, just load a different page
+	so need a view that takes a startdate and an enddate
+	maybe pass by get instead of form so it doesn't have to use url mapping?
+	-->
+	<span class="datepicker_nb"><input id="datepicker_start" type="text">
+		to 
+	<input id="datepicker_end" type="text"></span>
+	
+	<span class="datepicker"><a href="#" id="next_week">Next Week</a></span>
+	<span class="datepicker"><a href="#" id="next_month">Next Month</a></span>
+</div>
+</div>
+
+
+	<div id="reading_list">
+	{% include "list_readings.html" %}
+	</div>
+
+
+
+{% endblock content %}
+
+{% block script %}
+{{ super.script }}
+
+<script type="text/javascript">
+$(function() {
+	//$( "#tabs" ).tabs();
+	
+	$("#next_week").click(function() {
+		var today = new Date();
+		var one_week = new Date(today.getTime()+1000*60*60*24*7);
+		start.datepicker("setDate", today);
+		end.datepicker("setDate", one_week);
+		setNewDate();
+	});
+
+	$("#next_month").click(function() {
+		var today = new Date();
+		var one_week = new Date(today.getTime()+1000*60*60*24*31);
+		start.datepicker("setDate", today);
+		end.datepicker("setDate", one_week);
+		setNewDate();
+	});
+	
+	var start = $( "#datepicker_start" ).datepicker({
+		autoSize: true,
+		onSelect: change_start 
+	});
+	
+	var end = $( "#datepicker_end" ).datepicker({
+		autoSize: true,
+		onSelect: change_end
+	});
+	
+	function change_start(dateText, inst) {
+		// first make sure the dates make sense
+		validate_start(dateText, inst);
+		setNewDate();
+	}
+
+	
+	function change_end(dateText, inst) {
+		validate_end(dateText, inst);
+		setNewDate();
+	}
+	
+	function validate_start(dateText, inst) {
+		/* need to check if start_date is after end_date.
+		if so, then make end_date start_date + 1 day. */
+		day_milliseconds = 1000*60*60*24;
+		var start_date = start.datepicker("getDate");
+		var end_date = end.datepicker("getDate");
+		if (start_date > end_date) {
+			end.datepicker("setDate", new Date(start_date.getTime()+day_milliseconds))
+		}		
+	}
+	
+	function validate_end(dateText, inst) {
+		/* need to check if end_date is before start_date.
+		if so, then make start_date end_date - 1 day. */
+		day_milliseconds = 1000*60*60*24;
+		var start_date = start.datepicker("getDate");
+		var end_date = end.datepicker("getDate");
+		if (end_date < start_date) {
+			start.datepicker("setDate", new Date(end_date.getTime()-day_milliseconds))
+		}		
+	}
+	
+	function setNewDate() {
+		// now go to a new page with this start_time and end_time
+		var start_date = start.datepicker("getDate");
+		var end_date = end.datepicker("getDate");
+		var start_month = start_date.getMonth()+1;
+		var end_month = end_date.getMonth()+1;
+		url = "http://127.0.0.1:8000/readsr/";
+		new_loc = "?" + "start=" + start_month + "-" + start_date.getDate() + "-" + start_date.getFullYear() + "&" + "end=" + end_month + "-" + end_date.getDate() + "-" + end_date.getFullYear();
+		//alert("new loc " + new_loc);
+		//window.location.href = new_loc;
+		$("#reading_list").load(new_loc + " #reading_list");
+	}
+
+	start.datepicker("setDate", "{{ start_date }}")
+	end.datepicker("setDate", "{{ end_date }}")
+	
+});
+
+
+</script>
+
+{% endblock script %}

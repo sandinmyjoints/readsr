@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% block name %}
+<h1>{{ reading.series.primary_name }}, {{ reading.date_and_time}}</h1>
+{% endblock name %}
+
+{% block update_listing %}
+{% endblock update_listing %}
+
+{% block details %}
+<form action="" method="post">
+	{% csrf_token %}
+	
+	{% include "form_snippet.html" %}
+
+	<div class="submit-row"><input type="submit" value="Submit" /></div>
+</form>
+{% endblock details %}
+
+
+{% endblock content %}

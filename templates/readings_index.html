@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Readsr - DC{% endblock title %}
+
+{% block content %}
+
+<h2>Upcoming Readings</h2>
+{% include "list_readings.html" %}
+
+{% endblock content %}
+
+{% block sidebar %}
+{% endblock %}
+
+{% block script %}
+{{ super.script }}
+{% endblock script %}

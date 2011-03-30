@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}About Readsr{% endblock title %}
+
+{% block content %}
+<p>This site strives to be a <strong>comprehensive list of all literary reading series in and around Washington, DC</strong>. If you know of a reading
+series that isn't listed here, please <a href="../edit/">add it</a>. Or if one of the reading series needs to be updated, go ahead and do that. We're counting on your help!</p>
+<p>Please contact us with any questions.</p>
+	<form action="" method="post">
+		{% csrf_token %}
+		
+		{% include "form_snippet.html" %}
+		
+	<div class="submit-row">
+	<input type="submit" value="Send" />
+	</div>
+	</form>
+	{% if message_success %}
+	Thanks for sending your message.
+	{% endif %}
+{% endblock content %}
+

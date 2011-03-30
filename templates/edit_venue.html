@@ -1,0 +1,125 @@
+{% extends "generic_list.html" %}
+
+{% load hideemail %}
+
+{% block name %}
+<h1 class="reading_name">{% if venue.id %}{{ venue.name }}{% else %}Tell us about this venue.{% endif %}</h1>
+{% endblock name %}
+
+{% block update_listing %}
+{% endblock update_listing %}
+
+{% block details %}
+{% if address_form.errors or venue_form.errors %}
+<p>Please correct the error{{ form.errors|pluralize }} below.</p>
+{% endif %}
+
+{{ form.non_field_errors }}
+
+	<div class="formWrapper">		
+		<form action="" method="post">
+		{% csrf_token %}
+	
+		<dl>
+			<dt>Name</dt>
+			<dd>
+				<div class="formFieldWrapper">
+				{{ venue_form.name }}
+				</div>
+				{% if venue_form.name.errors %}
+				    <ol class="errorlist">
+				    {% for error in venue_form.name.errors %}
+				        <li><strong>{{ error|escape }}</strong></li>
+				    {% endfor %}
+				    </ol>
+				{% endif %}
+			</dd>
+			<dt>Address</dt>
+				<dd>
+				<div class="formFieldWrapper">
+				{{ address_form.street_address }}
+				</div>
+				{% if address_form.street_address.errors %}
+				    <ol class="errorlist">
+				    {% for error in address_form.street_address.errors %}
+				        <li><strong>{{ error|escape }}</strong></li>
+				    {% endfor %}
+				    </ol>
+				{% endif %}
+				<div class="formFieldWrapper">
+				{{ address_form.city }}
+				</div>
+				{% if address_form.city.errors %}
+				    <ol class="errorlist">
+				    {% for error in address_form.city.errors %}
+				        <li><strong>{{ error|escape }}</strong></li>
+				    {% endfor %}
+				    </ol>
+				{% endif %}
+				<div class="formFieldWrapper">
+				{{ address_form.state }}
+				</div>
+				{% if address_form.state.errors %}
+				    <ol class="errorlist">
+				    {% for error in address_form.state.errors %}
+				        <li><strong>{{ error|escape }}</strong></li>
+				    {% endfor %}
+				    </ol>
+				{% endif %}
+				<div class="formFieldWrapper">
+				{{ address_form.zipcode }}
+				</div>
+				{% if address_form.zipcode.errors %}
+				    <ol class="errorlist">
+				    {% for error in address_form.zipcode.errors %}
+				        <li><strong>{{ error|escape }}</strong></li>
+				    {% endfor %}
+				    </ol>
+				{% endif %}
+			</dd>
+			<dt>Phone</dt>
+			<dd>
+				<div class="formFieldWrapper">
+				{{ venue_form.phone }}
+				</div>
+			{% if venue_form.phone.errors %}
+			    <ol class="errorlist">
+			    {% for error in venue_form.phone.errors %}
+			        <li><strong>{{ error|escape }}</strong></li>
+			    {% endfor %}
+			    </ol>
+			{% endif %}
+			</dd>
+			<dt>Website</dt>
+			<dd>
+				<div class="formFieldWrapper">
+				{{ venue_form.website }}
+				</div>
+			{% if venue_form.website.errors %}
+			    <ol class="errorlist">
+			    {% for error in venue_form.website.errors %}
+			        <li><strong>{{ error|escape }}</strong></li>
+			    {% endfor %}
+			    </ol>
+			{% endif %}
+			</dd>
+			<dt>In DC?</dt>
+			<dd>
+				<div class="formFieldWrapper">
+				{{ venue_form.in_dc }}
+				</div>
+			{% if venue_form.in_dc.errors %}
+			    <ol class="errorlist">
+			    {% for error in venue_form.in_dc.errors %}
+			        <li><strong>{{ error|escape }}</strong></li>
+			    {% endfor %}
+			    </ol>
+			{% endif %}
+			</dd>
+
+	</dl>
+	<div class="submit-row"><input type="submit" value="{% if venue_form.name %}Update{% else %}Submit{% endif %}" /></div>
+		</form>
+
+	</div>
+{% endblock details %}
