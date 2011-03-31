@@ -109,6 +109,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
 	'django.contrib.humanize',
+	'city_site',
 	'series',
 	'reading',
     # Uncomment the next line to enable the admin:
@@ -118,7 +119,6 @@ INSTALLED_APPS = (
 	'contact_form',
 	'hideemail',
 	'registration',
-	'city_site',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
