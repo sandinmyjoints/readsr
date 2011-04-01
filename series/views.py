@@ -61,7 +61,7 @@ def account_profile(request):
 #	return render_to_response("registration/login.html", {}, context_instance=RequestContext(request))
 
 # index and upcoming #################### 
-def index(request, series_id=None, start_date=datetime.today().date(), end_date=(datetime.today() + timedelta(37)).date()):
+def index(request, series_id=None, genre_id=None, start_date=datetime.today().date(), end_date=(datetime.today() + timedelta(37)).date()):
 	"""
 	Displays a list of readings ordered chronologically. Takes a start date and an end date.
 	By default, it shows readings from all series. But if a series ID is passed in, it 
@@ -82,6 +82,9 @@ def index(request, series_id=None, start_date=datetime.today().date(), end_date=
 	``series_id``
 		Default is none, which will cause index to display readings from all series.
 		Can be passed as a GET parameter.
+		
+	``genre_id``
+		Default is none, which returns readings of all any and all genres. 
 		
 	"""
 	current_site = Site.objects.get_current()
@@ -108,7 +111,7 @@ def index(request, series_id=None, start_date=datetime.today().date(), end_date=
 			series_list = Series.objects.filter(site__exact=current_site.id).filter(pk=series_id)
 			#print "filtered reading_list = %s, len=%d" % (reading_list, len(reading_list))
 			#print "filtered series_list = %s, len=%d" % (series_list, len(series_list))
-		
+					
 	return render_to_response('index.html', {'reading_list': reading_list, 'index': True, 'start_date': start_date.strftime("%m/%d/%Y"), 'end_date': end_date.strftime("%m/%d/%Y") }, context_instance=RequestContext(request))
 
 	# generic views way
@@ -426,7 +429,10 @@ def edit_venue(request, venue_id=None, success_url=None, extra_context=None):
 	return render_to_response("edit_venue.html", { 'venue_form': venue_form, 'address_form': address_form }, context_instance=context)
 	
 def detail_venue(request, venue_id):
-	print "venue_id = %s" % venue_id
+	"""
+	Show the details of a venue, including a list of all the series happening there.
+	"""
+	
 	series_list = Series.objects.filter(venue=venue_id)
 	extra_context = { 'series_list': series_list }
 	print "series_list = %s" % series_list

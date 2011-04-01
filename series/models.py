@@ -74,6 +74,7 @@ class Genre(models.Model):
 		# this should only happen if all the genres were not added to the db
 		print "Self.genre = %s, was not in self.GENRE_CHOICES. Did you add all the genres to the database?" % self.genre
 		return self.genre
+		
 
 class Address(models.Model):
 	"""
