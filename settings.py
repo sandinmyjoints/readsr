@@ -16,7 +16,7 @@ DATABASES = {
         'NAME': 'django_db',                      # Or path to database file if using sqlite3.
         'USER': 'django_db',                      # Not used with sqlite3.
         'PASSWORD': 'Fqw3EtedHfrMPqZB',                  # Not used with sqlite3.
-        'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
 #		'HOST': '/var/mysql/mysql.sock',
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }

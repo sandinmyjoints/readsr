@@ -1,5 +1,5 @@
 Hi!
-You registered with {{ site }}, and to activate your account, please click http://localhost:8000/accounts/activate/{{ activation_key }}. 
+You registered with {{ site }}, and to activate your account, please click http://{{ site }}/accounts/activate/{{ activation_key }}. 
 
 You've got {{ expiration_days }} days to activate your account, or else you'll have to start the registration process over.
 
