@@ -16,5 +16,5 @@ class CitySite(Site):
 	city_and_state = property(_get_city_and_state)
 	
 	def __unicode__(self):
-		return city_and_state
+		return self.city_and_state
 		
