@@ -1,6 +1,5 @@
 # Django settings for dcreadings project.
 import os
-#from city_site.middleware import CitySiteMiddleware
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

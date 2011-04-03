@@ -223,8 +223,9 @@ class Series(models.Model):
 	wiki_mode = models.BooleanField("Wiki Mode", default=True)
 	created = models.DateTimeField(default=datetime.now)
 	last_update = models.DateTimeField("Last Updated", default=datetime.now)
-	site = models.ForeignKey(CitySite, default=CitySite.objects.get(pk=settings.SITE_ID))
- 
+	#site = models.ForeignKey(CitySite, default=CitySite.objects.get(pk=settings.SITE_ID))
+	site = models.ForeignKey(CitySite)
+
 	def __unicode__(self):
 		return self.primary_name
 		

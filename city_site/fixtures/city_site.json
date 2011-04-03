@@ -1,0 +1,1 @@
+[{"pk": 4, "model": "city_site.citysite", "fields": {"city": "Baltimore", "state": "MD"}}, {"pk": 2, "model": "city_site.citysite", "fields": {"city": "Washington", "state": "DC"}}, {"pk": 3, "model": "city_site.citysite", "fields": {"city": "New York", "state": "NY"}}]
