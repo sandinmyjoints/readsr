@@ -2,11 +2,11 @@
 <html>
 <head>
 	<meta charset=UTF-8>
-	<link rel="stylesheet" type="text/css" media="all" href="/readsr/media/css/reset.css" />
-	<link rel="stylesheet" type="text/css" media="all" href="/readsr/media/css/text.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="/media/css/reset.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="/media/css/text.css" />
 	<!-- my stylesheet -->
-    <link rel="stylesheet" type="text/css" media="all" href="/readsr/media/css/style.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="/readsr/media/css/custom-theme/jquery-ui-1.8.10.custom.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/media/css/style.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="/media/css/custom-theme/jquery-ui-1.8.10.custom.css">
 
 {% block styles %}
 {% endblock styles %}
@@ -17,8 +17,8 @@
 	{% endblock %}
 </title>
 	
-<script src="/readsr/media/js/jquery-1.4.4.min.js"></script>
-<script src="/readsr/media/js/jquery-ui-1.8.10.custom.min.js"></script>
+<script src="/media/js/jquery-1.4.4.min.js"></script>
+<script src="/media/js/jquery-ui-1.8.10.custom.min.js"></script>
 
 </head>
 
@@ -38,9 +38,9 @@
 	    <div id="navbar" class="">
 			{% block navbar %}
 			<ul>
-			    <li><a href="/readsr/">Home</a></li>
-				<li><a href="/readsr/edit/">Add a Series</a></li>
-			    <li><a href="/readsr/about/">About</a></li>
+			    <li><a href="/">Home</a></li>
+				<li><a href="/edit/">Add a Series</a></li>
+			    <li><a href="/about/">About</a></li>
 				{% if user.is_authenticated %}
 				<li><a href="/accounts/profile">Profile</a></li>
 				<li><a href="/accounts/logout" id="logout">Logout</a></li>

@@ -5,7 +5,7 @@
 {% block name %}
 <div id="banner">
 <h1 class="reading_name">{{ series.primary_name }}{% if series.website %}
-<a href="{{ series.website }}" class="external"><img src="/readsr/media/external-link.png" class="external-icon" ></a>
+<a href="{{ series.website }}" class="external"><img src="/media/external-link.png" class="external-icon" ></a>
 {% endif %}</h1>
 
 	{% if series.secondary_name %}
@@ -23,8 +23,8 @@
 <div class="sidebar_element">
 <h2>{{ series.primary_name }}
 	{% if user.is_authenticated %}
-<a href="edit/"><img src="/readsr/media/edit.png" alt="Edit" class="edit-icon"></a>
-<a href="remove/"><img src="/readsr/media/delete.png" alt="Request removal" class="delete-icon"></a>
+<a href="edit/"><img src="/media/edit.png" alt="Edit" class="edit-icon"></a>
+<a href="remove/"><img src="/media/delete.png" alt="Request removal" class="delete-icon"></a>
 {% endif %}
 </h2>
 

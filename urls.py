@@ -8,7 +8,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-	(r'^readsr/', include('series.urls')),
+	#(r'^readsr/', include('series.urls')),
     (r'^admin/', include(admin.site.urls)),
 	# django-registration has a url entry for accounts/register, but it uses a default form.
 	# we want to use the form that allows for a new user's full name to be entered, so 
@@ -25,6 +25,7 @@ urlpatterns = patterns('',
     #(r'^accounts/login/$',  login ),
 	#(r'^accounts/logout/$', 'series.views.logout_user'),	
 	#(r'^accounts/register/$', 'series.views.register'),
+	(r'^', include('series.urls')),
     
 )
 

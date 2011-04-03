@@ -7,11 +7,10 @@ from series.models import Series
 # series views
 urlpatterns = patterns('',
     # Example:
-	(r'^readings/', include('reading.urls')),
-	url(r'^$', views.index, name="index"),
+	url(r'^readings/', include('reading.urls')),
 	#url(r'^upcoming/$', views.upcoming, name="upcoming"),
 	url(r'^about/$', views.about, name="about"),
-	(r'^(?P<series_id>\d+)/readings/', include('reading.urls')),
+	url(r'^(?P<series_id>\d+)/readings/', include('reading.urls')),
 	url(r'^(?P<series_id>\d+)/$', views.detail_series, name="detail-series"),
 	url(r'^edit/$', views.edit_series, name="create-series"), 
 	url(r'^(?P<series_id>\d+)/edit/$', views.edit_series, name="edit-series"),
@@ -28,6 +27,7 @@ urlpatterns = patterns('',
 	url(r'^affiliate/(?P<affiliate_id>\d+)/$', views.edit_affiliate, name="detail-affiliate"),
 	url(r'^affiliate/edit/$', views.edit_affiliate, name="create-affiliate"),
 	url(r'^affiliate/(?P<affiliate_id>\d+)/edit/$', views.edit_affiliate, name="edit-affiliate"),
+	url(r'^$', views.index, name="index"),
 )
 
 if settings.DEBUG:		

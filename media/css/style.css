@@ -1,7 +1,7 @@
 /* body and headers */
 body {
 	background-color: #FFFFFF;
-	background: url("/readsr/media/background.png");
+	background: url("/media/background.png");
 	background-repeat: repeat-x;
 	/* font-family: Georgia, Palatino, "Palatino Linotype", Times, "Times New Roman", serif; */
 	font-family: Garamond, "Hoefler Text", "Times New Roman", Times, serif;
@@ -9,7 +9,7 @@ body {
 	line-height: 1.5em;
 }
 #header h1 {
-/*	background-image:url("/readsr/media/Readsr4-logo-noshadow.png");
+/*	background-image:url("/media/Readsr4-logo-noshadow.png");
 	background-position: left-top;
 	background-repeat: no-repeat;
 	background-color: transparent;
@@ -22,7 +22,7 @@ body {
 }
 
 #header_link {
-	background-image:url("/readsr/media/Readsr4-logo-noshadow.png");
+	background-image:url("/media/Readsr4-logo-noshadow.png");
     display:block;
     height:53px;
     width:209px;
@@ -427,7 +427,7 @@ li.message {
 
 .tooltip {
 	display:none;
-	background:transparent url(/readsr/media/black_arrow.png);
+	background:transparent url(/media/black_arrow.png);
 	font-size:.75em;
 	height:70px;
 	width:160px;
