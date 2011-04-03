@@ -11,10 +11,8 @@ class CitySite(Site):
 	state = USStateField()
 	
 	def _get_city_and_state(self):
-		return u'%s, %s' % (city, state)
+		return u'%s, %s' % (self.city, self.state)
 		
 	city_and_state = property(_get_city_and_state)
 	
-	def __unicode__(self):
-		return self.city_and_state
 		
