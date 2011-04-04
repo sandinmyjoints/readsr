@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.localflavor.us.forms import USPhoneNumberField, USStateSelect, USZipCodeField
+from django.contrib.auth.models import User
 from datetime import time
-from series.models import Series, Contact, Venue, Affiliate, Address
+from series.models import Series, Venue, Affiliate, Address
 from contact_form.forms import ContactForm
 from registration.forms import RegistrationFormUniqueEmail
 from django.conf import settings
@@ -44,14 +45,14 @@ class SeriesForm(forms.ModelForm):
 		}
 		js = ('js/timePicker/jquery.timePicker.min.js',)
 
-# a form for changing a Contact (person), named so as not to conflict with the library class for sending messages via a ContactForm
+# a form for changing a contact (person), named so as not to conflict with the library class for sending messages via a ContactForm
 class ReadsrContactForm(forms.ModelForm):
 	first_name = forms.CharField()
 	last_name = forms.CharField()
 	email = forms.CharField()
 
 	class Meta:
-		model = Contact	
+		model = User	
 
 # need to figure out how to get this to display the associated address as well
 class VenueForm(forms.Form):

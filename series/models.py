@@ -13,6 +13,7 @@ class Contact(models.Model):
 	"""
 	Represents a person who can be contacted about a particular reading series. Currently 
 	associated one-to-one with a user in the system.
+	NOTE: This class has been deprecated and replaced with django.contrib.auth.models.User throughout.
 	"""
 	# If we wanted to disassociate a contact from a particular user--for example, to let
 	# someone be a user in the system but create a new reading series and designate someone
@@ -207,7 +208,7 @@ class Series(models.Model):
 	"""
 	primary_name = models.CharField("Reading Name", max_length=200, unique=True)
 	secondary_name = models.CharField("Reading Secondary Name", max_length=200, blank=True, null=True)
-	contact = models.ForeignKey(Contact)
+	contact = models.ForeignKey(User)
 	genre = models.ManyToManyField(Genre)
 	venue = models.ForeignKey(Venue)
 	regular = models.BooleanField("Regular", default=True)

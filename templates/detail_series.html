@@ -30,7 +30,7 @@
 
 <dl>
 	<dt>Contact</dt>
-	<dd><a href="{% url detail-contact series.contact.id %}">{{ series.contact }}</a></dd>
+	<dd><a href="{% url detail-contact series.contact_id %}">{{ series.contact.first_name }} {{ series.contact.last_name }}</a></dd>
 	<dt>Genre{% if series.genre.all|length > 1 %}s{% endif %}</dt>
 	<dd>
 	{% for genre in series.genre.all %}

@@ -14,7 +14,6 @@ class SeriesAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Series, SeriesAdmin)
-admin.site.register(Contact)
 admin.site.register(Venue)
 admin.site.register(Address)
 admin.site.register(Affiliate)

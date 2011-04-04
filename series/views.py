@@ -7,6 +7,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.contrib import auth, messages
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import logout
@@ -14,7 +15,7 @@ from django.views.generic import list_detail
 from django.contrib.sites.models import Site
 from django.conf import settings
 
-from series.models import Series, Contact, Affiliate, Venue, Address
+from series.models import Series, Affiliate, Venue, Address
 from series.forms import SeriesForm, ReadsrContactForm, RemoveSeriesContactForm, VenueForm, AffiliateForm, AddressForm
 from reading.models import Reading
 from city_site.models import CitySite
@@ -196,7 +197,7 @@ def detail_series(request, series_id):
 	sr = get_object_or_404(Series, pk=series_id)
 	reading_list=Reading.objects.filter(date_and_time__gte=datetime.today()).filter(series=series_id)
 	#print "reading_list = %s, reading_list length = %d" % (reading_list, len(reading_list))
-	
+	print "series is %s, series contact_id is %s, series contact is X, series contact user is X" % (sr, sr.contact_id, )
 	return render_to_response('detail_series.html', {'series': sr, 'reading_list': reading_list}, context_instance=RequestContext(request))
 	
 @login_required	
@@ -214,12 +215,17 @@ def edit_series(request, series_id=None):
 	if request.method == 'POST': # if we are receiving POST data, then we're getting the result of a form submission, so we save it to the database and show the detail template
 		form = SeriesForm(request.POST, instance=sr)
 		sr.site = CitySite.objects.get(pk=settings.SITE_ID) # site can only be the current site
+		# We are creating a new reading series, so give it the current user as the contact, and
+		if not sr.id:
+			sr.contact = request.user
+
 		old_sr = copy.deepcopy(sr) # need to create a copy because is_valid() will trigger model validation, which will update the model object with the new time values
 		if form.is_valid():
 			new_reading_list = []
 			created_new = create_new_readings_list = False
 			if not sr.id:
-				# We are creating a new reading series, so create all its reading events for a year.
+				# We are creating a new reading series, so 
+				# create all its reading events for a year.
 				created_new = True
 				if sr.regular:
 					create_new_readings_list = True
@@ -332,18 +338,18 @@ def remove_series(request, template_name="remove_series.html", series_id=None, s
 	
 # contact ####################
 def contact_list(request):
-	return list_detail.object_list(request, queryset=Contact.objects.all(), template_name="generic_list.html")
+	return list_detail.object_list(request, queryset=User.objects.all(), template_name="generic_list.html")
 	
 def detail_contact(request, contact_id):
-	c = get_object_or_404(Contact, pk=contact_id)
+	c = get_object_or_404(User, pk=contact_id)
 	return render_to_response('detail_contact.html', {'contact': c}, context_instance=RequestContext(request))
 	
 @login_required
 def edit_contact(request, contact_id=None):
 	if contact_id:
-		c = get_object_or_404(Contact, pk=contact_id)
+		c = get_object_or_404(User, pk=contact_id)
 	else:
-		c = Contact()
+		c = User()
 	if request.method == 'POST':
 		form = ReadsrContactForm(request.POST, instance=c)
 		if form.is_valid():
