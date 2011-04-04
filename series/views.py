@@ -51,7 +51,7 @@ def account_profile(request):
 	Requires the user to be logged in.
 	"""
 	#user_series = Series.objects.filter(contact__first_name__exact=request.user.first_name).filter(contact__last_name__exact=request.user.last_name)
-	user_series = Series.objects.filter(contact__user__exact=request.user)
+	user_series = Series.objects.filter(contact__exact=request.user)
 	
 	return render_to_response("registration/profile.html", { "user": request.user, "user_series": user_series }, context_instance=RequestContext(request))
 

@@ -47,9 +47,9 @@ class SeriesForm(forms.ModelForm):
 
 # a form for changing a contact (person), named so as not to conflict with the library class for sending messages via a ContactForm
 class ReadsrContactForm(forms.ModelForm):
-	first_name = forms.CharField()
-	last_name = forms.CharField()
-	email = forms.CharField()
+#	first_name = forms.CharField()
+#	last_name = forms.CharField()
+#	email = forms.CharField()
 
 	class Meta:
 		model = User	
