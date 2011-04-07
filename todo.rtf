@@ -38,8 +38,16 @@ X	\'95	use django-registration for registration\
 X	\'95	Rework URLS to form /contact/1/edit and pass edit as argument to view to decide what to do with? that way only have to use one view method\
 {\listtext	\'95	}display reading map/details/photos/venue details on the right side\
 {\listtext	\'95	}mouse enter into details dd turns it into an input\'97fix bugs\
+{\listtext	\'95	}
+\b fix reading inline details bug
+\b0 \'97it goes away after an ajax query, so maybe it is related to that?\
+{\listtext	\'95	}Automatic login after successful account activation\
+X	\'95	Label the various address fields in the series form\
+X	\'95	Need to create a mercurial branch of django-registration that captures first name and last name. I think what I need to do is create a new remote repo on webfaction, set my laptop to point to that, commit and push my changes to it, then pull them into the production site repo\
+{\listtext	\'95	}make auth table username and email unique together? or would it be better to leave it as is, with them each unique on their own?\
 \pard\tx560\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 -how to refactor so that i don't have to write several similar views and templates?\
+\cf0 \
+-how to refactor so that i don't have to write several similar views and templates?\
 -how to generalize so that any city name can be plugged in as a global variable?\
 -how to reduce reliance on hardcoded path names for media in the templates (and anywhere else they are used)?\
 -how to generalize so that it can be installed and run on different serves for different cities, or installed on one server and run for different cities? probably the latter, since it's cheaper and I will be the overall admin\

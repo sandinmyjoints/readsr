@@ -438,10 +438,10 @@ def detail_venue(request, venue_id):
 	"""
 	Show the details of a venue, including a list of all the series happening there.
 	"""
-	
-	series_list = Series.objects.filter(venue=venue_id)
-	extra_context = { 'series_list': series_list }
-	print "series_list = %s" % series_list
+	series_list = Series.objects.all()
+	#venue_series_list = Series.objects.filter(venue=venue_id)
+	venue_series_list = series_list.filter(venue=venue_id)
+	extra_context = { 'series_list': series_list, 'venue_series_list': venue_series_list }
 	# probably no point in using the generic view any more--might as well do render to response
 	return list_detail.object_detail(request, queryset=Venue.objects.filter(id__exact=venue_id), object_id=venue_id, template_name="detail_venue.html", template_object_name="venue", extra_context=extra_context)
 	
