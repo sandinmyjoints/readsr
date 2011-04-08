@@ -11,12 +11,19 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from reading.models import Reading
 from reading.forms import ReadingForm
 
-# this view does not know about series, so it has to use the readings_index.html instead of index.html, and not show the readings sidebar
 def list_readings(request, start_date=datetime.today(), end_date=datetime.today()+timedelta(31)):
+	"""
+	Displays a list of all the readings between start_date and end_date.
+	"""
+	
 	reading_list = Reading.objects.filter(date_and_time__gte=start_date).filter(date_and_time__lte=end_date).order_by("date_and_time")
 	return render_to_response('readings_index.html', {'reading_list': reading_list }, context_instance=RequestContext(request))
 	
 def list_readings_month(request, num_months=1, ajax="0", index="0"):
+	"""
+	Displays a list of all the readings for num_months months from today.
+	"""
+	
 	reading_list = Reading.objects.filter(date_and_time__gte=datetime.today()).filter(date_and_time__lte=datetime.today()+timedelta(31*int(num_months.rstrip('/')))).order_by("date_and_time")
 	if index=="0":
 		whether_index = False

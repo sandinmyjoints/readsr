@@ -531,3 +531,12 @@ p {
 .edit_list {
 	display: block;
 }
+
+.sites_list {
+	margin-left: 1.5em;
+}
+
+.sites_list li {
+	list-style-type: circle;
+	padding: .2em;
+}

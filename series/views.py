@@ -90,6 +90,10 @@ def index(request, series_id=None, genre_id=None, start_date=datetime.today().da
 	"""
 	current_site = Site.objects.get_current()
 	
+	# if we're on the generic www.readsrs.com site, show a list of available cities
+	if current_site.id == settings.WWW_SITE:
+		return render_to_response('splash.html', { 'sites_list': Site.objects.all() }, context_instance=RequestContext(request))
+	
 	if request.method == "GET":
 		# if request is get, then we can get start and end dates from that
 		start = request.GET.get('start', "")

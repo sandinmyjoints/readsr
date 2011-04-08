@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset=UTF-8>
+	<link rel="stylesheet" type="text/css" media="all" href="/media/css/reset.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="/media/css/text.css" />
+	<!-- my stylesheet -->
+    <link rel="stylesheet" type="text/css" media="all" href="/media/css/style.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="/media/css/custom-theme/jquery-ui-1.8.10.custom.css">
+
+{% block styles %}
+{% endblock styles %}
+
+<title>
+	{% block title %}
+	Readsr
+	{% endblock %}
+</title>
+	
+<script src="/media/js/jquery-1.4.4.min.js"></script>
+<script src="/media/js/jquery-ui-1.8.10.custom.min.js"></script>
+
+</head>
+
+<body>
+	
+	<div id="header">
+		
+		{% block header %}
+		<h1><a href="{% url index %}" id="header_link">{{ city_site.name }}</a></h1>
+		<h3>Literary reading series in your city.</h3>
+		{% endblock header %}
+		
+	</div>
+	
+	<div id="page" class="">
+		
+		<div id="navbar" class="">
+			{% block navbar %}
+			<ul>
+
+			</ul>
+	        {% endblock navbar %}
+	    </div>
+	
+		<div id="messages">
+			{% block messages %}
+			{% if messages %}
+			<ul class="messages">
+			    {% for message in messages %}
+			    <li class="message {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
+			    {% endfor %}
+			</ul>
+			{% endif %}
+			{% endblock messages %}
+		</div>
+	
+	    <div id="content">
+	        {% block content %}
+				<h1>We're tracking readings in these cities.</h1>
+				<ul class="sites_list">
+				{% for site in sites_list %}
+				<li><h2><a href="http://{{ site.domain }}">{{ site.name }}</a></h2></li>
+				{% endfor %}
+				</ul>
+			{% endblock content %}
+	    </div>
+	
+
+		<div class="spacer"></div>
+		<div id="footer" class="">
+			{% block footer %}
+			Site by <a href="http://williamjohnbert.com">wjb</a>
+			{% endblock footer %}
+		</div>
+	
+	</div> <!-- end content -->
+	
+	<!-- begin script -->
+	<script type="text/javascript">
+	$(document).ready(function() {
+		/*
+		var $login_dialog = $('<div></div>')
+		.html("Login")
+		.dialog({ 
+			autoOpen: false, 
+			title: 'Login Stuff',
+			modal: true,
+			width: 400
+		});
+
+		$( "#opener" ).click(function() {
+			$login_dialog.dialog('open');
+			return false;
+		});
+		*/
+
+	});
+	</script>
+	
+	{% if messages %}
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$("#messages").hide();
+		$("#messages").delay(100).slideToggle().delay(2500).slideToggle();
+	})
+	</script>
+	{% endif %}
+	
+	{% block script %} 	
+	{% endblock script %}
+</body>
+</html>
+

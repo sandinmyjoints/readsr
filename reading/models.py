@@ -3,6 +3,14 @@ from series.models import Series
 from django.contrib.sites.models import Site
 
 class Reading(models.Model):
+	"""
+	A Reading represents one instance of a reading series, that is, an event 
+	taking place on a certain date at a certain time, optionally with a certain
+	description such as the names and short bios of the readers.
+	All Readings are associated with a Series, which contain other information
+	such as where the Readings take place, whether they follow a regular pattern, 
+	who is the main contact for the series, etc.
+	"""
 	
 	date_and_time = models.DateTimeField("Date and Time")
 	series = models.ForeignKey(Series)
