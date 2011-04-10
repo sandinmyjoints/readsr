@@ -29,6 +29,10 @@ class Contact(models.Model):
 	# This way, a user can only create a series with themself as the contact.
 	user = models.OneToOneField(User)
 	
+	@permalink
+	def get_absolute_url(self):
+		return ('profiles_profile_detail', (), { 'username': self.user.username })
+	
 	def _get_first_name(self):
 		return self.user.first_name
 		

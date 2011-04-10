@@ -89,6 +89,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 	"django.core.context_processors.request",
 	"city_site.context_processors.city_site",
 	"series.context_processors.series_list",
+	"series.context_processors.contact",
 )
 
 
@@ -119,7 +120,10 @@ INSTALLED_APPS = (
 	'contact_form',
 	'hideemail',
 	'registration',
+	'profiles',
 )
+
+AUTH_PROFILE_MODULE = 'series.Contact'
 
 ACCOUNT_ACTIVATION_DAYS = 7
 

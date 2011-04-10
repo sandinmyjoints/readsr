@@ -1,6 +1,6 @@
-# Create your views here.
 import copy
 from datetime import datetime, timedelta
+
 from django import forms
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext
@@ -16,36 +16,19 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 
 from series.models import Series, Affiliate, Venue, Address
-from series.forms import SeriesForm, ReadsrContactForm, RemoveSeriesContactForm, VenueForm, AffiliateForm, AddressForm
+from series.forms import SeriesForm, ReadsrContactForm, RemoveSeriesContactForm, VenueForm, AffiliateForm, AddressForm, ProfileForm
 from reading.models import Reading
 from city_site.models import CitySite
-
-
-#below are for ContactForm
 from contact_form.forms import ContactForm
 
-# login/logout/register ####################
-#def logout_user(request):
-#	response = logout(request, next_page=reverse('series.views.index'))
-#	return response	
+from profiles.views import profile_detail as profile_profile_detail
+from profiles.views import create_profile as profile_create_profile
+from profiles.views import edit_profile as profile_edit_profile
 
-# this is not used anymore. registration is handled by django-registration.
-#def register(request):
-#    if request.method == 'POST':
-#        form = UserCreationForm(request.POST)
-#        if form.is_valid():
-#            new_user = form.save()
-#			# need to add a successful registration message here
-#            return HttpResponseRedirect(reverse('series.views.index'))
-#    else:
-#        form = UserCreationForm()
-#    return render_to_response("registration/register.html", 
-#		{ 'form': form },
-#		context_instance=RequestContext(request))
 
-# account ######################
+# profiles ######################
 @login_required
-def account_profile(request):
+def profile_detail(request, username):
 	"""
 	Renders the user's profile page, which contains links to update email and change password.
 	Requires the user to be logged in.
@@ -53,13 +36,25 @@ def account_profile(request):
 	#user_series = Series.objects.filter(contact__first_name__exact=request.user.first_name).filter(contact__last_name__exact=request.user.last_name)
 	user_series = Series.objects.filter(contact__exact=request.user)
 	
-	return render_to_response("registration/profile.html", { "user": request.user, "user_series": user_series }, context_instance=RequestContext(request))
+#	return render_to_response("registration/profile.html", { "user": request.user, "user_series": user_series }, context_instance=RequestContext(request))
+	print "calling ppd with form_class=ProfileForm"
+	return profile_profile_detail(request, username, extra_context={ 'user_series': user_series })
 
 #	if request.user.is_authenticated():
 #		return render_to_response("registration/profile.html", { "user": request.user }, context_instance=RequestContext(request))
 #	else:
 #		messages.info(request, "You aren't logged in. Please log in or create an account.")
 #	return render_to_response("registration/login.html", {}, context_instance=RequestContext(request))
+
+@login_required
+def create_profile(request):
+	return profile_create_profile(request)
+	
+@login_required	
+def edit_profile(request):
+	user_series = Series.objects.filter(contact__exact=request.user)
+	return profile_edit_profile(request, form_class=ProfileForm, extra_context={ 'user_series': user_series })
+	#return profile_edit_profile(request)
 
 # index and upcoming #################### 
 def index(request, series_id=None, genre_id=None, start_date=datetime.today().date(), end_date=(datetime.today() + timedelta(37)).date()):
@@ -118,16 +113,6 @@ def index(request, series_id=None, genre_id=None, start_date=datetime.today().da
 			#print "filtered series_list = %s, len=%d" % (series_list, len(series_list))
 					
 	return render_to_response('index.html', {'reading_list': reading_list, 'index': True, 'start_date': start_date.strftime("%m/%d/%Y"), 'end_date': end_date.strftime("%m/%d/%Y") }, context_instance=RequestContext(request))
-
-	# generic views way
-	#try:
-	#return list_detail.object_list(request, queryset=Series.objects.all(), template_name="index.html", template_object_name="series")
-	#except TemplateDoesNotExist:
-	#	raise Http404()
-
-#def upcoming(request):
-#	# need to list the actual Reading events
-#	return index(request)
 
 # about ##############################
 def about(request, form_class=ContactForm, template_name='about.html', success_url=None, extra_context=None, fail_silently=False, message_success=False):
@@ -193,7 +178,7 @@ def generic_edit_view(request, edit_object, form_class, template_name, success_u
 
 # series ####################
 
-def detail_series(request, series_id):
+def series_detail(request, series_id):
 	"""
 	Displays a page about one particular series object, and a list of all its readings 
 	that happen today or in the future.
@@ -202,7 +187,7 @@ def detail_series(request, series_id):
 	reading_list=Reading.objects.filter(date_and_time__gte=datetime.today()).filter(series=series_id)
 	#print "reading_list = %s, reading_list length = %d" % (reading_list, len(reading_list))
 	print "series is %s, series contact_id is %s, series contact is X, series contact user is X" % (sr, sr.contact_id, )
-	return render_to_response('detail_series.html', {'series': sr, 'reading_list': reading_list}, context_instance=RequestContext(request))
+	return render_to_response('series_detail.html', {'series': sr, 'reading_list': reading_list}, context_instance=RequestContext(request))
 	
 @login_required	
 def edit_series(request, series_id=None):
@@ -342,14 +327,27 @@ def remove_series(request, template_name="remove_series.html", series_id=None, s
 	
 # contact ####################
 def contact_list(request):
+	"""
+	Uses a generic view to return a list of all the contacts on the site.
+	This is deprecated, because in practice, this probably will not be used often or at 
+	all. Any listing of contacts would be done by an admin from the admin site.
+	Consider removing entirely.
+	"""
 	return list_detail.object_list(request, queryset=User.objects.all(), template_name="generic_list.html")
 	
-def detail_contact(request, contact_id):
+def contact_detail(request, contact_id):
+	"""
+	Presents the details of a particular contact.
+	"""
 	c = get_object_or_404(User, pk=contact_id)
-	return render_to_response('detail_contact.html', {'contact': c}, context_instance=RequestContext(request))
+	return render_to_response('contact_detail.html', {'contact': c}, context_instance=RequestContext(request))
 	
 @login_required
 def edit_contact(request, contact_id=None):
+	"""
+	This is deprecated now that Contacts are Users. A user can only edit his/her own
+	information, and they can do that through the account profile page.
+	"""
 	if contact_id:
 		c = get_object_or_404(User, pk=contact_id)
 	else:
@@ -363,13 +361,17 @@ def edit_contact(request, contact_id=None):
 			except ValueError:
 				# need to figure out how to display more about this error
 				messages.error(request, 'ValueError')
-				return HttpResponseRedirect(reverse('series.views.detail_contact', args=(c.id,)))
+				return HttpResponseRedirect(reverse('series.views.contact_detail', args=(c.id,)))
 	else:
 		form = ReadsrContactForm(instance=c)	
 	return render_to_response('edit_contact.html', {'form': form, 'contact': c}, context_instance=RequestContext(request))
 
 # venue ########################
 def venue_list(request):
+	"""
+	Lists all the venues on the site. A better way to use this would be as a snipper
+	that presents a list of series by venue.
+	"""
 	return list_detail.object_list(request, queryset=Venue.objects.all(), template_name="generic_list.html")
 
 @login_required
@@ -438,16 +440,13 @@ def edit_venue(request, venue_id=None, success_url=None, extra_context=None):
 
 	return render_to_response("edit_venue.html", { 'venue_form': venue_form, 'address_form': address_form }, context_instance=context)
 	
-def detail_venue(request, venue_id):
+def venue_detail(request, venue_id):
 	"""
 	Show the details of a venue, including a list of all the series happening there.
 	"""
 	series_list = Series.objects.all()
-	#venue_series_list = Series.objects.filter(venue=venue_id)
 	venue_series_list = series_list.filter(venue=venue_id)
-	extra_context = { 'series_list': series_list, 'venue_series_list': venue_series_list }
-	# probably no point in using the generic view any more--might as well do render to response
-	return list_detail.object_detail(request, queryset=Venue.objects.filter(id__exact=venue_id), object_id=venue_id, template_name="detail_venue.html", template_object_name="venue", extra_context=extra_context)
+	return render_to_response("venue_detail.html", { 'venue': Venue.objects.get(pk=venue_id), 'series_list': series_list, 'venue_series_list': venue_series_list}, context_instance=RequestContext(request))
 	
 # affiliation ##################	
 def affiliate_list(request):
@@ -460,4 +459,3 @@ def edit_affiliate(request, affiliate_id=None):
 	else:
 		affiliate = Affiliate()
 	return generic_edit_view(request, edit_object=affiliate, form_class=AffiliateForm, template_name="generic_form.html")
-

@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.localflavor.us.forms import USPhoneNumberField, USStateSelect, USZipCodeField
 from django.contrib.auth.models import User
 from datetime import time
-from series.models import Series, Venue, Affiliate, Address
+from series.models import Series, Venue, Affiliate, Address, Contact
 from contact_form.forms import ContactForm
 from registration.forms import RegistrationFormUniqueEmail
 from django.conf import settings
@@ -99,3 +99,38 @@ class RemoveSeriesContactForm(ContactForm):
 class FullNameRegistrationForm(RegistrationFormUniqueEmail):
 	first_name = forms.CharField(widget=forms.TextInput(), required=False)
 	last_name = forms.CharField(widget=forms.TextInput(), required=False)
+
+# custom form class to allow users to edit their email address and name through 
+# django-profiles
+class ProfileForm(forms.ModelForm):
+
+	def __init__(self, *args, **kwargs):
+		super(ProfileForm, self).__init__(*args, **kwargs)
+
+		try:
+			self.fields['email'].initial = self.instance.user.email
+			self.fields['first_name'].initial = self.instance.user.first_name
+			self.fields['last_name'].initial = self.instance.user.last_name
+		except User.DoesNotExist as ex:
+			print "exception %s" % ex
+			pass
+
+	email = forms.EmailField(label="Primary email",help_text='')
+	first_name = forms.CharField(widget=forms.TextInput(), required=False)
+	last_name = forms.CharField(widget=forms.TextInput(), required=False)
+
+	class Meta:
+		model = Contact
+		exclude = ('user',)        
+
+	def save(self, *args, **kwargs):
+		"""
+		Update the primary email address and names on the related User object as well.
+		"""
+		u = self.instance.user
+		u.email = self.cleaned_data['email']
+		u.first_name = self.cleaned_data['first_name']
+		u.last_name = self.cleaned_data['last_name']
+		u.save()
+		profile = super(ProfileForm, self).save(*args,**kwargs)
+		return profile

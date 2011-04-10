@@ -42,7 +42,7 @@
 				<li><a href="/edit/">Add a Series</a></li>
 			    <li><a href="/about/">About</a></li>
 				{% if user.is_authenticated %}
-				<li><a href="/accounts/profile">Profile</a></li>
+				<li><a href="{{ contact.get_absolute_url }}">Profile</a></li>
 				<li><a href="/accounts/logout" id="logout">Logout</a></li>
 				{% else %}
 				<!--<li><a href="#" id="opener">Login</a></li>-->

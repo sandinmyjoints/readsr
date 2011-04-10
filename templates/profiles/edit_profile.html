@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Hi, {{ user.username }}.</h1>
+
+<div class="formFieldWrapper">
+<form action="" method="post">
+	{% csrf_token %}
+	<ul class="form">
+	{{ form.as_ul }}
+	</ul>
+	<input type="submit" value="Submit" class="submit_row" />
+	
+</form>
+</div>
+
+{% endblock content %}
