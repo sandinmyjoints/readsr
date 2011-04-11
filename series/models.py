@@ -1,10 +1,12 @@
+from datetime import datetime, time, timedelta
+
 from django.db import models
 from django.db.models import permalink
 from django.contrib.localflavor.us.models import PhoneNumberField, USStateField
 from django.conf import settings
 from django.contrib.auth.models import User
-from datetime import datetime, time, timedelta
 #from django.contrib.sites.models import Site
+from django.db.models.signals import post_save
 
 from city_site.models import CitySite
 
@@ -13,7 +15,6 @@ class Contact(models.Model):
 	"""
 	Represents a person who can be contacted about a particular reading series. Currently 
 	associated one-to-one with a user in the system.
-	NOTE: This class has been deprecated and replaced with django.contrib.auth.models.User throughout.
 	"""
 	# If we wanted to disassociate a contact from a particular user--for example, to let
 	# someone be a user in the system but create a new reading series and designate someone
@@ -31,6 +32,7 @@ class Contact(models.Model):
 	
 	@permalink
 	def get_absolute_url(self):
+		print "username %s" % self.user.username
 		return ('profiles_profile_detail', (), { 'username': self.user.username })
 	
 	def _get_first_name(self):
@@ -56,6 +58,12 @@ class Contact(models.Model):
 		
 	def __unicode__(self):
 		return self.full_name
+		
+	def create_contact(sender, instance, created, **kwargs):  
+	    if created:  
+	       profile, created = Contact.objects.get_or_create(user=instance)  
+
+	post_save.connect(create_contact, sender=User)
 		
 	
 class Genre(models.Model):

@@ -22,7 +22,6 @@ urlpatterns = patterns('',
 	(r'^accounts/', include('registration.backends.default.urls')),
 	# below lines were for using django's default installed registration/account system
 	# but django-registration takes care of these
-    #(r'^accounts/login/$',  login ),
 	#(r'^accounts/logout/$', 'series.views.logout_user'),	
 	#(r'^accounts/register/$', 'series.views.register'),
 

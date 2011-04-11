@@ -133,6 +133,8 @@ EMAIL_HOST_USER = ('william.bert@gmail.com')
 EMAIL_HOST_PASSWORD = ('glbnocb9')
 EMAIL_USE_TLS = True
 
+LOGIN_REDIRECT_URL = "/"
+
 # Grab local settings from local settings fie
 try:
  from local_settings import *

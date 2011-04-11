@@ -120,7 +120,9 @@ class ProfileForm(forms.ModelForm):
 	last_name = forms.CharField(widget=forms.TextInput(), required=False)
 
 	class Meta:
-		model = Contact
+		# what if I get rid of Contact and make User the model? But User isn't a model,
+		# it's something else, I think
+		model = Contact 
 		exclude = ('user',)        
 
 	def save(self, *args, **kwargs):
