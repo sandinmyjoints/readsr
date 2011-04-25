@@ -31,15 +31,18 @@ $.fn.inlineEdit = function( options ) {
                 editableElement = widget.element.find( widget.options.control ),
                 mutated = !!editableElement.length;
 
+            widget.element.removeClass( widget.options.hover );
+            
             if ( event.target !== editableElement[0] ) {
                 switch ( event.type ) {
                     case 'click':
                         widget[ mutated ? 'mutate' : 'init' ]();
                         break;
-					case 'mouseenter':
-                    case 'mouseover':
-                    case 'mouseout':
-					case 'mouseleave':
+
+                    case 'mouseover': // jquery 1.4.x
+                    case 'mouseout': // jquery 1.4.x
+                    case 'mouseenter':
+                    case 'mouseleave':
                         if ( !mutated ) {
                             widget.hoverClassChange( event );
                         }
@@ -79,8 +82,8 @@ $.inlineEdit.defaults = {
     hover: 'ui-state-hover',
     value: '',
     save: '',
-    buttons: '<button class="save">Update</button> <button class="cancel">Cancel</button>',
-    placeholder: '<span class="blank_reading_description">Click to add reader names and other details.</span>',
+    buttons: '<button class="save">save</button> <button class="cancel">cancel</button>',
+    placeholder: 'Click to edit',
     control: 'input',
     cancelOnBlur: false
 };
@@ -158,7 +161,8 @@ $.inlineEdit.prototype = {
     
     value: function( newValue ) {
         if ( arguments.length ) {
-            this.element.data( 'value' + namespace, $( '.' + placeholderClass, this ).length ? '' : newValue && newValue.replace( /\n/g,"<br />" ) );
+            var value = newValue === this.options.placeholder ? '' : newValue;
+            this.element.data( 'value' + namespace, $( '.' + placeholderClass, this ).length ? '' : value && value.replace( /\n/g,"<br />" ) );
         }
         return this.element.data( 'value' + namespace );
     },
@@ -216,7 +220,7 @@ $.inlineEdit.prototype = {
     },
 
     hoverClassChange: function( event ) {
-        $( event.target )[event.type === 'mouseover' || event.type === 'mouseenter' ? 'addClass':'removeClass']( this.options.hover );
+        $( event.target )[ /mouseover|mouseenter/.test( event.type ) ? 'addClass':'removeClass']( this.options.hover );
     }
 
 };
