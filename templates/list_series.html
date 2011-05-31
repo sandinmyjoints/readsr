@@ -9,17 +9,15 @@
 			{% endif %}
 			<br />
 			{% if series.regular %}
-			{{ series.week_within_month.get_week_within_month_display }} {{ series.day_of_week.get_day_display }}s, {{ series.time }}
+				{{ series.week_within_month.get_week_within_month_display }} {{ series.day_of_week.get_day_display }}s, {{ series.time }}
 			{% else %}
-			{{ series.irregular_date_description }}
+				{{ series.irregular_date_description }}
 			{% endif %}
 			<br />
 			{% for genre in series.genre.all %}
-			{{ genre.get_genre_display }}{% if not forloop.last %},{% endif %}
+				{{ genre.get_genre_display }}{% if not forloop.last %},{% endif %}
 			{% endfor %}
-			{% if not forloop.last %}
 			<div style="text-align:center">&#10018;</div>
-			{% endif %}
 		<li>
     {% endfor %}
 	</ul>

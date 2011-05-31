@@ -15,6 +15,9 @@ from django.views.generic import list_detail
 from django.contrib.sites.models import Site
 from django.conf import settings
 
+import tweepy # for tweeting about updated series
+import bitlyapi # for shortening urls for tweets
+
 from series.models import Series, Affiliate, Venue, Address
 from series.forms import SeriesForm, ReadsrContactForm, RemoveSeriesContactForm, VenueForm, AffiliateForm, AddressForm, ProfileForm
 from reading.models import Reading
@@ -219,22 +222,55 @@ def edit_series(request, series_id=None):
 				if sr.regular:
 					create_new_readings_list = True
 
-			# We are updating an exist reading series, so need to check if its time or regularity changed. 				
-			# Loop through items in sr and compare them to items in form.cleaned_data
-			# to see if any of the date/times have changed. 
 			# If so, we will need to update its reading events.
-			elif old_sr.regular != form.cleaned_data["regular"] or old_sr.day_of_week != form.cleaned_data["day_of_week"]	or old_sr.week_within_month != form.cleaned_data["week_within_month"] or old_sr.irregular_date_description != form.cleaned_data["irregular_date_description"] or old_sr.time != form.cleaned_data["time"] or old_sr.regular != form.cleaned_data["regular"] :
-				# For now, we hose all the items if the series changed regularity
-				# If what is being changed is the date, then				
-				# go into the db and hose all future readings.
-				# Then insert new readings to replace them.
-				# Need to warn the user this will delete all existing readings.
-				# Would be nice to someday fix it so it updates readings more intelligently, 
-				# but not sure what that would entail.
-				future_readings = Reading.objects.filter(series=sr.id).filter(date_and_time__gte=datetime.today()).delete()
-				if sr.regular:
-					create_new_readings_list = True
+			else:
+				# We are updating an existing series. 
+				
+				# Depending on what changed, we may want to tweet about it, so start constructing
+				# a tweet message.
+				tweet_message = ["%s has been updated!" % old_sr.primary_name]
+				tweet_or_not = False
+				
+				# If the name has changed, tweet about it:
+				if form.cleaned_data["primary_name"] != old_sr.primary_name:
+					tweet_or_not = True
+					tweet_message.append("New name: %s" % sr.primary_name)
+				
+				# We are updating an existing reading series, so need to check if its time or regularity changed. 				
+				# Loop through items in sr and compare them to items in form.cleaned_data
+				# to see if any of the date/times have changed. 				
+				if old_sr.regular != form.cleaned_data["regular"] or old_sr.day_of_week != form.cleaned_data["day_of_week"]	or old_sr.week_within_month != form.cleaned_data["week_within_month"] or old_sr.irregular_date_description != form.cleaned_data["irregular_date_description"] or old_sr.time != form.cleaned_data["time"] or old_sr.regular != form.cleaned_data["regular"] :
+					# For now, we hose all the items if the series changed regularity
+					# If what is being changed is the date, then				
+					# go into the db and hose all future readings.
+					# Then insert new readings to replace them.
+					# Need to warn the user this will delete all existing readings.
+					# Would be nice to someday fix it so it updates readings more intelligently, 
+					# but not sure what that would entail.
+					future_readings = Reading.objects.filter(series=sr.id).filter(date_and_time__gte=datetime.today()).delete()
+					if sr.regular:
+						create_new_readings_list = True
 					
+					tweet_or_not = True
+					tweet_message.append("New time.")
+
+				if old_sr.venue.id != form.cleaned_data["venue"].id:
+					tweet_or_not = True
+					tweet_message.append("New venue: %s" % form.cleaned_data["venue"])
+					# The location has changed, so add that to the tweet.
+					
+				if tweet_or_not:
+					# append shortened URL
+					api = bitlyapi.BitLy(settings.BITLY_USER, settings.BITLY_KEY) 
+					url = request.build_absolute_uri().replace("/edit", "")
+					res = api.shorten(longUrl=url)
+					tweet_message.append("%s" % res['url'])
+					
+					auth = tweepy.OAuthHandler(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
+					auth.set_access_token(settings.TWITTER_ACCESS_KEY, settings.TWITTER_ACCESS_SECRET)
+					api = tweepy.API(auth)
+					api.update_status(' '.join(tweet_message))
+				
 			# If the series has a regular time, day of the week, and week of the month, and
 			# it is new or its time has changed, then create new reading objects for the new year
 			if create_new_readings_list: 

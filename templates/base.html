@@ -28,7 +28,28 @@
 		
 		{% block header %}
 		<h1><a href="{% url index %}" id="header_link">{{ city_site.name }}</a></h1>
-		<h3>Literary reading series in and around {{ city_site.city }}, {{ city_site.state }}.</h3>
+		<h3>Literary reading series in and around 
+		<ul id="citysite_menu">
+			<li class="dropdown"><a href="#" class="dropdown-link">{{ city_site.city }}, {{ city_site.state }}</a>.
+				<ul class="sub-menu all_cities">
+				{% for a_city_site in all_city_sites %}
+					<li><a href="#">{{ a_city_site.city }}, {{ a_city_site.state }}</a></li>
+				{% endfor %}
+				</ul>
+			</li>
+		</ul>
+<!--		
+		<ul id="citysite_menu">
+			<li class="dropdown"><a href="#" class="dropdown-link">{{ city_site.city }}, {{ city_site.state }}</a>
+				<ul class="sub-menu all_cities">
+				{% for a_city_site in all_city_sites %}
+					<li><a href="#">{{ a_city_site.city }}, {{ a_city_site.state }}</a></li>
+				{% endfor %}
+				</ul>
+			</li>
+		</ul>.
+		-->
+		</h3>
 		{% endblock header %}
 		
 	</div>
@@ -116,6 +137,24 @@
 	})
 	</script>
 	{% endif %}
+	
+	<script type="text/javascript">
+	$(document).ready(function () {
+/*	    $('.current_city').click(function () {
+			$('#citysite_menu ul').slideToggle('medium');
+	    });
+	*/
+		$(".dropdown").click(
+			function() {
+				$("ul.sub-menu").slideToggle("200");
+				}
+			);
+		$(".dropdown").blur(
+			function() {
+				$("ul.sub-menu").slideToggle("200");
+			});
+	});
+	</script>
 	
 	{% block script %} 	
 	{% endblock script %}

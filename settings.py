@@ -88,6 +88,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 	"django.contrib.messages.context_processors.messages",
 	"django.core.context_processors.request",
 	"city_site.context_processors.city_site",
+	"city_site.context_processors.all_city_sites",
 	"series.context_processors.series_list",
 	"series.context_processors.contact",
 )
@@ -134,6 +135,14 @@ EMAIL_HOST_PASSWORD = ('glbnocb9')
 EMAIL_USE_TLS = True
 
 LOGIN_REDIRECT_URL = "/"
+
+TWITTER_CONSUMER_KEY = "oZpnsipBP1jBhGbPp5eCUA"
+TWITTER_CONSUMER_SECRET = "pi48qgRK2O0SmOlpWIDZtFsFh6AlaAcGY6IOyeY7IE"
+TWITTER_ACCESS_KEY = "307415363-Lb84FJbNjH6zyUSpDL0YYY9ovp8CQiIDXWbv5TcR"
+TWITTER_ACCESS_SECRET = "GXZBz82nLkytDbnFaU1nHrNhavCuhnKTFx3ACS59k"
+
+BITLY_USER = "readsr"
+BITLY_KEY = "R_8b4787749bdbc284709fc4dca825cc9b"
 
 # Grab local settings from local settings fie
 try:

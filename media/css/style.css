@@ -1,7 +1,7 @@
 /* body and headers */
 body {
-	background-color: #FFFFFF;
-	background: url("/media/background.png");
+	background-color: #FFF;
+	background: url("/media/adc3eb_bg.png");
 	background-repeat: repeat-x;
 	/* font-family: Georgia, Palatino, "Palatino Linotype", Times, "Times New Roman", serif; */
 	font-family: Garamond, "Hoefler Text", "Times New Roman", Times, serif;
@@ -178,10 +178,11 @@ div#sidebar {
 
 .sidebar_element {
 	width: 100%;
-	background: #BF9371;
-	margin-bottom: 10px;
+	background: #DDD;
+	margin-bottom: 20px;
+	padding-bottom: 20px;
 	margin-right: .5em;
-	border: 2px solid #AE8260;
+	border: 2px solid #888;
 	
 }
 
@@ -221,7 +222,8 @@ div#footer {
 
 /* other */
 a:link, a:visited {
-	color:#774E00; 
+	color: #24488E;
+	/*color:#774E00; */
 	/* color: #ADC3ED; */
 	text-decoration: none;
 }
@@ -298,13 +300,21 @@ dl dd {
 	padding: 10px 10px;
 }
 
+.sidebar_element dl dt {
+	padding: 2px 5px;
+}
+
+.sidebar_element dl dd {
+	padding: 2px 5px;
+}
+
 dd ul {
 	float: left;
 }
 
 #sidebar dl dd {
 	float: left;
-	width: 50%;
+	width: 55%;
 }
 
 li {
@@ -318,17 +328,19 @@ li {
 .external-icon {
 	width:24 px;
 	height: 24px;
+	position: relative;
+	top: 3px;
 }
 
 .edit-icon {
 	position: relative;
-	top: 4px;
+	top: 1px;
 	width:20px;
 	height:20px;
 }
 .delete-icon{
 	position: relative;
-	top: 4px;
+	top: 2px;
 	width: 20px;
 	height: 20px;
 }
@@ -476,19 +488,20 @@ li.reading_list {
 	padding: 0px 4px;
 }
 
-div#choose_date, div#banner {
-	background: #DDDDDD;
+div#choose_date {
+	background-color: transparent;
 	margin: 0em .5em;
 	/*padding: .2em;*/
 	text-align: center;
-}
-
-div#choose_date {
-	padding: .2em;
+		padding: .2em;
 }
 
 div#banner {
-	border: 2px solid #CCCCCC;
+	background: #BBB;
+	margin: 0em .5em;
+	/*padding: .2em;*/
+	text-align: center;
+	border: 2px solid #333;
 }
 
 div.inside_banner {
@@ -540,4 +553,55 @@ p {
 .sites_list li {
 	list-style-type: circle;
 	padding: .2em;
+}
+
+#citysite_menu {
+	margin: 0;
+	padding: 0;
+	display: inline;
+}
+
+#citysite_menu li {
+	display: inline;
+}
+
+#citysite_menu .sub-menu {
+	border: 1px solid black;
+	position: relative;
+	right: -24px;
+}
+
+#citysite_menu li .sub-menu {
+	display: none;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: 29px;
+	z-index: 999;
+	float: right;
+}
+
+#citysite_menu ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: none;
+	
+	position: absolute;
+	left: 0;
+	z-index: 500;
+}
+
+#citysite_menu ul li {
+	background-color: #DDD;
+	display: block;
+	position: relative;
+	right: -248px;
+	padding: 2px 10px 2px 10px;
+}
+
+#citysite_menu ul li a {
+	display: block;
+	
 }

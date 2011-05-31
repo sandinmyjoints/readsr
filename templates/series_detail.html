@@ -40,15 +40,16 @@
 		, {{ series.venue.secondary_name }}
 		{% endif %}
 		</li>
-		<li>{{ series.venue.address.street_address }},</li>
+		<li>{{ series.venue.address.street_address }}</li>
 		<li>{{ series.venue.address.city_address }} <a href="http://maps.google.com/?q=loc%3A+{{ series.venue.address.street_address }}+{{ series.venue.address.city_address }}+US">(map)</a></li>
 		</ul>
 	</dd>
+	<dt>When</dt>
 	{% if series.regular %}
-		<dt>When</dt>
-		<dd>{{ series.week_within_month.get_week_within_month_display }} {{ series.day_of_week.get_day_display }}s, {{ series.time }}</dd>
+		<dd>{{ series.week_within_month.get_week_within_month_display }} {{ series.day_of_week.get_day_display }}s
+		<br /> 
+		{{ series.time }}</dd>
 	{% else %}
-		<dt>When</dt>
 		<dd>{{ series.irregular_date_description }}</dd>
 	{% endif %}
 	{% if series.affiliation.all %}
@@ -69,10 +70,17 @@
 	{% endif %}
 	<dt>Admission</dt>
 	<dd>{{ series.admission_description|default:"Free" }}</dd>
+	{% if series.website %}
+	<dt>Website</dt>
+	<dd><a href="{{ series.website }}">{{ series.website }}</a></dd>
+	{% endif %}
+
 	{% if series.notes %}
 	<dt>Notes</dt>
 	<dd>{{ series.notes|default:"None" }}</dd>
 	{% endif %}
+	<div class="clear"></div>
+	
 </dl>
 </div>
 

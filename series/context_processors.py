@@ -7,7 +7,7 @@ from series.models import Series, Contact
 
 def series_list(request):
 	"""
-	Adds the current list of all readings series for this cityiste based on the settings file to the template context.
+	Adds the current list of all readings series for this city_site based on the settings file to the template context.
 	"""
 
 	try:
