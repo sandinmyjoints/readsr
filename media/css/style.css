@@ -157,6 +157,28 @@ div#content {
 	padding: 0px 2px;
 }
 
+/* banner at top of content */
+div#banner {
+	background: #DDD;
+	margin: 0em .5em;
+	/*padding: .2em;*/
+	text-align: center;
+	border: 2px solid #555;
+}
+
+div#choose_date {
+	background-color: transparent;
+	margin: 0em .5em;
+	/*padding: .2em;*/
+	text-align: center;
+		padding: .2em;
+}
+
+div.inside_banner {
+	padding: 1em;
+}
+
+
 /* sidebar */
 div#sidebar {
 	float: right;
@@ -182,7 +204,7 @@ div#sidebar {
 	margin-bottom: 20px;
 	padding-bottom: 20px;
 	margin-right: .5em;
-	border: 2px solid #888;
+	border: 2px solid #555;
 	
 }
 
@@ -488,24 +510,8 @@ li.reading_list {
 	padding: 0px 4px;
 }
 
-div#choose_date {
-	background-color: transparent;
-	margin: 0em .5em;
-	/*padding: .2em;*/
-	text-align: center;
-		padding: .2em;
-}
-
-div#banner {
-	background: #BBB;
-	margin: 0em .5em;
-	/*padding: .2em;*/
-	text-align: center;
-	border: 2px solid #333;
-}
-
-div.inside_banner {
-	padding: 1em;
+.series_list p {
+	padding: 0px 4px;
 }
 
 span.ui-state-hover {
@@ -566,7 +572,6 @@ p {
 }
 
 #citysite_menu .sub-menu {
-	border: 1px solid black;
 	position: relative;
 	right: -24px;
 }
