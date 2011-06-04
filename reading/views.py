@@ -6,34 +6,67 @@ from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.template import RequestContext
 from django.core.exceptions import ValidationError
-
+from django.utils.safestring import mark_safe
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+
 from reading.models import Reading
 from reading.forms import ReadingForm
 
-def list_readings(request, start_date=datetime.today(), end_date=datetime.today()+timedelta(31)):
+def calendar(request, year, month, series_id=None):
+#	if series_id:
+#		readings = Reading.objects.order_by('date_and_time').filter(series=series_id)
+#	else:
+#		readings = Reading.objects.order_by('date_and_time')
+#	print "readings count is %d" % readings.count()
+	return render_to_response('cal_template.html', { 'year': year, 'month': month })
+
+def list_readings(request, series_id=None, start_date=datetime.today(), end_date=datetime.today()+timedelta(31)):
 	"""
-	Displays a list of all the readings between start_date and end_date.
+	Displays a list of all the readings in series series_id between start_date and end_date.
+	If series_id is None, list all readings.
 	"""
 	
-	reading_list = Reading.objects.filter(date_and_time__gte=start_date).filter(date_and_time__lte=end_date).order_by("date_and_time")
-	return render_to_response('readings_index.html', {'reading_list': reading_list }, context_instance=RequestContext(request))
-	
-def list_readings_month(request, num_months=1, ajax="0", index="0"):
+	try: 
+		if series_id:
+			reading_list = Reading.objects.filter(series=series_id).filter(date_and_time__gte=start_date).filter(date_and_time__lte=end_date).order_by("date_and_time")
+		else:
+			reading_list = Reading.objects.filter(date_and_time__gte=start_date).filter(date_and_time__lte=end_date).order_by("date_and_time")
+			
+		return render_to_response('readings_index.html', {'reading_list': reading_list }, context_instance=RequestContext(request))
+	except ValueError:
+		raise Http404
+		
+def list_readings_month(request, series_id=None, num_months=1, ajax="0", index="0"):
 	"""
 	Displays a list of all the readings for num_months months from today.
 	"""
 	
-	reading_list = Reading.objects.filter(date_and_time__gte=datetime.today()).filter(date_and_time__lte=datetime.today()+timedelta(31*int(num_months.rstrip('/')))).order_by("date_and_time")
-	if index=="0":
-		whether_index = False
-	else:
-		whether_index = True
+	try: 
+		reading_list = Reading.objects.filter(date_and_time__gte=datetime.today()).filter(date_and_time__lte=datetime.today()+timedelta(31*int(num_months.rstrip('/')))).order_by("date_and_time")
+		if index=="0":
+			whether_index = False
+		else:
+			whether_index = True
 	
-	if ajax=="1": # list_readings has not styles by itself
-		return render_to_response('list_readings.html', {'reading_list': reading_list, 'index': whether_index }, context_instance=RequestContext(request))
-	else: # readings_index is a wrapper so the page can stand on its own
-		return render_to_response('readings_index.html', {'reading_list': reading_list, 'index': whether_index }, context_instance=RequestContext(request))
+		if ajax=="1": # list_readings has not styles by itself
+			return render_to_response('list_readings.html', {'reading_list': reading_list, 'index': whether_index }, context_instance=RequestContext(request))
+		else: # readings_index is a wrapper so the page can stand on its own
+			return render_to_response('readings_index.html', {'reading_list': reading_list, 'index': whether_index }, context_instance=RequestContext(request))
+	except ValueError:
+		raise Http404
+	
+def list_readings_date(request, year, month, date, series_id=None):
+	"""
+	Displays a list of readings for a given date, for a calendar-style lookup.
+	"""
+	try: 
+		start_date = datetime(int(year), int(month), int(date), 0, 0, 0)
+		end_date = datetime(int(year), int(month), int(date), 23, 59, 59)
+		reading_list = Reading.objects.filter(date_and_time__gte=start_date).filter(date_and_time__lte=end_date).order_by("date_and_time")
+		# .filter(series.site_id__eq=request.city_site.site_ptr_id)
+		return render_to_response('readings_index.html', {'reading_list': reading_list }, context_instance=RequestContext(request))
+	except ValueError:
+		raise Http404
 	
 def detail_reading(request, series_id=None, reading_id=None):
 	return HttpResponse("detail")

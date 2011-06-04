@@ -8,7 +8,6 @@ from series.models import Series
 urlpatterns = patterns('',
     # Example:
 	url(r'^readings/', include('reading.urls')),
-	#url(r'^upcoming/$', views.upcoming, name="upcoming"),
 	url(r'^about/$', views.about, name="about"),
 	url(r'^(?P<series_id>\d+)/readings/', include('reading.urls')),
 	url(r'^(?P<series_id>\d+)/$', views.series_detail, name="detail-series"),

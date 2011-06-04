@@ -30,7 +30,7 @@ class Reading(models.Model):
 		
 	def time(self):
 		return self.date_and_time.time()
-		
+						
 	@models.permalink
 	def get_absolute_url(self):
 		return ('detail-reading', (), { 
