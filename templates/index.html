@@ -9,20 +9,19 @@
 	<h2>Upcoming readings in {{ city_site.city}}, {{ city_site.state }}</h2>
 
 <div id="choose_date">
-	<!--
-	need some kind date picker for start date
-	then another for end date
-	whenever one of them is changed, do an ajax request for the readings from that
-	but for now, just load a different page
-	so need a view that takes a startdate and an enddate
-	maybe pass by get instead of form so it doesn't have to use url mapping?
-	-->
 	<span class="datepicker_nb"><input id="datepicker_start" type="text">
 		to 
 	<input id="datepicker_end" type="text"></span>
 	
 	<span class="datepicker"><a href="#" id="next_week">Next Week</a></span>
 	<span class="datepicker"><a href="#" id="next_month">Next Month</a></span>
+
+	<!-- Need to write code to change the type of display via Ajax -->
+	{% if view_type = "list" %}
+	<!--><span class=""><a href="#" id="calendar">Calendar</a></span>-->
+	{% else %}
+	<!--><span class=""><a href="#" id="list">List</a></span>-->
+	{% endif %}
 </div>
 </div>
 
@@ -108,11 +107,9 @@ $(function() {
 		var end_date = end.datepicker("getDate");
 		var start_month = start_date.getMonth()+1;
 		var end_month = end_date.getMonth()+1;
-		//url = "http://127.0.0.1:8000/";
 		url = "http://{{ city_site.domain }}/";
 		new_loc = "?" + "start=" + start_month + "-" + start_date.getDate() + "-" + start_date.getFullYear() + "&" + "end=" + end_month + "-" + end_date.getDate() + "-" + end_date.getFullYear();
-		//alert("new loc =" + new_loc);
-		//window.location.href = new_loc; // reload page 
+		//window.location.href = new_loc; // reload page--a way of doing this without using ajax
 		$("#reading_list").load(new_loc + " #reading_list"); // pull data using ajax
 	}
 
