@@ -24,9 +24,6 @@ def contact(request):
 	try:
 		# This should return a queryset of either zero (if no user is logged in) or
 		# one (logged-in user) contact objects.
-		print "contact is %s" % Contact.objects.filter(user__exact=request.user.id)
-		print "contact is is %d" % request.user.id
-		print "user is %s" % request.user
 		if Contact.objects.filter(user__exact=request.user.id).count() == 0:
 			return { 'contact': "" }
 		else:

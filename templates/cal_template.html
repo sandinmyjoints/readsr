@@ -3,6 +3,12 @@
 {% block content %}
 {% load reading_tags %}
 
-{% reading_calendar year month %}
+<div id="banner">
+	<h2>Readings in {{ city_site.city}}, {{ city_site.state }} - {{ month_name }}, {{ year }}</h2>
+</div>
+
+<div id="calendar">
+	{% reading_calendar year month readings_list %}
+</div>
 
 {% endblock content %}

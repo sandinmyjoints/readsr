@@ -610,3 +610,70 @@ p {
 	display: block;
 	
 }
+
+#calendar {
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+#calendar table {
+    width: 100%;
+}
+
+#calendar th {
+	font-size: 16px;
+	background-color: #00297A;
+	text-align: center;
+    color: #FFF;
+    
+}
+
+#calendar .mon th,
+#calendar .tue th,
+#calendar .wed th,
+#calendar .thu th,
+#calendar .fri th,
+#calendar .sat th,
+#calendar .sun th
+{
+    text-align: center;
+    font-size: 12px;
+    background-color: #00297A;
+    color: #FFF;
+}
+
+#calendar table tr th {
+}
+
+#calendar table tr td {
+    width: 10%;
+    border: 1px solid #555;
+    vertical-align: top;
+    height: 120px;
+    padding: 2px;
+}
+
+#calendar td.noday {
+    background-color: #eee;
+}
+
+#calendar td.filled {
+    background-color: #ADC3DB;
+}
+
+#calendar td.today {
+    border: 4px solid #316497;
+}
+
+#calendar .dayNumber {
+	float: right;
+    font-size: 16px !important;
+}
+
+#calendar .dayNumberNoReadings {
+	float: right;
+}
+
+#calendar a {
+    font-size: 10px;
+}

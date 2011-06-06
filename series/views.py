@@ -188,7 +188,6 @@ def series_detail(request, series_id):
 	"""
 	sr = get_object_or_404(Series, pk=series_id)
 	reading_list=Reading.objects.filter(date_and_time__gte=datetime.today()).filter(series=series_id)
-	#print "reading_list = %s, reading_list length = %d" % (reading_list, len(reading_list))
 	print "series is %s, series contact_id is %s, series contact is X, series contact user is X" % (sr, sr.contact_id, )
 	return render_to_response('series_detail.html', {'series': sr, 'reading_list': reading_list}, context_instance=RequestContext(request))
 	
