@@ -60,7 +60,7 @@ def edit_profile(request):
 	#return profile_edit_profile(request)
 
 # index and upcoming #################### 
-def index(request, series_id=None, genre_id=None, start_date=datetime.today().date(), end_date=(datetime.today() + timedelta(37)).date()):
+def index(request, series_id=None, genre_id=None, list_view=True, start_date=datetime.today().date(), end_date=(datetime.today() + timedelta(37)).date()):
 	"""
 	Displays a list of readings ordered chronologically. Takes a start date and an end date.
 	By default, it shows readings from all series. But if a series ID is passed in, it 
@@ -85,7 +85,12 @@ def index(request, series_id=None, genre_id=None, start_date=datetime.today().da
 	``genre_id``
 		Default is none, which returns readings of all any and all genres. 
 		
+	``list_view``
+		Whether to show in list view or in calendar view.
+		
 	"""
+	print "series_id = %s" % series_id
+	
 	current_site = Site.objects.get_current()
 	
 	# if we're on the generic www.readsrs.com site, show a list of available cities
@@ -93,10 +98,11 @@ def index(request, series_id=None, genre_id=None, start_date=datetime.today().da
 		return render_to_response('splash.html', { 'sites_list': Site.objects.exclude(id__exact=current_site.id) }, context_instance=RequestContext(request))
 	
 	if request.method == "GET":
+		print "request method is GET"
 		# if request is get, then we can get start and end dates from that
 		start = request.GET.get('start', "")
 		end = request.GET.get('end', "")
-		series_id = request.GET.get('series_id', "")
+		series_id = request.GET.get('series_id', series_id)
 
 		if not start=="" and not end=="":
 			start_date = datetime.strptime(start, "%m-%d-%Y")
@@ -104,18 +110,67 @@ def index(request, series_id=None, genre_id=None, start_date=datetime.today().da
 		
 		reading_list = Reading.objects.filter(series__site__exact=current_site.id).filter(date_and_time__gte=start_date).filter(date_and_time__lte=end_date)
 		
-		#print "series_id = %s" % series_id
-		#print "Start_Date=%s end_date=%s" % (start_date, end_date)
+		print "series_id = %s" % series_id
+		print "Start_Date=%s end_date=%s" % (start_date, end_date)
 		#print "reading_list = %s, len=%d" % (reading_list, len(reading_list))
 		#print "series_list = %s, len=%d" % (series_list, len(series_list))
-		print "series_id = %s" % series_id
 		if series_id:
-			reading_list = reading_list.filter(series__site__exact=current_site.id).filter(date_and_time__gte=start_date).filter(date_and_time__lte=end_date).filter(series__id__exact=series_id)
-			series_list = Series.objects.filter(site__exact=current_site.id).filter(pk=series_id)
+			# we are in detail_series mode so filter the reading_list down to just the ones for this series_id
+			reading_list = reading_list.filter(series__site__exact=current_site.id).filter(series__id__exact=series_id)
+			sr = Series.objects.get(pk=series_id)
+			
 			#print "filtered reading_list = %s, len=%d" % (reading_list, len(reading_list))
-			#print "filtered series_list = %s, len=%d" % (series_list, len(series_list))
-					
-	return render_to_response('index.html', {'reading_list': reading_list, 'index': True, 'start_date': start_date.strftime("%m/%d/%Y"), 'end_date': end_date.strftime("%m/%d/%Y") }, context_instance=RequestContext(request))
+	else:
+		# not GET method
+		raise Http404
+	
+	if series_id:
+		print "series is %s, series.contact_id is %d" % (sr, sr.contact_id)
+		# we are in detail-series mode	
+		return render_to_response('series_detail.html', {
+															'series': sr, 
+															'reading_list': reading_list,
+															'start_date': start_date.strftime("%m/%d/%Y"), 
+															'end_date': end_date.strftime("%m/%d/%Y"),
+															'list_view': list_view,
+															'year': start_date.year,
+															'month': start_date.month,
+														}, context_instance=RequestContext(request))
+	else:						
+		# we are in index mode
+		print "in index mode, list_view is %d " % (list_view)
+		return render_to_response('index.html', {
+													'reading_list': reading_list, 
+													'index': True, 
+													'start_date': start_date.strftime("%m/%d/%Y"), 
+													'end_date': end_date.strftime("%m/%d/%Y"),
+													'list_view': list_view,
+													'year': start_date.year,
+													'month': start_date.month,
+												}, context_instance=RequestContext(request))
+
+# THIS VIEW IS DEPRECATED, REPLACED BY INDEX
+def series_detail(request, series_id, list_view=True):
+	"""
+	Displays a page about one particular series object, and a list of all its readings 
+	that happen today or in the future.
+
+	``series_id``
+		Series id must be supplied or else we get a 404 error.
+
+	``list_view``
+		Whether to display in list view or calendar view. Default is list.
+	"""
+	sr = get_object_or_404(Series, pk=series_id)
+	reading_list=Reading.objects.filter(date_and_time__gte=datetime.today()).filter(series=series_id)
+	print "series is %s, series contact_id is %s, series contact is X, series contact user is X" % (sr, sr.contact_id, )
+	return render_to_response('series_detail.html', {
+														'series': sr, 
+														'reading_list': reading_list,
+														'list_view': list_view,
+													}, context_instance=RequestContext(request))
+
+
 
 # about ##############################
 def about(request, form_class=ContactForm, template_name='about.html', success_url=None, extra_context=None, fail_silently=False, message_success=False):
@@ -180,16 +235,6 @@ def generic_edit_view(request, edit_object, form_class, template_name, success_u
 	
 
 # series ####################
-
-def series_detail(request, series_id):
-	"""
-	Displays a page about one particular series object, and a list of all its readings 
-	that happen today or in the future.
-	"""
-	sr = get_object_or_404(Series, pk=series_id)
-	reading_list=Reading.objects.filter(date_and_time__gte=datetime.today()).filter(series=series_id)
-	print "series is %s, series contact_id is %s, series contact is X, series contact user is X" % (sr, sr.contact_id, )
-	return render_to_response('series_detail.html', {'series': sr, 'reading_list': reading_list}, context_instance=RequestContext(request))
 	
 @login_required	
 def edit_series(request, series_id=None):
