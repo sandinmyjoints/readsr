@@ -19,10 +19,25 @@ $(function() {
 		var end_month = end_date.getMonth()+1;
 		
 		url = "http://{{ city_site.domain }}/";
-		new_loc = "?" + "list_view=" + 0 + "&" + "start=" + start_month + "-" + start_date.getDate() + "-" + start_date.getFullYear() + "&" + "end=" + end_month + "-" + end_date.getDate() + "-" + end_date.getFullYear();
+		new_loc = "?" + "list_view=" + list_view + "&" + "start=" + start_month + "-" + start_date.getDate() + "-" + start_date.getFullYear() + "&" + "end=" + end_month + "-" + end_date.getDate() + "-" + end_date.getFullYear();
 
-		alert("new_loc is " + new_loc);
 		$("#reading_list").load(new_loc + " #reading_list"); // pull data using ajax
+
+		// now change the controls to reflect the new view
+		if(list_view) {
+			// changing to list view
+			// first, hide the calendar controls
+			$("#calendar_view").slideToggle(false);
+			// then, show the list controls
+			$("#list_view").slideToggle(true);
+		}
+		else {
+			// changing to calendar view
+			// first, hide the list view
+			$("#list_view").slideToggle(false);
+			// then, show the calendar controls
+			$("#calendar_view").slideToggle(true);
+		}
 	}
 	
 	$("#next_week").click(function() {

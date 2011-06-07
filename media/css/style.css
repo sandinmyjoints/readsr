@@ -502,6 +502,10 @@ li.reading_list {
 	font-weight: bold;
 }
 
+.view_select {
+	font-weight: bold;
+}
+
 #datepicker_start, #datepicker_end {
 	margin-left: .5em;
 }

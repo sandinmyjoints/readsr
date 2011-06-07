@@ -36,12 +36,11 @@ def profile_detail(request, username):
 	Renders the user's profile page, which contains links to update email and change password.
 	Requires the user to be logged in.
 	"""
-	#user_series = Series.objects.filter(contact__first_name__exact=request.user.first_name).filter(contact__last_name__exact=request.user.last_name)
-	user_series = Series.objects.filter(contact__exact=request.user)
+
+	user_owned_series = Series.objects.filter(contact__exact=request.user)
 	
 #	return render_to_response("registration/profile.html", { "user": request.user, "user_series": user_series }, context_instance=RequestContext(request))
-	print "calling ppd with form_class=ProfileForm"
-	return profile_profile_detail(request, username, extra_context={ 'user_series': user_series })
+	return profile_profile_detail(request, username, extra_context={ 'user_series': user_owned_series })
 
 #	if request.user.is_authenticated():
 #		return render_to_response("registration/profile.html", { "user": request.user }, context_instance=RequestContext(request))
@@ -55,9 +54,8 @@ def create_profile(request):
 	
 @login_required	
 def edit_profile(request):
-	user_series = Series.objects.filter(contact__exact=request.user)
-	return profile_edit_profile(request, form_class=ProfileForm, extra_context={ 'user_series': user_series })
-	#return profile_edit_profile(request)
+	user_owned_series = Series.objects.filter(contact__exact=request.user)
+	return profile_edit_profile(request, form_class=ProfileForm, extra_context={ 'user_series': user_owned_series })
 
 # index and upcoming #################### 
 def index(request, series_id=None, genre_id=None, list_view=True, start_date=datetime.today().date(), end_date=(datetime.today() + timedelta(37)).date()):
@@ -103,6 +101,11 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 		start = request.GET.get('start', "")
 		end = request.GET.get('end', "")
 		series_id = request.GET.get('series_id', series_id)
+		list_view = request.GET.get('list_view', "True")
+		if list_view == "false":
+			list_view = False
+		else:
+			list_view = True
 
 		if not start=="" and not end=="":
 			start_date = datetime.strptime(start, "%m-%d-%Y")

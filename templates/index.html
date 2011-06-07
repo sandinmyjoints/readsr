@@ -16,16 +16,11 @@
 	<span class="datepicker"><a href="#" id="next_week">Next Week</a></span>
 	<span class="datepicker"><a href="#" id="next_month">Next Month</a></span>
 
-	<!-- Need to write code to change the type of display via Ajax -->
-	{% if list_view %}
-		<span class=""><a href="#" id="calendar_view">Calendar</a></span>
-	{% else %}
-		<span class=""><a href="#" id="list_view">List</a></span>
-	{% endif %}
+	<span class="view_select"><a href="#" id="calendar_view">Calendar</a></span>
+	<span class="view_select"><a href="#" id="list_view">List</a></span>
 </div>
 </div>
 
-list_view is {{ list_view }}
 	<div id="reading_list">
 		{% if list_view %}
 			{% include "list_readings.html" %}
@@ -35,13 +30,21 @@ list_view is {{ list_view }}
 
 	</div>
 
-
-
 {% endblock content %}
 
 {% block script %}
 {{ super.script }}
 
 {% include "datepickerscript.js" %}
+
+<script>
+$(function() {
+{% if list_view %}
+	$("#list_view").hide();
+{% else %}
+	$("#calendar_view").hide();
+{% endif %}
+});
+</script>
 
 {% endblock script %}
