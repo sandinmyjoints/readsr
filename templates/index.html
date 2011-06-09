@@ -9,19 +9,27 @@
 	<h2>Upcoming readings in {{ city_site.city}}, {{ city_site.state }}</h2>
 
 <div id="choose_date">
-	<span class="datepicker_nb"><input id="datepicker_start" type="text">
+	<!-- first set the controls for the list view -->
+	<span class="datepicker_nb list_controls"><input id="datepicker_start" type="text">
 		to 
 	<input id="datepicker_end" type="text"></span>
 	
-	<span class="datepicker"><a href="#" id="next_week">Next Week</a></span>
-	<span class="datepicker"><a href="#" id="next_month">Next Month</a></span>
+	<span class="list_controls"><a href="#" id="next_week">Next Week</a></span>
+	<span class="list_controls"><a href="#" id="next_month">Next Month</a></span>
 
-	<span class="view_select"><a href="#" id="calendar_view">Calendar</a></span>
-	<span class="view_select"><a href="#" id="list_view">List</a></span>
+	<!-- then set the controls for the calendar view -->
+	<span class="calendar_controls"><a href="#" id="previous_year">Previous Year</a></span>
+	<span class="calendar_controls"><a href="#" id="previous_month">Previous Month</a></span>
+	<span class="calendar_controls"><a href="#" id="next_month">Next Month</a></span>
+	<span class="calendar_controls"><a href="#" id="next_year">Next Year</a></span>
+
+	<span class="select_view_type list_controls"><a href="#" id="calendar_view">Calendar</a></span>
+	<span class="select_view_type calendar_controls"><a href="#" id="list_view">List</a></span>
 </div>
 </div>
 
 	<div id="reading_list">
+		<img id="load_image" src="media/spinner-large.gif">
 		{% if list_view %}
 			{% include "list_readings.html" %}
 		{% else %}
@@ -36,15 +44,5 @@
 {{ super.script }}
 
 {% include "datepickerscript.js" %}
-
-<script>
-$(function() {
-{% if list_view %}
-	$("#list_view").hide();
-{% else %}
-	$("#calendar_view").hide();
-{% endif %}
-});
-</script>
 
 {% endblock script %}

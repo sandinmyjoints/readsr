@@ -497,17 +497,24 @@ li.reading_list {
 	padding: .5em 1em;
 }
 
-.datepicker {
+.list_controls {
 	padding: .5em 1em;
 	font-weight: bold;
 }
 
-.view_select {
-	font-weight: bold;
-}
 
 #datepicker_start, #datepicker_end {
 	margin-left: .5em;
+}
+
+.calendar_controls {
+	padding: .5em 1em;
+	font-weight: bold;
+	
+}
+
+.select_view_type {
+	font-weight: bold;
 }
 
 .series_list li {
@@ -680,4 +687,22 @@ p {
 
 #calendar a {
     font-size: 10px;
+}
+
+#load_image {
+	display:none;
+	width:48px;
+	height:48px;
+	top: 36px;
+	left: 286px;
+	/*text-indent:-3000px;*/
+	background-position:0 0;
+	background-repeat:no-repeat;
+	z-index:2000;
+	overflow:hidden;
+	position:absolute;
+}
+
+#reading_list {
+	position: relative;
 }

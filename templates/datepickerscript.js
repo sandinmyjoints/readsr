@@ -1,6 +1,17 @@
+<script>
+// set the initial viewing controls
+$(function() {
+{% if list_view %}
+	$(".calendar_controls").hide();
+{% else %}
+	$(".list_controls").hide();
+{% endif %}
+});
+</script>
+
+<script src="media/js/jquery.spinner.js"></script>
 <script type="text/javascript">
 $(function() {
-	//$( "#tabs" ).tabs();
 	
 	$("#calendar_view").click(function() {
 		change_view(false);
@@ -20,23 +31,30 @@ $(function() {
 		
 		url = "http://{{ city_site.domain }}/";
 		new_loc = "?" + "list_view=" + list_view + "&" + "start=" + start_month + "-" + start_date.getDate() + "-" + start_date.getFullYear() + "&" + "end=" + end_month + "-" + end_date.getDate() + "-" + end_date.getFullYear();
-
-		$("#reading_list").load(new_loc + " #reading_list"); // pull data using ajax
+		$("#load_image").fadeIn("fast");
+		$("#reading_list").fadeOut("fast");
+		$("#reading_list").load(new_loc + " #reading_list", function() {
+			// callback function
+			$("#load_image").fadeOut("fast");
+		}); // pull data using ajax
+		$("#reading_list").fadeIn("fast");
 
 		// now change the controls to reflect the new view
 		if(list_view) {
-			// changing to list view
+			// was list_view, now changing to calendar view
 			// first, hide the calendar controls
-			$("#calendar_view").slideToggle(false);
-			// then, show the list controls
-			$("#list_view").slideToggle(true);
+			$(".calendar_controls").fadeOut("fast", function() {
+				// then, show the list controls
+				$(".list_controls").fadeIn("fast");
+			});
 		}
 		else {
-			// changing to calendar view
-			// first, hide the list view
-			$("#list_view").slideToggle(false);
-			// then, show the calendar controls
-			$("#calendar_view").slideToggle(true);
+			// changing to list view
+			// first, hide the list controls
+			$(".list_controls").fadeOut("fast", function() {
+				// then, show the calendar controls
+				$(".calendar_controls").fadeIn("fast");				
+			});
 		}
 	}
 	
