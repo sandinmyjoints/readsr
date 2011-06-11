@@ -706,3 +706,18 @@ p {
 #reading_list {
 	position: relative;
 }
+
+.reading_description {
+	border: 1px solid;
+	border-color: transparent;
+}
+
+.inlineEdit-placeholder {
+	border: 1px solid;
+	border-color: transparent;
+	
+}
+
+#choose_date form {
+	display: inline;
+}

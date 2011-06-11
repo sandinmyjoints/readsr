@@ -87,7 +87,6 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 		Whether to show in list view or in calendar view.
 		
 	"""
-	print "series_id = %s" % series_id
 	
 	current_site = Site.objects.get_current()
 	
@@ -96,40 +95,56 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 		return render_to_response('splash.html', { 'sites_list': Site.objects.exclude(id__exact=current_site.id) }, context_instance=RequestContext(request))
 	
 	if request.method == "GET":
-		print "request method is GET"
 		# if request is get, then we can get start and end dates from that
 		start = request.GET.get('start', "")
 		end = request.GET.get('end', "")
 		series_id = request.GET.get('series_id', series_id)
 		list_view = request.GET.get('list_view', "True")
-		if list_view == "false":
+		if list_view == "Calendar":
+			# js is disabled
+			print "list_view is %s, js is disabled" % list_view
+			list_view = False
+			pass
+		elif list_view == "List":
+			# js is disabled
+			print "list_view is %s, js is disabled" % list_view
+			list_view = True
+			pass
+		elif list_view == "false":
 			list_view = False
 		else:
 			list_view = True
-
+			
 		if not start=="" and not end=="":
 			start_date = datetime.strptime(start, "%m-%d-%Y")
 			end_date = datetime.strptime(end, "%m-%d-%Y")
+		else:
+			# if both dates are not supplied, default to a range of today + one month
+			start_date = datetime.today()
+			td = timedelta(31)
+			end_date = start_date + td
 		
 		reading_list = Reading.objects.filter(series__site__exact=current_site.id).filter(date_and_time__gte=start_date).filter(date_and_time__lte=end_date)
 		
-		print "series_id = %s" % series_id
-		print "Start_Date=%s end_date=%s" % (start_date, end_date)
 		#print "reading_list = %s, len=%d" % (reading_list, len(reading_list))
 		#print "series_list = %s, len=%d" % (series_list, len(series_list))
 		if series_id:
 			# we are in detail_series mode so filter the reading_list down to just the ones for this series_id
 			reading_list = reading_list.filter(series__site__exact=current_site.id).filter(series__id__exact=series_id)
 			sr = Series.objects.get(pk=series_id)
+		else:
+			sr = None
 			
 			#print "filtered reading_list = %s, len=%d" % (reading_list, len(reading_list))
 	else:
 		# not GET method
 		raise Http404
+
+	print "series is %s, start_date is %s, end_date is %s" % (sr, start_date.strftime("%m/%d/%Y"), end_date.strftime("%m/%d/%Y"))
 	
 	if series_id:
-		print "series is %s, series.contact_id is %d" % (sr, sr.contact_id)
 		# we are in detail-series mode	
+		print "ending view in detail-series mode, list_view is %d " % (list_view)
 		return render_to_response('series_detail.html', {
 															'series': sr, 
 															'reading_list': reading_list,
@@ -141,7 +156,7 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 														}, context_instance=RequestContext(request))
 	else:						
 		# we are in index mode
-		print "in index mode, list_view is %d " % (list_view)
+		print "ending view in index mode, list_view is %d " % (list_view)
 		return render_to_response('index.html', {
 													'reading_list': reading_list, 
 													'index': True, 

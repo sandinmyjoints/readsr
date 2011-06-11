@@ -103,6 +103,14 @@
 {% block script %}
 {{ super.script }}
 
-{% include "datepickerscript.js" %}
+<script type="text/javascript">
+// set the initial viewing controls
+{% if list_view %}
+	$(".calendar_controls").hide();
+{% else %}
+	$(".list_controls").hide();
+{% endif %}
+</script>
 
+<script type="text/javascript" src="media/js/datepickerscript.js"></script>
 {% endblock script %}

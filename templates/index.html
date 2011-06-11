@@ -4,27 +4,31 @@
 
 {% block content %}
 
-
 <div id="banner">
 	<h2>Upcoming readings in {{ city_site.city}}, {{ city_site.state }}</h2>
 
 <div id="choose_date">
 	<!-- first set the controls for the list view -->
-	<span class="datepicker_nb list_controls"><input id="datepicker_start" type="text">
+	<form name="submit_date" class="datepicker_nb list_controls" action="{% url index %}" method="get">
+		<input name="start_date" id="datepicker_start" type="text">
 		to 
-	<input id="datepicker_end" type="text"></span>
+		<input name="end_date" id="datepicker_end" type="text">
+		<input id="submit_date" type="submit" name="submit_date" value="Go">
+	</form>
 	
 	<span class="list_controls"><a href="#" id="next_week">Next Week</a></span>
 	<span class="list_controls"><a href="#" id="next_month">Next Month</a></span>
 
 	<!-- then set the controls for the calendar view -->
-	<span class="calendar_controls"><a href="#" id="previous_year">Previous Year</a></span>
-	<span class="calendar_controls"><a href="#" id="previous_month">Previous Month</a></span>
+	<span class="calendar_controls"><a href="#PreviousYear" id="previous_year">Previous Year</a></span>
+	<span class="calendar_controls"><a href="#PreviousMonth" id="previous_month">Previous Month</a></span>
 	<span class="calendar_controls"><a href="#" id="next_month">Next Month</a></span>
 	<span class="calendar_controls"><a href="#" id="next_year">Next Year</a></span>
 
-	<span class="select_view_type list_controls"><a href="#" id="calendar_view">Calendar</a></span>
-	<span class="select_view_type calendar_controls"><a href="#" id="list_view">List</a></span>
+	<form name="view_type" action="{% url index %}" method="get">
+	<input id="calendar_view" class="select_view_type list_controls" type="submit" name="list_view" value="Calendar" />
+	<input id="list_view" class="select_view_type calendar_controls" type="submit" name="list_view" value="List" />
+	</form>
 </div>
 </div>
 
@@ -42,7 +46,18 @@
 
 {% block script %}
 {{ super.script }}
+<script type="text/javascript">
+// set the initial viewing controls
+{% if list_view %}
+	$(".calendar_controls").hide();
+{% else %}
+	$(".list_controls").hide();
+{% endif %}
+</script>
 
-{% include "datepickerscript.js" %}
-
+<script type="text/javascript" src="media/js/datepickerscript.js"></script>
+<script type="text/javascript">
+start.datepicker("setDate", "{{ start_date }}");
+end.datepicker("setDate", "{{ end_date }}");
+</script>
 {% endblock script %}
