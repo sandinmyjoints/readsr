@@ -27,6 +27,7 @@ urlpatterns = patterns('',
 	url(r'^affiliate/(?P<affiliate_id>\d+)/$', views.edit_affiliate, name="detail-affiliate"),
 	url(r'^affiliate/edit/$', views.edit_affiliate, name="create-affiliate"),
 	url(r'^affiliate/(?P<affiliate_id>\d+)/edit/$', views.edit_affiliate, name="edit-affiliate"),
+	url(r'^site/', views.site_redirect, name="site-redirect"),
 	url(r'^$', views.index, name="index"),
 )
 

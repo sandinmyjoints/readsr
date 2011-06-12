@@ -2,11 +2,12 @@ import copy
 import string
 from datetime import datetime, timedelta
 import calendar
+from urlparse import urlparse
 
 from django import forms
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.contrib import auth, messages
 from django.contrib.auth.models import User
@@ -591,3 +592,10 @@ def edit_affiliate(request, affiliate_id=None):
 	else:
 		affiliate = Affiliate()
 	return generic_edit_view(request, edit_object=affiliate, form_class=AffiliateForm, template_name="generic_form.html")
+
+def site_redirect(request):
+	if request.method == "GET":
+		new_site = request.GET.get('new_site', None)
+		if not new_site.startswith("http://"):
+			new_site = "".join(["http://", new_site])
+		return redirect(urlparse(new_site).geturl())

@@ -29,6 +29,16 @@
 		{% block header %}
 		<h1><a href="{% url index %}" id="header_link">{{ city_site.name }}</a></h1>
 		<h3>Literary reading series in and around 
+			<form name="choose_city" action="{% url site-redirect %}" class="city_chooser">
+			<select name="new_site" id="choose_city" class="city_chooser">
+				<option value="{{ city_site }}">{{ city_site.city }}, {{ city_site.state }}</option>
+				{% for a_city_site in all_city_sites %}
+					<option value="{{ a_city_site }}">{{ a_city_site.city }}, {{ a_city_site.state }}</option>
+				{% endfor %}
+			</select>
+			<input type="submit" class="city_chooser" value="Go">
+			</form>
+		<!--
 		<ul id="citysite_menu">
 			<li class="dropdown"><a href="#" class="dropdown-link">{{ city_site.city }}, {{ city_site.state }}</a>.
 				<ul class="sub-menu all_cities">
@@ -38,17 +48,8 @@
 				</ul>
 			</li>
 		</ul>
-<!--		
-		<ul id="citysite_menu">
-			<li class="dropdown"><a href="#" class="dropdown-link">{{ city_site.city }}, {{ city_site.state }}</a>
-				<ul class="sub-menu all_cities">
-				{% for a_city_site in all_city_sites %}
-					<li><a href="#">{{ a_city_site.city }}, {{ a_city_site.state }}</a></li>
-				{% endfor %}
-				</ul>
-			</li>
-		</ul>.
 		-->
+
 		</h3>
 		{% endblock header %}
 		
@@ -159,7 +160,15 @@
 			}
 		);
 		*/
+		$("input.city_chooser").hide(); // only shows if js in not enabled
+		$("#choose_city").change(function(e) {
+			//alert("changed: " + e.target.value);
+			e.preventDefault();
+			window.location.href = "http://" + e.target.value;
+			
+		})
 	});
+	
 	</script>
 	
 	{% block script %} 	
