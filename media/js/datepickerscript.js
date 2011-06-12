@@ -192,7 +192,19 @@ function loadReadingList(start_date, end_date, list_view) {
 	new_loc = "?" +"list_view=" + list_view + "&" + "start=" + (start_date.getMonth()+1) + "-" + start_date.getDate() + "-" + start_date.getFullYear() + "&" + "end=" + (end_date.getMonth()+1) + "-" + end_date.getDate() + "-" + end_date.getFullYear();
 	//alert(new_loc);
 
-	$("#reading_list").load(new_loc + " #reading_list"); // pull data using ajax
+	$("#reading_list").load(new_loc + " #reading_list", function(response, status, xhr) {
+		if(status == "error") {
+			var msg = "Sorry, there was an error: ";
+		 	$("#messages").append("<p>" + msg + xhr.status + " " + xhr.statusText + "</p>");
+			return;
+		}
+		// call the function to make the reading description of the newly
+		// pulled readings editable. this is in list_readings.html, but that
+		// may not be the best place to put it.
+		bind_editable_descriptions();
+		
+	}
+	); // pull data using ajax
 	
 	if(!list_view) {
 		// if calendar view, set the cal_name 
