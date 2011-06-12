@@ -128,10 +128,13 @@ def detail_reading(request, series_id=None, reading_id=None):
 	
 @login_required
 def edit_reading(request, reading_id=None):
-
 	if request.is_ajax():
+		if not request.method == "POST":
+			raise Http404
+			
+		reading_id = request.POST["reading_id"]
 		r = get_object_or_404(Reading, pk=reading_id)
-		#r.description = description or ""
+
 		r.description = request.POST["description"]
 		try:
 			r.full_clean()
@@ -142,7 +145,6 @@ def edit_reading(request, reading_id=None):
 			messages.error(request, "There was an error validating your update.")
 		return render_to_response('index.html', {}, context_instance=RequestContext(request))
 			
-		# need to return some 
 	else:
 		created_new = True;
 		if reading_id:

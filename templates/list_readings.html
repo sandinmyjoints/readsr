@@ -87,7 +87,7 @@
 <script type="text/javascript">
 $(document).ready(function() 
     { 
-
+		alert("document.ready fired");
 		$(".edit_reading_description").inlineEdit({
 			buttonText: 'Update',
 			placeholder: 'Add details about this reading.',
@@ -95,7 +95,7 @@ $(document).ready(function()
 				/* need to figure out if there is a better way to do this*/
 				$.ajax({
 					type: 'POST',
-					url: {% if not index %}'../' + {% endif %}'readings/' + this.id + '/' + 'edit/',
+					url: "{% url edit-reading-ajax %}",
 					data: { 'reading_id': this.id, 'description': data.value },
 					success: function() {
 						

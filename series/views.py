@@ -231,7 +231,6 @@ def about(request, form_class=ContactForm, template_name='about.html', success_u
 	Displays some information about the website.
 	Also displays a contact form which can be used to send an email to site managers.
 	"""
-	# Uses the series_list to display the sidebar. Is there another way do to this?
 	return contact_form_view(request, form_class=form_class, template_name=template_name, success_url=success_url, fail_silently=fail_silently, message_success=message_success)
 	
 def contact_form_view(request, form_class, template_name, success_url=None, extra_context=None, fail_silently=False, message_success=False):

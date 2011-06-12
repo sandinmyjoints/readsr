@@ -13,5 +13,6 @@ urlpatterns = patterns('',
 	url(r'^(?P<reading_id>\d+)/$', views.detail_reading, name="detail-reading"),
 	url(r'^edit/$', views.edit_reading, name="create-reading"), 
 	url(r'^(?P<reading_id>\d+)/edit/$', views.edit_reading, name="edit-reading"),
+	url(r'^edit-ajax/$', views.edit_reading, name="edit-reading-ajax"),
 	url(r'^calendar/(?P<year>\d+)/(?P<month>\d+)/$', views.calendar, name="calendar"),
 )
