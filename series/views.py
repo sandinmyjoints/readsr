@@ -1,5 +1,7 @@
 import copy
+import string
 from datetime import datetime, timedelta
+import calendar
 
 from django import forms
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -87,37 +89,65 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 		Whether to show in list view or in calendar view.
 		
 	"""
-	
 	current_site = Site.objects.get_current()
 	
-	# if we're on the generic www.readsrs.com site, show a list of available cities
+	# assume client's js is enabled until we get a value that indicates otherwise.
+	# the template will use this value to decide whether to show some extra information
+	# that would otherwise be shown using js (start date and end date)
+	js_available = True
+	
+	# If we're on the generic www.readsrs.com site, show a list of available cities
 	if current_site.id == settings.WWW_SITE:
 		return render_to_response('splash.html', { 'sites_list': Site.objects.exclude(id__exact=current_site.id) }, context_instance=RequestContext(request))
 	
 	if request.method == "GET":
-		# if request is get, then we can get start and end dates from that
+		# If request is get, then we can get start and end dates from that
 		start = request.GET.get('start', "")
 		end = request.GET.get('end', "")
 		series_id = request.GET.get('series_id', series_id)
 		list_view = request.GET.get('list_view', "True")
+		print "method is get, list_view is %s, start out of GET is %s, end is %s" % (list_view, start, end)
+
+		# if list_view is Calendar or List, then the client is not using js. We know
+		# this because they submitted a form, rather than the js capturing the event
+		# and preventing it from submitting.
 		if list_view == "Calendar":
 			# js is disabled
-			print "list_view is %s, js is disabled" % list_view
 			list_view = False
-			pass
+			js_available = False
 		elif list_view == "List":
 			# js is disabled
-			print "list_view is %s, js is disabled" % list_view
 			list_view = True
-			pass
+			js_available = False
 		elif list_view == "false":
 			list_view = False
 		else:
 			list_view = True
 			
 		if not start=="" and not end=="":
-			start_date = datetime.strptime(start, "%m-%d-%Y")
-			end_date = datetime.strptime(end, "%m-%d-%Y")
+			try:
+				# first try with dashes
+				if string.find(start, "-") > -1:
+					start_date = datetime.strptime(start, "%m-%d-%Y")
+					end_date = datetime.strptime(end, "%m-%d-%Y")
+				else:
+					# then try with slashes
+					start_date = datetime.strptime(start, "%m/%d/%Y")
+					end_date = datetime.strptime(end, "%m/%d/%Y")
+				
+			except ValueError:
+				# raise an error if neither of those formats works
+				raise Http404
+				
+			if not list_view and not js_available:
+				# this means we are using calendar but without the input
+				# validation occuring in js, so set the start date to
+				# the first of the month and the end date to
+				# one month after the start date.
+				start_date = start_date.replace(day=1)
+				end_date = end_date.replace(month=start_date.month, day=calendar.monthrange(start_date.year, start_date.month)[1], year=start_date.year)
+				
+				
 		else:
 			# if both dates are not supplied, default to a range of today + one month
 			start_date = datetime.today()
@@ -150,9 +180,11 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 															'reading_list': reading_list,
 															'start_date': start_date.strftime("%m/%d/%Y"), 
 															'end_date': end_date.strftime("%m/%d/%Y"),
+															'cal_name': start_date.strftime("%B %Y"),
 															'list_view': list_view,
 															'year': start_date.year,
 															'month': start_date.month,
+															'js_available': js_available,
 														}, context_instance=RequestContext(request))
 	else:						
 		# we are in index mode
@@ -162,9 +194,11 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 													'index': True, 
 													'start_date': start_date.strftime("%m/%d/%Y"), 
 													'end_date': end_date.strftime("%m/%d/%Y"),
+													'cal_name': start_date.strftime("%B %Y"),													
 													'list_view': list_view,
 													'year': start_date.year,
 													'month': start_date.month,
+													'js_available': js_available,													
 												}, context_instance=RequestContext(request))
 
 # THIS VIEW IS DEPRECATED, REPLACED BY INDEX

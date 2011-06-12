@@ -8,6 +8,11 @@ body {
 	font-size: 100%;
 	line-height: 1.5em;
 }
+
+p {
+	padding: .5em 0 .5em 0;
+}
+
 #header h1 {
 /*	background-image:url("/media/Readsr4-logo-noshadow.png");
 	background-position: left-top;
@@ -492,25 +497,26 @@ li.reading_list {
 	clear:both;
 }
 
-.datepicker_nb {
-	font-style: italic;
-	padding: .5em 1em;
-}
-
 .list_controls {
-	padding: .5em 1em;
 	font-weight: bold;
 }
 
+a.list_controls {
+	padding-left: .5em;
+	padding-right: .5em;
+}
 
 #datepicker_start, #datepicker_end {
 	margin-left: .5em;
 }
 
 .calendar_controls {
-	padding: .5em 1em;
 	font-weight: bold;
-	
+}
+
+a.calendar_controls {
+	padding: .5em 1em;
+	font-weight: bold;	
 }
 
 .select_view_type {
@@ -546,10 +552,6 @@ span.reading_description textarea {
 
 .profile ul {
 	
-}
-
-p {
-	padding: .5em 0 .5em 0;
 }
 
 .blank_reading_description {

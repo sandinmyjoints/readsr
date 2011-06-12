@@ -8,26 +8,24 @@
 	<h2>Upcoming readings in {{ city_site.city}}, {{ city_site.state }}</h2>
 
 <div id="choose_date">
-	<!-- first set the controls for the list view -->
-	<form name="submit_date" class="datepicker_nb list_controls" action="{% url index %}" method="get">
-		<input name="start_date" id="datepicker_start" type="text">
-		to 
-		<input name="end_date" id="datepicker_end" type="text">
-		<input id="submit_date" type="submit" name="submit_date" value="Go">
-	</form>
+	<form name="submit_dates" action="{% url index %}" method="get">
+		<!-- First, set up the controls for the list view -->
+		<input name="start" id="datepicker_start" class="list_controls" type="text" {% if not js_available %}value="{{ start_date }}"{% endif %} />
+		<span class="list_controls">to</span>
+		<input name="end" id="datepicker_end" class="list_controls" type="text" {% if not js_available %}value="{{ end_date }}"{% endif %} /></span>
 	
-	<span class="list_controls"><a href="#" id="next_week">Next Week</a></span>
-	<span class="list_controls"><a href="#" id="next_month">Next Month</a></span>
+		<a href="#NextWeek" id="next_week" class="list_controls">One Week</a>
+		<a href="#NextMonth" id="next_month" class="list_controls">One Month</a>
 
-	<!-- then set the controls for the calendar view -->
-	<span class="calendar_controls"><a href="#PreviousYear" id="previous_year">Previous Year</a></span>
-	<span class="calendar_controls"><a href="#PreviousMonth" id="previous_month">Previous Month</a></span>
-	<span class="calendar_controls"><a href="#" id="next_month">Next Month</a></span>
-	<span class="calendar_controls"><a href="#" id="next_year">Next Year</a></span>
+		<!-- Then set up the controls for the calendar view -->
+		<a href="#CalPreviousYear" id="previous_year" class="calendar_controls">&lt;&lt;</a>
+		<a href="#CalPreviousMonth" id="previous_month" class="calendar_controls">&lt;</a>
+		<span id="cal_name" class="calendar_controls">{{ cal_name }}</span>
+		<a href="#CalNextMonth" id="next_month" class="calendar_controls">&gt;</a>
+		<a href="#CalNextYear" id="next_year" class="calendar_controls">&gt;&gt;</a>
 
-	<form name="view_type" action="{% url index %}" method="get">
-	<input id="calendar_view" class="select_view_type list_controls" type="submit" name="list_view" value="Calendar" />
-	<input id="list_view" class="select_view_type calendar_controls" type="submit" name="list_view" value="List" />
+		<input id="calendar_view" class="select_view_type list_controls" type="submit" name="list_view" value="Calendar" />
+		<input id="list_view" class="select_view_type calendar_controls" type="submit" name="list_view" value="List" />
 	</form>
 </div>
 </div>
