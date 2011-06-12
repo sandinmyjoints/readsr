@@ -258,6 +258,9 @@ a:visited: {
 	color:#BFA471;
 }
 
+a:hover {
+	text-decoration: underline;
+}
 
 /* classes */
 
@@ -292,6 +295,10 @@ ul.form li, ul.errorlist li {
 	list-style-type: none;
 	margin-left: 0px;
 	
+}
+
+#reading_list {
+	position: relative;
 }
 
 ul.reading_list {
@@ -477,19 +484,23 @@ li.message {
 .reading_info {
 	float: left;
 }
-.reading_description {
+
+.edit_reading_description {
 	display: block;
 	width: 60%;
 	float:right;
+	border: 1px solid;
+	border-color: transparent;
+	
 	/*height: 4em;*/
 }
 
-.reading_description textarea {
+.edit_reading_description textarea {
 	width: 98%;
 	height: 80%;
 }
 
-.reading_description button {
+.edit_reading_description button {
 	
 }
 
@@ -536,7 +547,7 @@ span.ui-state-hover {
 	background-image: none;
 }
 
-span.reading_description textarea {
+span.edit_reading_description textarea {
 	width: 340px;
 }
 
@@ -705,14 +716,6 @@ span.reading_description textarea {
 	position:absolute;
 }
 
-#reading_list {
-	position: relative;
-}
-
-.reading_description {
-	border: 1px solid;
-	border-color: transparent;
-}
 
 .inlineEdit-placeholder {
 	border: 1px solid;
@@ -722,4 +725,11 @@ span.reading_description textarea {
 
 #choose_date form {
 	display: inline;
+}
+
+.reading_description {
+	clear: both;
+	margin: .7em;
+	padding: .3em;
+	border: 2px solid #555;
 }

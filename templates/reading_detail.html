@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% block name %}
+<div id="banner">
+<h1 class="reading_name">{{ reading.series.primary_name }}</h1>
+<h3>{{ reading.date_and_time }}</h3>
+
+</div>
+{% endblock %}
+
+<div class="reading_description">
+{{ reading.description }}
+</div>
+{% endblock content %}
+

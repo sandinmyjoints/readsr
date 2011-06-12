@@ -15,21 +15,19 @@
 	<h2 class="reading_name">{{ series.secondary_name }}</h2>
 	{% endif %}
 	
-	<div id="choose_date">
-		<span class="datepicker_nb"><input id="datepicker_start" type="text" />
-			to 
-		<input id="datepicker_end" type="text" /></span>
-
-		<span class="datepicker"><a href="#" id="next_week">Next Week</a></span>
-		<span class="datepicker"><a href="#" id="next_month">Next Month</a></span>
-
-	</div>
+	{% include "choose_date_snippet.html" %}
 	
 	</div>
 {% endblock name %}
 
-{% include "list_readings.html" %}
-
+	<div id="reading_list">
+		<img id="load_image" src="media/spinner-large.gif">
+		{% if list_view %}
+			{% include "list_readings.html" %}
+		{% else %}
+			{% include "calendar_snippet.html" %}
+		{% endif %}
+	</div>
 {% endblock content %}
 
 {% block sidebar %}
@@ -112,5 +110,9 @@
 {% endif %}
 </script>
 
-<script type="text/javascript" src="media/js/datepickerscript.js"></script>
+<script type="text/javascript" src="/media/js/datepickerscript.js"></script>
+<script type="text/javascript">
+start.datepicker("setDate", "{{ start_date }}");
+end.datepicker("setDate", "{{ end_date }}");
+</script>
 {% endblock script %}

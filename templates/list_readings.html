@@ -20,13 +20,13 @@
 			</h3>
 			<h3>
 				{% if reading.series.regular %}
-				{{ reading.date|naturalday|capfirst }}, {{ reading.time }}
+				<a href="{% url detail-reading reading.id %}">{{ reading.date|naturalday|capfirst }}, {{ reading.time }}</a>
 				{% else %}
 				Irregular
 				{% endif %}
 			</h3>
 			</div>
-			<div class="reading_description" id="{{ reading.id }}">
+			<div class="edit_reading_description" id="{{ reading.id }}">
 				{% if reading.description %}
 				{{ reading.description }}
 				{% endif %}
@@ -38,7 +38,7 @@
 			<div class="reading_info">
 			<h3>
 				{% if reading.series.regular %}
-				{{ reading.date|naturalday|capfirst }}, {{ reading.time }}
+				<a href="{% url detail-reading reading.id %}">{{ reading.date|naturalday|capfirst }}, {{ reading.time }}</a>
 				{% else %}
 				Irregular
 				{% endif %}
@@ -52,7 +52,7 @@
 				{% endfor %}
 			</h3>	
 			</div>	
-			<div class="reading_description" id="{{ reading.id }}">
+			<div class="edit_reading_description" id="{{ reading.id }}">
 				{% if reading.description %}
 				{{ reading.description }}
 				{% endif %}
@@ -88,7 +88,7 @@
 $(document).ready(function() 
     { 
 
-		$(".reading_description").inlineEdit({
+		$(".edit_reading_description").inlineEdit({
 			buttonText: 'Update',
 			placeholder: 'Add details about this reading.',
 		    save: function(e, data) {

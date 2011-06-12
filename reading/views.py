@@ -123,7 +123,8 @@ def list_readings_date(request, year, month, date, series_id=None):
 		raise Http404
 	
 def detail_reading(request, series_id=None, reading_id=None):
-	return HttpResponse("detail")
+	reading = get_object_or_404(Reading, pk=reading_id)
+	return render_to_response("reading_detail.html", { 'reading': reading, }, context_instance=RequestContext(request))
 	
 @login_required
 def edit_reading(request, reading_id=None):

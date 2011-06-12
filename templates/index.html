@@ -5,29 +5,10 @@
 {% block content %}
 
 <div id="banner">
-	<h2>Upcoming readings in {{ city_site.city}}, {{ city_site.state }}</h2>
+	<h1>Upcoming readings in {{ city_site.city}}, {{ city_site.state }}</h1>
 
-<div id="choose_date">
-	<form name="submit_dates" action="{% url index %}" method="get">
-		<!-- First, set up the controls for the list view -->
-		<input name="start" id="datepicker_start" class="list_controls" type="text" {% if not js_available %}value="{{ start_date }}"{% endif %} />
-		<span class="list_controls">to</span>
-		<input name="end" id="datepicker_end" class="list_controls" type="text" {% if not js_available %}value="{{ end_date }}"{% endif %} /></span>
-	
-		<a href="#NextWeek" id="next_week" class="list_controls">One Week</a>
-		<a href="#NextMonth" id="next_month" class="list_controls">One Month</a>
+{% include "choose_date_snippet.html" %}
 
-		<!-- Then set up the controls for the calendar view -->
-		<a href="#CalPreviousYear" id="previous_year" class="calendar_controls">&lt;&lt;</a>
-		<a href="#CalPreviousMonth" id="previous_month" class="calendar_controls">&lt;</a>
-		<span id="cal_name" class="calendar_controls">{{ cal_name }}</span>
-		<a href="#CalNextMonth" id="next_month" class="calendar_controls">&gt;</a>
-		<a href="#CalNextYear" id="next_year" class="calendar_controls">&gt;&gt;</a>
-
-		<input id="calendar_view" class="select_view_type list_controls" type="submit" name="list_view" value="Calendar" />
-		<input id="list_view" class="select_view_type calendar_controls" type="submit" name="list_view" value="List" />
-	</form>
-</div>
 </div>
 
 	<div id="reading_list">
@@ -37,7 +18,6 @@
 		{% else %}
 			{% include "calendar_snippet.html" %}
 		{% endif %}
-
 	</div>
 
 {% endblock content %}
@@ -53,7 +33,7 @@
 {% endif %}
 </script>
 
-<script type="text/javascript" src="media/js/datepickerscript.js"></script>
+<script type="text/javascript" src="/media/js/datepickerscript.js"></script>
 <script type="text/javascript">
 start.datepicker("setDate", "{{ start_date }}");
 end.datepicker("setDate", "{{ end_date }}");
