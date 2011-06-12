@@ -26,7 +26,7 @@
 				{% endif %}
 			</h3>
 			</div>
-			<div class="edit_reading_description" id="{{ reading.id }}">
+			<div class="edit_reading_description style_reading_description" id="{{ reading.id }}">
 				{% if reading.description %}
 				{{ reading.description }}
 				{% endif %}
@@ -52,7 +52,7 @@
 				{% endfor %}
 			</h3>	
 			</div>	
-			<div class="edit_reading_description" id="{{ reading.id }}">
+			<div class="edit_reading_description style_reading_description" id="{{ reading.id }}">
 				{% if reading.description %}
 				{{ reading.description }}
 				{% endif %}
@@ -83,36 +83,14 @@
 
 {% if user.is_authenticated %}
 <script type="text/javascript" src="/media/js/jquery.inlineedit.js"></script>
-
+<script type="text/javascript" src="/media/js/editable_reading_descriptions.js"></script>
 <script type="text/javascript">
 $(document).ready(function() 
     { 
-		bind_editable_descriptions();
+		bind_editable_descriptions("{% url edit-reading-ajax %}");
     } 
 );
-
-function bind_editable_descriptions() {
-	// this has to run when the document is ready the first time, and also
-	// every time it loads new data via ajax
-	$(".edit_reading_description").inlineEdit({
-		buttonText: 'Update',
-		placeholder: 'Add details about this reading.',
-	    save: function(e, data) {
-			$.ajax({
-				type: 'POST',
-				url: "{% url edit-reading-ajax %}",
-				data: { 'reading_id': this.id, 'description': data.value },
-				success: function() {					
-				}
-			})
-	
-	    },
-		control: 'textarea',
-	});
-	
-}
 </script>
 {% endif %}
-
 
 {% endblock script %}

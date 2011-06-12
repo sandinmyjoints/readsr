@@ -10,8 +10,24 @@
 </div>
 {% endblock %}
 
-<div class="reading_description">
+<div id="{{ reading.id }}" class="edit_reading_description reading_description">
 {{ reading.description }}
 </div>
 {% endblock content %}
 
+{% block script %}
+{{ super.script }}
+
+{% if user.is_authenticated %}
+<script type="text/javascript" src="/media/js/jquery.inlineedit.js"></script>
+<script type="text/javascript" src="/media/js/editable_reading_descriptions.js"></script>
+<script type="text/javascript">
+$(document).ready(function() 
+    { 
+		bind_editable_descriptions("{% url edit-reading-ajax %}");
+    } 
+);
+</script>
+{% endif %}
+
+{% endblock script %}

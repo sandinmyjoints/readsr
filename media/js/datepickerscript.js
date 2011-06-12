@@ -20,7 +20,7 @@ $('a[href$="CalPreviousYear"]').click(function(e) {
 	// 
 	var start_date = start.datepicker("getDate");
 	start_date.setYear(start_date.getFullYear()-1);
-	var end_date = new Date(start_date.getFullYear(), start_date.getMonth(), 1, 0, 0, 0);
+	var end_date = new Date(start_date.getFullYear(), start_date.getMonth()+1, 1, 0, 0, 0);
 	
 	loadReadingList(start_date, end_date, false);	
 	

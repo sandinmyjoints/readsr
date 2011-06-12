@@ -40,6 +40,11 @@ p {
 	float: right;
 	top: 36px;
 }
+
+#banner h3 {
+	padding-bottom: .2em !important;
+}
+
 #header {
 	height: 53px;
 	padding: 10px 0px 10px;
@@ -485,7 +490,7 @@ li.message {
 	float: left;
 }
 
-.edit_reading_description {
+.style_reading_description {
 	display: block;
 	width: 60%;
 	float:right;
@@ -495,12 +500,12 @@ li.message {
 	/*height: 4em;*/
 }
 
-.edit_reading_description textarea {
+.style_reading_description textarea {
 	width: 98%;
 	height: 80%;
 }
 
-.edit_reading_description button {
+.style_reading_description button {
 	
 }
 
@@ -737,5 +742,12 @@ form.city_chooser {
 	clear: both;
 	margin: .7em;
 	padding: .3em;
-	border: 2px solid #555;
+	border: 2px solid #555 !important;
+	background-color: #FFD4B3;
+}
+
+.reading_description textarea {
+	margin-left: 1%;
+	margin-right: 1%;
+	width: 98%;
 }

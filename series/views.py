@@ -226,12 +226,12 @@ def series_detail(request, series_id, list_view=True):
 
 
 # about ##############################
-def about(request, form_class=ContactForm, template_name='about.html', success_url=None, extra_context=None, fail_silently=False, message_success=False):
+def about(request, form_class=ContactForm, success_url=None, extra_context=None, fail_silently=False, message_success=False):
 	"""
 	Displays some information about the website.
 	Also displays a contact form which can be used to send an email to site managers.
 	"""
-	return contact_form_view(request, form_class=form_class, template_name=template_name, success_url=success_url, fail_silently=fail_silently, message_success=message_success)
+	return contact_form_view(request, form_class, template_name="about.html")
 	
 def contact_form_view(request, form_class, template_name, success_url=None, extra_context=None, fail_silently=False, message_success=False):
 	"""
@@ -592,7 +592,12 @@ def edit_affiliate(request, affiliate_id=None):
 		affiliate = Affiliate()
 	return generic_edit_view(request, edit_object=affiliate, form_class=AffiliateForm, template_name="generic_form.html")
 
+
+# site_redirect ##############
 def site_redirect(request):
+	"""
+	Site_rirect is used for switching between different city_sites when javascript is disabled.
+	"""
 	if request.method == "GET":
 		new_site = request.GET.get('new_site', None)
 		if not new_site.startswith("http://"):
