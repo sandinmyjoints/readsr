@@ -54,9 +54,17 @@ class ReadingCalendar(HTMLCalendar):
 	
 	def __init__(self, readings):
 		super(ReadingCalendar, self).__init__()
+		# create a list of all the days in the month,
+		# and each day has within it a list of the events on that day
 		self.readings = self.group_by_day(readings)
+		for day in self.readings:
+			#print "day is %d" % day
+			for reading in self.readings[day]:
+				#print "reading is %s, reading.date is %s" % (reading, reading.date)
+				pass
 
 	def formatday(self, day, weekday):
+		# 0 is Monday
 		if day != 0:
 			cssclass = self.cssclasses[weekday]
 			if date.today() == date(self.year, self.month, day):
@@ -75,6 +83,7 @@ class ReadingCalendar(HTMLCalendar):
 		return self.day_cell('noday', '&nbsp;')
 
 	def formatmonth(self, year, month):
+		#print "formatmonth year=%s, month=%s" % (year, month)
 		self.year, self.month = year, month
 		return super(ReadingCalendar, self).formatmonth(year, month)
 

@@ -32,7 +32,6 @@ class Contact(models.Model):
 	
 	@permalink
 	def get_absolute_url(self):
-		print "username %s" % self.user.username
 		return ('profiles_profile_detail', (), { 'username': self.user.username })
 	
 	def _get_first_name(self):
@@ -140,17 +139,20 @@ class DayOfWeek(models.Model):
 	or 'third Friday', this field is useful in determining on which dates individual
 	readings take place.
 	"""
-	days =[ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
+	days =[ 'No day', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
 	       'Sunday' ]
-	
+
+	# the pk in the db is 1-indexed (Monday=1, Tuesday=2, etc), but python's days 
+	# of the week are 0-indexed if you use .weekday(), so we are using .isoweeky()
+	# instead	
 	DAYS_OF_WEEK_CHOICES = (
-	('MO', days[0]),
-	('TU', days[1]),
-	('WE', days[2]),
-	('TH', days[3]),
-	('FR', days[4]),
-	('SA', days[5]),
-	('SU', days[6]),
+	('MO', days[1]),
+	('TU', days[2]),
+	('WE', days[3]),
+	('TH', days[4]),
+	('FR', days[5]),
+	('SA', days[6]),
+	('SU', days[7]),
 	)
 	
 	day = models.CharField(max_length=2, choices=DAYS_OF_WEEK_CHOICES)
@@ -168,17 +170,18 @@ class DayOfWeek(models.Model):
 	# it simply returns today rather than checking whether the reading time has passed already.
 	# so we need to check for that outside of this method. 
 	def my_next_day_of_the_week(self):
-		""" Returns a datetime equal to the start of the next day that is this instance's day of the week. """
+		""" 
+		Returns a datetime equal to the start of the next day that is this instance's day of the week. 
+		"""
+		
 		# need to find the number of the current day of the week
-		today_day = datetime.today().weekday()
-		reading_day = self.days.index(self.__unicode__())
-		next_day = datetime.today().date()
-		
-		if today_day < reading_day:
-			next_day = next_day + timedelta(reading_day-today_day)
-		elif today_day > reading_day:
-			next_day = next_day + timedelta(7-today_day)
-		
+		today_day = datetime.today().isoweekday() # today_day is Sunday, 7
+		reading_day = self.days.index(self.__unicode__()) # reading_Day is Friday, 5
+		next_day = datetime.today().date() # next day is today
+		while next_day.isoweekday() != reading_day:
+			next_day = next_day + timedelta(1)
+				
+		#print "my next day of the week should be %s, actually is %s" % (reading_day, next_day)
 		return next_day
 	
 	class Meta(object):
@@ -248,7 +251,9 @@ class Series(models.Model):
 			'series_id': self.id })
 		
 	def next_reading_day(self):
-		""" Return the date of the next instance of this reading (assumes reading is monthly) """
+		""" 
+		Return the date of the next instance of this reading (assumes reading is monthly) 
+		"""
 
 		today = datetime.today().date()
 		next_reading_day = self.day_of_week.my_next_day_of_the_week()

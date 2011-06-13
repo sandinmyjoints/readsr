@@ -171,11 +171,10 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 		# not GET method
 		raise Http404
 
-	print "series is %s, start_date is %s, end_date is %s" % (sr, start_date.strftime("%m/%d/%Y"), end_date.strftime("%m/%d/%Y"))
+	#print "series is %s, start_date is %s, end_date is %s" % (sr, start_date.strftime("%m/%d/%Y"), end_date.strftime("%m/%d/%Y"))
 	
 	if series_id:
 		# we are in detail-series mode	
-		print "ending view in detail-series mode, list_view is %d " % (list_view)
 		return render_to_response('series_detail.html', {
 															'series': sr, 
 															'reading_list': reading_list,
@@ -189,7 +188,6 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 														}, context_instance=RequestContext(request))
 	else:						
 		# we are in index mode
-		print "ending view in index mode, list_view is %d " % (list_view)
 		return render_to_response('index.html', {
 													'reading_list': reading_list, 
 													'index': True, 
@@ -303,6 +301,7 @@ def edit_series(request, series_id=None):
 	if request.method == 'POST': # if we are receiving POST data, then we're getting the result of a form submission, so we save it to the database and show the detail template
 		form = SeriesForm(request.POST, instance=sr)
 		sr.site = CitySite.objects.get(pk=settings.SITE_ID) # site can only be the current site
+		
 		# We are creating a new reading series, so give it the current user as the contact, and
 		if not sr.id:
 			sr.contact = request.user
@@ -361,12 +360,16 @@ def edit_series(request, series_id=None):
 					url = request.build_absolute_uri().replace("/edit", "")
 					res = api.shorten(longUrl=url)
 					tweet_message.append("%s" % res['url'])
-					
-					auth = tweepy.OAuthHandler(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
-					auth.set_access_token(settings.TWITTER_ACCESS_KEY, settings.TWITTER_ACCESS_SECRET)
-					api = tweepy.API(auth)
-					api.update_status(' '.join(tweet_message))
-				
+
+					try:
+						auth = tweepy.OAuthHandler(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
+						auth.set_access_token(settings.TWITTER_ACCESS_KEY, settings.TWITTER_ACCESS_SECRET)
+						api = tweepy.API(auth)
+						print "tweeting %s" % ' '.join(tweet_message)
+						api.update_status(' '.join(tweet_message))
+					except tweepy.TweepError:
+						print "tweep error"
+									
 			# If the series has a regular time, day of the week, and week of the month, and
 			# it is new or its time has changed, then create new reading objects for the new year
 			if create_new_readings_list: 
@@ -418,12 +421,6 @@ def new_series_readings(sr, years=1):
 		new_reading_list.append(r)
 
 	return new_reading_list
-
-# old remove_series, hopefully I fixed it
-#def remove_series(request, series_id=None):
-#	extra_context = {'series': sr}
-	#form_class.series_name.clean(sr.primary_name)
-#	return contact_form_view(request, form_class=RemoveSeriesContactForm, template_name="remove_series.html", extra_context=extra_context)
 	
 @login_required
 def remove_series(request, template_name="remove_series.html", series_id=None, success_url=None, extra_context=None, fail_silently=False, message_success=False):
