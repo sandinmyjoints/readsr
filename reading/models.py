@@ -14,7 +14,7 @@ class Reading(models.Model):
 	
 	date_and_time = models.DateTimeField("Date and Time")
 	series = models.ForeignKey(Series)
-	description = models.CharField("Description", max_length=200, blank=True, null=True)
+	description = models.CharField("Description", max_length=300, blank=True, null=True)
 
 #	def __init__(self, date_and_time=None, series=None, description=None):
 #		super(Reading, self).__init__()

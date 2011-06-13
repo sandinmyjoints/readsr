@@ -11,7 +11,7 @@
 {% endblock %}
 
 <div id="{{ reading.id }}" class="edit_reading_description reading_description">
-{{ reading.description }}
+{{ reading.description|linebreaks }}
 </div>
 {% endblock content %}
 
