@@ -16,6 +16,8 @@
 	<ul class="sites_list">
 	{% for site in sites_list %}
 	<li><h2><a href="http://{{ site.domain }}">{{ site.name }}</a></h2></li>
+	{% empty %}
+	No cities yet!
 	{% endfor %}
 	</ul>
 {% endblock content %}

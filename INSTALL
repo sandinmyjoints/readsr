@@ -4,7 +4,7 @@
 \margl1440\margr1440\vieww7280\viewh12800\viewkind0
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
-\f0\fs28 \cf0 Installation instructions for Readsr\
+\f0\fs28 \cf0 Installation instructions for Readsr on Webfaction\
 \
 -Create a new wsgi app through the webfaction control panel\
 \
@@ -12,18 +12,14 @@
 \
 -Create a new website through the webfaction control panel. Add the wsgi app and the symbolic link apps.\
 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 -Create a database for Readsr to use\
+-Create a database for Readsr to use\
 \
 -Use pip to install the required packages in requirements.txt\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 \
+\
 -Create a virtualenv for Readsr and clone readsr.git into it.\
 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 -Install the fixtures containing day of week and week within month data into the database.\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 \
+-Install the fixtures containing day of week and week within month data into the database.\
+\
 -Create a new local_settings.py to hold the settings for the root domain (which will be an intro and list of installed cities) and then create new local settings for each installed city: site1_settings.py, site2_settings.py\
 \
 -Create the .wsgi files for each of the installed cities. They are all the same except for pointing to the different settings files\

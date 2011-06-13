@@ -32,9 +32,12 @@
 		<h3>Literary reading series in and around 
 			<form name="choose_city" action="{% url site-redirect %}" class="city_chooser">
 			<select name="new_site" id="choose_city" class="city_chooser">
-				<option value="{{ city_site }}">{{ city_site.city }}, {{ city_site.state }}</option>
+				<option value="{{ city_site }}" selected="selected">{{ city_site.city }}, {{ city_site.state }}</option>
 				{% for a_city_site in all_city_sites %}
+					{% if a_city_site != city_site %}
 					<option value="{{ a_city_site }}">{{ a_city_site.city }}, {{ a_city_site.state }}</option>
+					{% endif %}
+					
 				{% endfor %}
 			</select>
 			<input type="submit" class="city_chooser" value="Go">
