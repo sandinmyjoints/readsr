@@ -57,6 +57,7 @@ class ReadingCalendar(HTMLCalendar):
 		# create a list of all the days in the month,
 		# and each day has within it a list of the events on that day
 		self.readings = self.group_by_day(readings)
+		self.setfirstweekday(6) 
 		for day in self.readings:
 			#print "day is %d" % day
 			for reading in self.readings[day]:
