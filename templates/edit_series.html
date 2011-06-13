@@ -24,11 +24,11 @@ your reading series.
 	{% if form.errors %}
 	<p>Please correct the error{{ form.errors|pluralize }} below.</p>
 	{% endif %}
-	<!-->
+	<!--
 	{% for error in form.errors %}
 	{{ error }}
 	{% endfor %}
-	<-->
+	-->
 
 	{{ form.non_field_errors }}
 	<!-- 
@@ -172,7 +172,7 @@ your reading series.
 				    </ol>
 				{% endif %}
 			</dd>
-			<dt><label for="id_wiki_mode">Start in <a href="#" title="Wiki mode lets anyone update the readings to include readers, etc. If the series isn't in Wiki mode, only the contact can update it. ">Wiki mode</a>?</label></dt>
+			<dt><label for="id_wiki_mode">Start in <a href="#" title="Wiki mode lets anyone update the reading description--for example, adding the names of readers. If the series isn't in Wiki mode, only the contact (that's you!) can update it. You can always come back and change the setting later.">Wiki mode</a>?</label></dt>
 			<dd>
 				{{ form.wiki_mode }}
 				{% if form.wiki_mode.errors %}
@@ -185,8 +185,8 @@ your reading series.
 			</dd>
 		</dl>
 		<p class="clear">
-		You'll be listed as the point of contact for this series. Your email address will be listed, but in a form that prevents spammers from harvesting it. </p>
-		<div class="submit-row"><input type="submit" value="{% if series.primary_name %}Update{% else %}Submit{% endif %}" /></div>
+		You'll be listed as the point of contact for this series. Your email address will be listed, but in a form that prevents spammers from harvesting it. If that's not cool, hit cancel and we won't create this series.</p>
+		<div class="submit-row"><input type="submit" value="{% if series.primary_name %}Update{% else %}Submit{% endif %}" /><input type="button" id="cancel_button" value="Cancel"></div>
 	</form>
 
 	
@@ -238,6 +238,11 @@ your reading series.
 
 	});
 	document.getElementById("id_primary_name").focus();
+	
+	$("#cancel_button").click(function(e) {
+		e.preventDefault();
+		window.location.href = "http://{{ city_site }}"
+	});
 	</script>
 	
 	{{ form.media.js }}

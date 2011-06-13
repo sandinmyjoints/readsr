@@ -136,11 +136,12 @@ div#navbar a.long_nav {
 }
 /* messages */
 div#messages {
-	width: 900px;
-	margin-left: auto;
-	margin-right: auto;
+	margin-left: .5em;
+	margin-right: .5em;
+	margin-bottom: .5em;
 	
-	background-color: #A67A26;
+	background-color: #555;
+	color: #CCC;
 }
 
 /* page */

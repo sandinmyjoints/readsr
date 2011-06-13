@@ -18,6 +18,7 @@ $("#list_view").click(function(e) {
 // Calendar view controls
 $('a[href$="CalPreviousYear"]').click(function(e) {
 	// 
+	e.preventDefault();
 	var start_date = start.datepicker("getDate");
 	start_date.setYear(start_date.getFullYear()-1);
 	var end_date = new Date(start_date.getFullYear(), start_date.getMonth()+1, 1, 0, 0, 0);
@@ -28,6 +29,7 @@ $('a[href$="CalPreviousYear"]').click(function(e) {
 
 $('a[href$="CalPreviousMonth"]').click(function(e) {
 	// 
+	e.preventDefault();
 	var start_date = start.datepicker("getDate");
 	start_date.setMonth(start_date.getMonth()-1);
 	var end_date = new Date(start_date.getFullYear(), start_date.getMonth()+1, 1, 0, 0, 0);
@@ -38,6 +40,7 @@ $('a[href$="CalPreviousMonth"]').click(function(e) {
 
 $('a[href$="CalNextMonth"]').click(function(e) {
 	// 
+	e.preventDefault();
 	var start_date = start.datepicker("getDate");
 	start_date.setMonth(start_date.getMonth()+1);
 	var end_date = new Date(start_date.getFullYear(), start_date.getMonth()+1, 1, 0, 0, 0);
@@ -48,6 +51,7 @@ $('a[href$="CalNextMonth"]').click(function(e) {
 
 $('a[href$="CalNextYear"]').click(function(e) {
 	// 
+	e.preventDefault();
 	var start_date = start.datepicker("getDate");
 	start_date.setYear(start_date.getFullYear()+1);
 	var end_date = new Date(start_date.getFullYear(), start_date.getMonth()+1, 1, 0, 0, 0);

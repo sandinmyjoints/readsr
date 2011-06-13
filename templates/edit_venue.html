@@ -112,19 +112,6 @@
 			    </ol>
 			{% endif %}
 			</dd>
-			<dt>In DC?</dt>
-			<dd>
-				<div class="formFieldWrapper">
-				{{ venue_form.in_dc }}
-				</div>
-			{% if venue_form.in_dc.errors %}
-			    <ol class="errorlist">
-			    {% for error in venue_form.in_dc.errors %}
-			        <li><strong>{{ error|escape }}</strong></li>
-			    {% endfor %}
-			    </ol>
-			{% endif %}
-			</dd>
 		<div class="clear">
 	</dl>
 	<div class="submit-row"><input type="submit" value="{% if venue_form.name %}Update{% else %}Submit{% endif %}" /></div>
