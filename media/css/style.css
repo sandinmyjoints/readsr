@@ -489,11 +489,31 @@ li.message {
 
 .reading_info {
 	float: left;
+	width: 45%;
+}
+
+.reading_description {
+	clear: both;
+	margin: .7em;
+	padding: .3em;
+	border: 2px solid #555 !important;
+	background-color: #FFD4B3;
+}
+
+.reading_description textarea {
+	margin-left: 1%;
+	margin-right: 1%;
+	width: 98%;
+}
+
+span.inlineEdit-placeholder {
+	width: 99%;
+	border: 0px !important; /* prevents it from showing up when mouseover gets to it instead of the surrounding div */
 }
 
 .style_reading_description {
 	display: block;
-	width: 60%;
+	width: 54%;
 	float:right;
 	border: 1px solid;
 	border-color: transparent;
@@ -739,16 +759,3 @@ form.city_chooser {
 	display: inline;
 }
 
-.reading_description {
-	clear: both;
-	margin: .7em;
-	padding: .3em;
-	border: 2px solid #555 !important;
-	background-color: #FFD4B3;
-}
-
-.reading_description textarea {
-	margin-left: 1%;
-	margin-right: 1%;
-	width: 98%;
-}
