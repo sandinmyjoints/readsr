@@ -109,7 +109,7 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 		list_view = request.GET.get('list_view', "True")
 		print "method is get, list_view is %s, start out of GET is %s, end is %s" % (list_view, start, end)
 
-		# if list_view is Calendar or List, then the client is not using js. We know
+		# If list_view is Calendar or List, then the client is not using js. We know
 		# this because they submitted a form, rather than the js capturing the event
 		# and preventing it from submitting.
 		if list_view == "Calendar":
@@ -161,7 +161,7 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 		#print "series_list = %s, len=%d" % (series_list, len(series_list))
 		if series_id:
 			# we are in detail_series mode so filter the reading_list down to just the ones for this series_id
-			reading_list = reading_list.filter(series__site__exact=current_site.id).filter(series__id__exact=series_id)
+			reading_list = reading_list.filter(series__id__exact=series_id)
 			sr = Series.objects.get(pk=series_id)
 		else:
 			sr = None
@@ -305,6 +305,7 @@ def edit_series(request, series_id=None):
 		# We are creating a new reading series, so give it the current user as the contact, and
 		if not sr.id:
 			sr.contact = request.user
+			tweet_or_not = True
 
 		old_sr = copy.deepcopy(sr) # need to create a copy because is_valid() will trigger model validation, which will update the model object with the new time values
 		if form.is_valid():
