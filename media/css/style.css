@@ -259,6 +259,10 @@ div#footer {
 	border:  2px solid #BBBBBB;
 }
 
+#footer iframe {
+	width: 140px !important;
+}
+
 
 /* other */
 a:link, a:visited {

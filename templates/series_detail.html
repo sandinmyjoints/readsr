@@ -1,5 +1,9 @@
 {% extends "generic_list.html" %}
 
+{% block title %}
+{{ block.super }} - {{ series.primary_name }}
+{% endblock title %}
+
 {% block content %}
 
 {% block name %}
@@ -99,7 +103,7 @@
 {% endblock sidebar %}
 
 {% block script %}
-{{ super.script }}
+{{ block.super }}
 
 <script type="text/javascript">
 // set the initial viewing controls

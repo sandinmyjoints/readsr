@@ -107,15 +107,18 @@
 		<div id="footer" class="">
 			{% block footer %}
 			Site by <a href="http://williamjohnbert.com">wjb</a>
+			<span style="float: right"><a href="http://twitter.com/Readsr" class="twitter-follow-button" data-show-count="false">Follow @Readsr</a></span>
 			{% endblock footer %}
 		</div>
 	
 	</div> <!-- end content -->
 	
 	<!-- begin script -->
+	<script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
+	
 	<script type="text/javascript">
+	/*
 	$(document).ready(function() {
-		/*
 		var $login_dialog = $('<div></div>')
 		.html("Login")
 		.dialog({ 
@@ -129,22 +132,15 @@
 			$login_dialog.dialog('open');
 			return false;
 		});
-		*/
 
 	});
+	*/
 	</script>
 	
-	{% if messages %}
 	<script type="text/javascript">
 	$(document).ready(function() {
 		$("#messages").hide();
 		$("#messages").delay(100).slideToggle().delay(2500).slideToggle();
-	})
-	</script>
-	{% endif %}
-	
-	<script type="text/javascript">
-	$(document).ready(function () {
 		$(".dropdown").click(
 			function() {
 				$("ul.sub-menu").slideToggle("200");

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Readsr - {{ city_site.city_and_state }}{% endblock title %}
+{% block title %}{{ block.super }} - {{ city_site.city_and_state }}{% endblock title %}
 
 {% block content %}
 
@@ -23,7 +23,7 @@
 {% endblock content %}
 
 {% block script %}
-{{ super.script }}
+{{ block.super }}
 <script type="text/javascript">
 // set the initial viewing controls
 {% if list_view %}
