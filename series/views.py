@@ -99,7 +99,7 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 	
 	# If we're on the generic www.readsrs.com site, show a list of available cities
 	if current_site.id == settings.WWW_SITE:
-		return splash(request, current_site)
+		return splash(request)
 			
 	if request.method == "GET":
 		# If request is get, then we can get start and end dates from that
