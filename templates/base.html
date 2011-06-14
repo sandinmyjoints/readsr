@@ -25,6 +25,11 @@
 </head>
 
 <body>
+	<script type="text/javascript">
+	twttr.anywhere(function (T) {
+	  T.hovercards();
+	});
+	 </script>
 
 	<div id="header">
 		
@@ -140,8 +145,10 @@
 	
 	<script type="text/javascript">
 	$(document).ready(function() {
+		{% if messages %}
 		$("#messages").hide();
 		$("#messages").delay(100).slideToggle().delay(2500).slideToggle();
+		{% endif %}
 		$(".dropdown").click(
 			function() {
 				$("ul.sub-menu").slideToggle("200");

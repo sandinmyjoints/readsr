@@ -1,11 +1,4 @@
 {% extends "base.html" %}
-<script type="text/javascript">
-
-   twttr.anywhere(function (T) {
-     T.hovercards();
-   });
-
- </script>
 
 {% block header %}
 <h1><a href="{% url index %}" id="header_link">{{ city_site.name }}</a></h1>

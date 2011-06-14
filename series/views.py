@@ -99,8 +99,8 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 	
 	# If we're on the generic www.readsrs.com site, show a list of available cities
 	if current_site.id == settings.WWW_SITE:
-		return render_to_response('splash.html', { 'sites_list': Site.objects.exclude(id__exact=current_site.id) }, context_instance=RequestContext(request))
-	
+		return splash(request, current_site)
+			
 	if request.method == "GET":
 		# If request is get, then we can get start and end dates from that
 		start = request.GET.get('start', "")
@@ -199,6 +199,10 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 													'month': start_date.month,
 													'js_available': js_available,													
 												}, context_instance=RequestContext(request))
+
+def splash(request):
+	current_site = Site.objects.get_current()
+	return render_to_response('splash.html', { 'sites_list': Site.objects.exclude(id__exact=current_site.id) }, context_instance=RequestContext(request))
 
 # THIS VIEW IS DEPRECATED, REPLACED BY INDEX
 def series_detail(request, series_id, list_view=True):
@@ -301,10 +305,13 @@ def edit_series(request, series_id=None):
 	if request.method == 'POST': # if we are receiving POST data, then we're getting the result of a form submission, so we save it to the database and show the detail template
 		form = SeriesForm(request.POST, instance=sr)
 		sr.site = CitySite.objects.get(pk=settings.SITE_ID) # site can only be the current site
+		tweet_or_not = False
+		tweet_message = []
 		
 		# We are creating a new reading series, so give it the current user as the contact, and
 		if not sr.id:
 			sr.contact = request.user
+			tweet_message.append("New series: %s!" % sr.primary_name)
 			tweet_or_not = True
 
 		old_sr = copy.deepcopy(sr) # need to create a copy because is_valid() will trigger model validation, which will update the model object with the new time values
@@ -324,7 +331,7 @@ def edit_series(request, series_id=None):
 				
 				# Depending on what changed, we may want to tweet about it, so start constructing
 				# a tweet message.
-				tweet_message = ["%s has been updated!" % old_sr.primary_name]
+				tweet_message.append("%s has been updated!" % old_sr.primary_name)
 				tweet_or_not = False
 				
 				# If the name has changed, tweet about it:
