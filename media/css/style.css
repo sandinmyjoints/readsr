@@ -4,7 +4,7 @@ body {
 	background: url("/media/adc3eb_bg.png");
 	background-repeat: repeat-x;
 	/* font-family: Georgia, Palatino, "Palatino Linotype", Times, "Times New Roman", serif; */
-	font-family: Garamond, "Hoefler Text", "Times New Roman", Times, serif;
+	font-family: "EB Garamond", "Hoefler Text", "Times New Roman", Times, serif;
 	font-size: 100%;
 	line-height: 1.5em;
 }
@@ -51,18 +51,22 @@ p {
 }
 h1, h2, h3 {
 	/* font-family: Georgia, Times, "Times New Roman", serif; */
-	font-family: Garamond, "Hoefler Text", Palatino, "Palatino Linotype", serif
-	
+	font-family: "EB Garamond", Garamond, "Hoefler Text", Palatino, "Palatino Linotype", serif
 }
+
 h1 {
 	font-size: 2em;
 }
+
 h2 {
 	font-size: 1.5em;
 }
+
 h3 {
 	font-size: 1em;
+	font-weight: normal;
 }
+
 h1.reading_name {
 	/*display: inline;*/
 	margin-bottom: 0px;
@@ -78,7 +82,7 @@ div#header {
 
 div#navbar {  
 	clear: both;
-	width: 900px;
+	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
 	height: 1.5em;
@@ -109,7 +113,7 @@ div#navbar ul li {
 #navbar a:link, #navbar a:visited
 {
 	display:block;
-	font-weight:bold;
+	/*font-weight:bold;*/
 	color:#FFFFFF;
 	background-color:#7094DB;
 	text-align:center;
@@ -142,6 +146,7 @@ div#messages {
 	
 	background-color: #555;
 	color: #CCC;
+	display: none;
 }
 
 #content p {
@@ -198,6 +203,7 @@ div.inside_banner {
 div#sidebar {
 	float: right;
 	width: 30%;
+	margin-right: .5em;
 }
 
 #sidebar h1, #sidebar h2, #sidebar h3, #sidebar h4, #banner h2 {
@@ -208,7 +214,7 @@ div#sidebar {
 	padding: .5em .5em;
 }
 
-#sidebar h2, #banner h1, #banner h2 {
+#sidebar h2 {
 	font-style: italic;
 	text-align: center;
 }
@@ -543,7 +549,6 @@ li.reading_list {
 }
 
 .list_controls {
-	font-weight: bold;
 }
 
 a.list_controls {
@@ -556,7 +561,6 @@ a.list_controls {
 }
 
 .calendar_controls {
-	font-weight: bold;
 }
 
 a.calendar_controls {
@@ -681,7 +685,7 @@ span.edit_reading_description textarea {
 }
 
 #calendar th {
-	font-size: 16px;
+	font-size: 1em;
 	background-color: #00297A;
 	text-align: center;
     color: #FFF;
@@ -697,7 +701,7 @@ span.edit_reading_description textarea {
 #calendar .sun th
 {
     text-align: center;
-    font-size: 12px;
+    font-size: .75em;
     background-color: #00297A;
     color: #FFF;
 }
@@ -727,7 +731,7 @@ span.edit_reading_description textarea {
 
 #calendar .dayNumber {
 	float: right;
-    font-size: 16px !important;
+    font-size: 1em !important;
 }
 
 #calendar .dayNumberNoReadings {
@@ -735,7 +739,7 @@ span.edit_reading_description textarea {
 }
 
 #calendar a {
-    font-size: 10px;
+    font-size: .625em;
 }
 
 #load_image {

@@ -29,12 +29,12 @@ $(document).ready(function() {
 
 	// Set the dates for the datepicker
 	start = $( "#datepicker_start" ).datepicker({
-		autoSize: true,
+		autoSize: false,
 		onSelect: change_start_list_view 
 	});
 
 	end = $( "#datepicker_end" ).datepicker({
-		autoSize: true,
+		autoSize: false,
 		onSelect: change_end_list_view
 	});
 	
