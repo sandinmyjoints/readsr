@@ -64,7 +64,7 @@ your reading series.
 			</dd>
 			<dt><label for="id_venue">Where does it happen?</label></dt>
 			<dd>
-				{{ form.venue }} <a href="{% url create-venue %}?next={{ request.path }}"><img src="/media/add.png" alt="Add new venue" title="Add a new venue" class="add-icon"></a>
+				{{ form.venue }} <a href="{% url create-venue %}?next={{ request.path }}"><img src="{{ MEDIA_URL }}add.png" alt="Add new venue" title="Add a new venue" class="add-icon"></a>
 				{% if form.venue.errors %}
 				    <ol class="errorlist">
 				    {% for error in form.venue.errors %}
@@ -163,7 +163,7 @@ your reading series.
 			</dd>
 			<dt><label for="id_affiliations">Is it affiliated with any organizations?</label></dt>
 			<dd>
-				{{ form.affiliations }} <a href="{% url create-affiliate %}"><img src="/media/add.png" title="Add a new affiliate" alt="Add new affiliate" class="add-icon" style="padding-left: 5px"></a>
+				{{ form.affiliations }} <a href="{% url create-affiliate %}"><img src="{{ MEDIA_URL }}add.png" title="Add a new affiliate" alt="Add new affiliate" class="add-icon" style="padding-left: 5px"></a>
 				{% if form.affiliations.errors %}
 				    <ol class="errorlist">
 				    {% for error in form.affiliations.errors %}

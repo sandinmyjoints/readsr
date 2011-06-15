@@ -59,9 +59,7 @@ class ReadingCalendar(HTMLCalendar):
 		self.readings = self.group_by_day(readings)
 		self.setfirstweekday(6) 
 		for day in self.readings:
-			#print "day is %d" % day
 			for reading in self.readings[day]:
-				#print "reading is %s, reading.date is %s" % (reading, reading.date)
 				pass
 
 	def formatday(self, day, weekday):

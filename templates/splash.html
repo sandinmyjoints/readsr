@@ -12,9 +12,15 @@
       {% endblock navbar %}
 
       {% block content %}
+	<script type="text/javascript">
+	twttr.anywhere(function (T) {
+	  T.hovercards();
+	});
+	 </script>
+
 	<h2>Welcome to Readsr.</h2>
 		<p>We track literary reading series in various cities. You can see who's reading, what kinds of stuff they're reading (poetry, fiction, nonfiction), where, and when.</p>
-			</p>How do we stay up to date? With the help of users like you. You can add a new reading series, or update a current one with information about who's reading. You can also follow us on Twitter (@readsr) to get real-time updates. And you can <a href="{% url about %}">contact us</a> with suggestions or questions. </p>
+			<p>How do we stay up to date? With the help of users like you. You can add a new reading series, or update a current one with information about who's reading. You can also follow us on Twitter (@readsr) to get real-time updates. And you can <a href="{% url about %}">contact us</a> with suggestions or questions. </p>
 		<h3>Right now, we're tracking readings in these cities.</h3>
 	<ul class="sites_list">
 	{% for site in sites_list %}

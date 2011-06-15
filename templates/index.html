@@ -2,6 +2,14 @@
 
 {% block title %}{{ block.super }} - {{ city_site.city_and_state }}{% endblock title %}
 
+{% block headscript %}
+{{ block.super }}
+<script type="text/javascript">
+var start_date = "{{ start_date }}";
+var end_date = "{{ end_date }}";
+</script>
+{% endblock %}
+
 {% block content %}
 
 <div id="banner">
@@ -12,7 +20,7 @@
 </div>
 
 	<div id="reading_list">
-		<img id="load_image" src="/media/spinner-large.gif">
+		<img id="load_image" src="{{ MEDIA_URL }}spinner-large.gif">
 		{% if list_view %}
 			{% include "list_readings.html" %}
 		{% else %}
@@ -23,7 +31,9 @@
 {% endblock content %}
 
 {% block script %}
+
 {{ block.super }}
+
 <script type="text/javascript">
 // set the initial viewing controls
 {% if list_view %}
@@ -31,11 +41,8 @@
 {% else %}
 	$(".list_controls").hide();
 {% endif %}
+
+// set the initial dates
 </script>
 
-<script type="text/javascript" src="/media/js/datepickerscript.js"></script>
-<script type="text/javascript">
-start.datepicker("setDate", "{{ start_date }}");
-end.datepicker("setDate", "{{ end_date }}");
-</script>
 {% endblock script %}

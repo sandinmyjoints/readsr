@@ -107,7 +107,8 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 		end = request.GET.get('end', "")
 		series_id = request.GET.get('series_id', series_id)
 		list_view = request.GET.get('list_view', "True")
-		print "method is get, list_view is %s, start out of GET is %s, end is %s" % (list_view, start, end)
+		if settings.DEBUG:
+			print "method is get, list_view is %s, start out of GET is %s, end is %s" % (list_view, start, end)
 
 		# If list_view is Calendar or List, then the client is not using js. We know
 		# this because they submitted a form, rather than the js capturing the event
@@ -157,8 +158,6 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 		
 		reading_list = Reading.objects.filter(series__site__exact=current_site.id).filter(date_and_time__gte=start_date).filter(date_and_time__lte=end_date)
 		
-		#print "reading_list = %s, len=%d" % (reading_list, len(reading_list))
-		#print "series_list = %s, len=%d" % (series_list, len(series_list))
 		if series_id:
 			# we are in detail_series mode so filter the reading_list down to just the ones for this series_id
 			reading_list = reading_list.filter(series__id__exact=series_id)
@@ -166,12 +165,9 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 		else:
 			sr = None
 			
-			#print "filtered reading_list = %s, len=%d" % (reading_list, len(reading_list))
 	else:
 		# not GET method
 		raise Http404
-
-	#print "series is %s, start_date is %s, end_date is %s" % (sr, start_date.strftime("%m/%d/%Y"), end_date.strftime("%m/%d/%Y"))
 	
 	if series_id:
 		# we are in detail-series mode	
@@ -218,7 +214,8 @@ def series_detail(request, series_id, list_view=True):
 	"""
 	sr = get_object_or_404(Series, pk=series_id)
 	reading_list=Reading.objects.filter(date_and_time__gte=datetime.today()).filter(series=series_id)
-	print "series is %s, series contact_id is %s, series contact is X, series contact user is X" % (sr, sr.contact_id, )
+	if settings.DEBUG:
+		print "series is %s, series contact_id is %s, series contact is X, series contact user is X" % (sr, sr.contact_id, )
 	return render_to_response('series_detail.html', {
 														'series': sr, 
 														'reading_list': reading_list,
@@ -373,10 +370,12 @@ def edit_series(request, series_id=None):
 						auth = tweepy.OAuthHandler(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
 						auth.set_access_token(settings.TWITTER_ACCESS_KEY, settings.TWITTER_ACCESS_SECRET)
 						api = tweepy.API(auth)
-						print "tweeting %s" % ' '.join(tweet_message)
+						if settings.DEBUG:
+							print "tweeting %s" % ' '.join(tweet_message)
 						api.update_status(' '.join(tweet_message))
 					except tweepy.TweepError:
-						print "tweep error"
+						if settings.DEBUG:
+							print "tweep error"
 									
 			# If the series has a regular time, day of the week, and week of the month, and
 			# it is new or its time has changed, then create new reading objects for the new year
@@ -540,7 +539,6 @@ def edit_venue(request, venue_id=None, success_url=None, extra_context=None):
 		address_form = AddressForm()
 
 	success_url = request.REQUEST.get("next", 'series.views.index')
-	print "Success_url is %s" % success_url
 	
 	if request.method == 'POST': # if user is submitting a message through the contact form
 		venue_form = VenueForm(data=request.POST) 

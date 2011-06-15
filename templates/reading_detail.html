@@ -23,8 +23,7 @@
 {{ block.super }}
 
 {% if user.is_authenticated %}
-<script type="text/javascript" src="/media/js/jquery.inlineedit.js"></script>
-<script type="text/javascript" src="/media/js/editable_reading_descriptions.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.inlineedit.js"></script>
 <script type="text/javascript">
 $(document).ready(function() 
     { 

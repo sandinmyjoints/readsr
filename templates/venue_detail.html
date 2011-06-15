@@ -3,7 +3,7 @@
 {% block name %}
 <div id="banner"><h1 class="venue_name">{{ venue.name }}
 	{% if user.is_authenticated %}
-	<a href="edit/?next={{ request.path }}"><img src="/media/edit.png" alt="Edit" class="edit-icon"></a>
+	<a href="edit/?next={{ request.path }}"><img src="{{ MEDIA_URL }}edit.png" alt="Edit" class="edit-icon"></a>
 	{% endif %}
 	 </h1>
 	</div>

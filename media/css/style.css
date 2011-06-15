@@ -144,11 +144,8 @@ div#messages {
 	color: #CCC;
 }
 
-p#content {
-	margin-left: .5em;
-	margin-right: .5em;
-	margin-bottom: .5em;
-	
+#content p {
+	padding: .5em .5em .5em .5em;
 }
 
 /* page */
@@ -172,7 +169,7 @@ div#content {
 }
 
 #content h1, #content h2, #content h3, #content h4 {
-	padding: 0px 2px;
+	padding: 0px 3px;
 }
 
 /* banner at top of content */
