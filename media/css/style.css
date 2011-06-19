@@ -151,6 +151,7 @@ div#messages {
 
 #content p {
 	padding: .5em .5em .5em .5em;
+	text-align: left;
 }
 
 /* page */
@@ -174,24 +175,29 @@ div#content {
 }
 
 #content h1, #content h2, #content h3, #content h4 {
-	padding: 0px 3px;
+	padding: 1% 0% 1% 1%;
 }
 
 /* banner at top of content */
 div#banner {
-	background: #DDD;
+	background: #BBB;
 	margin: 0em .5em;
 	/*padding: .2em;*/
 	text-align: center;
 	border: 2px solid #555;
+	margin-bottom: 1em;
+	overflow: hidden;
+	
 }
 
 div#choose_date {
-	background-color: transparent;
+	background: #DDD;
 	margin: 0em .5em;
 	/*padding: .2em;*/
 	text-align: center;
-		padding: .2em;
+	padding: .2em;
+	border: 2px solid #555;
+	overflow: hidden;
 }
 
 div.inside_banner {
@@ -332,7 +338,7 @@ li.reading_list {
 }
 
 .hl {
-	background: #FFD4B3;
+	background: #C4D4F1;
 }
 
 /* dl and its elements are used (for now) on the edit_series.html template */
@@ -345,7 +351,6 @@ dl dt {
 	width: 30%;
 	/* background: #ADC3ED; */
 	clear: left;
-	font-weight: bold;
 	padding: 10px 10px;
 }
 dl dd {
@@ -375,6 +380,7 @@ li {
 	margin-left: 0px;
 	list-style-type: none;
 }
+
 .clear {
 	clear: both;
 }
@@ -518,6 +524,9 @@ li.message {
 	margin-left: 1%;
 	margin-right: 1%;
 	width: 98%;
+   -moz-resize: vertical;  
+   -webkit-resize: vertical;  
+   resize: vertical;
 }
 
 span.inlineEdit-placeholder {
@@ -587,12 +596,6 @@ span.ui-state-hover {
 
 span.edit_reading_description textarea {
 	width: 340px;
-}
-
-.map {
-	float: left;
-	width: 50%;
-	margin-bottom: 1em;
 }
 
 #content ul {
@@ -678,6 +681,8 @@ span.edit_reading_description textarea {
 #calendar {
 	padding-top: 1em;
 	padding-bottom: 1em;
+	margin-right: .5em;
+	margin-left: .5em;
 }
 
 #calendar table {
@@ -771,3 +776,68 @@ form.city_chooser {
 	display: inline;
 }
 
+div.series_info {
+	background: #C4D4F1;
+	margin: 0em .5em;
+	/*padding: .2em;*/
+	text-align: center;
+	border: 2px solid #555;
+	margin-bottom: 1em;
+	overflow: hidden;
+	
+}
+
+.series_info a {
+}
+
+dl.series_info {
+	float: left;
+	width: 45%;	
+}
+
+dt.series_info {
+	clear: left;
+	float: left;
+	width: 5em;
+	margin: 0;
+	padding: .5em;
+	border-top: 1px solid #999;
+}
+
+dd.series_info {
+	margin-left: 1em;
+	padding: 5px;
+}
+
+dt.first {
+	border-top: none;
+}
+
+dd.series_info ul {
+	padding: 0em !important;
+	float: none;
+	display: inline;
+	float: left;
+}
+
+ul.series_info {
+	float: left;
+	width: 45%;
+}
+
+.series_info li {
+	float: none;
+	padding: 0em 1em 0em 0em;
+	text-align: left;
+}
+
+.map iframe {
+	border: 2px solid #555;
+	margin: .5em;
+}
+
+.map {
+	float: right;
+	width: 54%;
+	margin-bottom: 1em;
+}

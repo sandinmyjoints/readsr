@@ -16,21 +16,86 @@ var end_date = "{{ end_date }}";
 
 {% block name %}
 	<div id="banner">
-	<h1 class="reading_name">{{ series.primary_name }}{% if series.website %}
-	<a href="{{ series.website }}" class="external"><img src="{{ MEDIA_URL }}external-link.png" class="external-icon" ></a>
-	{% endif %}{% if user.is_authenticated %}
-	<a href="edit/"><img src="{{ MEDIA_URL }}edit.png" alt="Edit" class="edit-icon"></a>
-	<a href="remove/"><img src="{{ MEDIA_URL }}delete.png" alt="Request removal" class="delete-icon"></a>
-	{% endif %}</h1>
+		<h1 class="reading_name">{{ series.primary_name }}{% if series.website %}
+		<a href="{{ series.website }}" class="external"><img src="{{ MEDIA_URL }}external-link.png" class="external-icon" ></a>
+		{% endif %}{% if user.is_authenticated %}
+		<a href="edit/"><img src="{{ MEDIA_URL }}edit.png" alt="Edit" class="edit-icon"></a>
+		<a href="remove/"><img src="{{ MEDIA_URL }}delete.png" alt="Request removal" class="delete-icon"></a>
+		{% endif %}</h1>
 
-	{% if series.secondary_name %}
-	<h2 class="reading_name">{{ series.secondary_name }}</h2>
-	{% endif %}
+		{% if series.secondary_name %}
+		<h2 class="reading_name">{{ series.secondary_name }}</h2>
+		{% endif %}
+	</div> <!-- banner -->
+
+	<div class="series_info">
+	<dl class="series_info">
+		<dt class="series_info first">Contact</dt>
+		<dd class="series_info"><a href="{% url detail-contact series.contact_id %}">{{ series.contact.first_name }} {{ series.contact.last_name }}</a></dd>
+		<dt class="series_info">Genre{{ series.genre.all|pluralize }}</dt>
+		<dd class="series_info">
+		{% for genre in series.genre.all %}
+			{{ genre.get_genre_display }}{% if not forloop.last %},{% endif %} 
+		{% endfor %}
+		</dd>
+		<dt class="series_info">Venue</dt>
+		<dd class="series_info">
+			<ul>
+			<li><a href="{% url detail-venue series.venue.id %}">{{ series.venue }}</a>
+			{% if series.venue.secondary_name %}
+			, {{ series.venue.secondary_name }}
+			{% endif %}
+			</li>
+			<li>{{ series.venue.address.street_address }}</li>
+			<li>{{ series.venue.address.city_address }} </li>
+			</ul>
+		</dd>
+		<dt class="series_info">When</dt>
+		{% if series.regular %}
+			<dd class="series_info">{{ series.week_within_month.get_week_within_month_display }} {{ series.day_of_week.get_day_display }}s
+			<br /> 
+			{{ series.time }}</dd>
+		{% else %}
+			<dd>{{ series.irregular_date_description }}</dd>
+		{% endif %}
+		{% if series.affiliation.all %}
+		<dt class="series_info">Affiliation</dt>
+		<dd class="series_info">
+		{% for affiliate in series.affiliation.all %}
+			{% if affiliate.website %}
+			<a href="{{ affiliate.website.url }}">
+			{% endif %}
+			{{ affiliate.name }}
+			{% if affiliate.website %}
+			</a>
+			{% endif %}
+			{% if not forloop.last %},{% endif %}
+
+		{% endfor %}
+		</dd>
+		{% endif %}
+		<dt class="series_info">Admission</dt>
+		<dd class="series_info">{{ series.admission_description|default:"Free" }}</dd>
+		
+		<dt class="series_info">Website</dt>
+		<dd class="series_info">{{ series.website|urlizetrunc:22|default:"None available" }}</dd>
+
+		{% if series.notes %}
+		<dt class="series_info">Notes</dt>
+		<dd class="series_info">{{ series.notes|default:"None" }}</dd>
+		{% endif %}
+
+	</dl>
+	
+	<div class="map">
+		<iframe width="300" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://local.google.com/maps?q={{ series.venue.address.street_address}}+{{ series.venue.address.city_address}}&amp;f=q&amp;hl=en&amp;ie=UTF8&amp;hq={{ series.venue.address.street_address}}+{{ series.venue.address.city_address}}&amp;z=13&amp;iwloc=A&amp;output=embed"></iframe><br /><small><a href="http://local.google.com/maps?q={{ series.venue.address.street_address}}+{{ series.venue.address.city_address}}&amp;f=q&amp;hl=en&amp;ie=UTF8&amp;hq={{ series.venue.address.street_address}}+{{ series.venue.address.city_address}}&amp;z=13&amp;iwloc=A&amp;source=embed" style="color:#0000FF;text-align:left">View Larger Map</a></small>
+		</div>
+	</div>	
 	
 	{% include "choose_date_snippet.html" %}
+
+	{% endblock name %}
 	
-	</div>
-{% endblock name %}
 
 	<div id="reading_list">
 		<img id="load_image" src="{{ MEDIA_URL }}spinner-large.gif">
@@ -40,71 +105,11 @@ var end_date = "{{ end_date }}";
 			{% include "calendar_snippet.html" %}
 		{% endif %}
 	</div>
+	
 {% endblock content %}
 
 {% block sidebar %}
-<div class="sidebar_element">
-<h2>About This Series</h2>
-<dl>
-	<dt>Contact</dt>
-	<dd><a href="{% url detail-contact series.contact_id %}">{{ series.contact.first_name }} {{ series.contact.last_name }}</a></dd>
-	<dt>Genre{% if series.genre.all|length > 1 %}s{% endif %}</dt>
-	<dd>
-	{% for genre in series.genre.all %}
-		{{ genre.get_genre_display }}{% if not forloop.last %},{% endif %} 
-	{% endfor %}
-	</dd>
-	<dt>Venue</dt>
-	<dd>
-		<ul>
-		<li><a href="{% url detail-venue series.venue.id %}">{{ series.venue }}</a>
-		{% if series.venue.secondary_name %}
-		, {{ series.venue.secondary_name }}
-		{% endif %}
-		</li>
-		<li>{{ series.venue.address.street_address }}</li>
-		<li>{{ series.venue.address.city_address }} <a href="http://maps.google.com/?q=loc%3A+{{ series.venue.address.street_address }}+{{ series.venue.address.city_address }}+US">(map)</a></li>
-		</ul>
-	</dd>
-	<dt>When</dt>
-	{% if series.regular %}
-		<dd>{{ series.week_within_month.get_week_within_month_display }} {{ series.day_of_week.get_day_display }}s
-		<br /> 
-		{{ series.time }}</dd>
-	{% else %}
-		<dd>{{ series.irregular_date_description }}</dd>
-	{% endif %}
-	{% if series.affiliation.all %}
-	<dt>Affiliation</dt>
-	<dd>
-	{% for affiliate in series.affiliation.all %}
-		{% if affiliate.website %}
-		<a href="{{ affiliate.website.url }}">
-		{% endif %}
-		{{ affiliate.name }}
-		{% if affiliate.website %}
-		</a>
-		{% endif %}
-		{% if not forloop.last %},{% endif %}
-		
-	{% endfor %}
-	</dd>
-	{% endif %}
-	<dt>Admission</dt>
-	<dd>{{ series.admission_description|default:"Free" }}</dd>
-	{% if series.website %}
-	<dt>Website</dt>
-	<dd><a href="{{ series.website }}">{{ series.website }}</a></dd>
-	{% endif %}
 
-	{% if series.notes %}
-	<dt>Notes</dt>
-	<dd>{{ series.notes|default:"None" }}</dd>
-	{% endif %}
-	<div class="clear"></div>
-	
-</dl>
-</div>
 
 {{ block.super }}
 

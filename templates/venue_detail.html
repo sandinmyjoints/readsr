@@ -1,5 +1,9 @@
 {% extends "generic_list.html" %}
 
+{% block title %}
+{{ block.super }} - {{ venue.name }}
+{% endblock title %}
+
 {% block name %}
 <div id="banner"><h1 class="venue_name">{{ venue.name }}
 	{% if user.is_authenticated %}
@@ -11,52 +15,52 @@
 
 
 {% block details %}
-<div style="width: 40%; float: left">
-<ul class="">
-	<li>{{ venue.address.street_address }}</li>
-	<li>{{ venue.address.city_address }}</li>
-	<li><a href="{{ venue.website }}">{{ venue.website }}</a></li>
-	<li>{{ venue.phone }}</li>
+<div class="series_info">
+	<ul class="series_info">
+		<li>{{ venue.address.street_address }}</li>
+		<li>{{ venue.address.city_address }}</li>
+		<li><a href="{{ venue.website }}">{{ venue.website }}</a></li>
+		<li>{{ venue.phone }}</li>
 
-</ul>
-
-	
-	
-<h2>Series at {{ venue.name }}</h2>
-{% if venue_series_list %}
-    <ul class="series_list">
-    {% for series in venue_series_list %}
-        <li>
-			<a href="{% url detail-series series.id %}">{{ series.primary_name }}</a> at {% if series.venue.website %}
-			<a href="{% url detail-venue series.venue.id %}">{{ series.venue }}</a>
-			{% else %}
-			{{ series.venue }}
-			{% endif %}
-			<br />
-			{% if series.regular %}
-			{{ series.week_within_month.get_week_within_month_display }} {{ series.day_of_week.get_day_display }}s, {{ series.time }}
-			{% else %}
-			{{ series.irregular_date_description }}
-			{% endif %}
-			<br />
-			{% for genre in series.genre.all %}
-			{{ genre.get_genre_display }}{% if not forloop.last %},{% endif %}
-			{% endfor %}
-			{% if not forloop.last %}
-			<div style="text-align:center">&#10018;</div>
-			{% endif %}
-		<li>
-    {% endfor %}
 	</ul>
-{% else %}
-    <p>We don't know about any reading series here yet. <a href="edit/">Add one!</a></p>
-{% endif %}
+	
+	<div class="map">
+		<iframe width="300" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://local.google.com/maps?q={{ venue.address.street_address}}+{{ venue.address.city_address}}&amp;f=q&amp;hl=en&amp;ie=UTF8&amp;hq={{ venue.address.street_address}}+{{ venue.address.city_address}}&amp;z=13&amp;iwloc=A&amp;output=embed"></iframe><br /><small><a href="http://local.google.com/maps?q={{ venue.address.street_address}}+{{ venue.address.city_address}}&amp;f=q&amp;hl=en&amp;ie=UTF8&amp;hq={{ venue.address.street_address}}+{{ venue.address.city_address}}&amp;z=13&amp;iwloc=A&amp;source=embed" style="color:#0000FF;text-align:left">View Larger Map</a></small>
+	</div>
+	
+	<h2 style="float: left; width: 45%">Series at {{ venue.name }}</h2>
+	{% if venue_series_list %}
+	    <ul class="series_info">
+	    {% for series in venue_series_list %}
+	        <li>
+				<a href="{% url detail-series series.id %}">{{ series.primary_name }}</a> at {% if series.venue.website %}
+				<a href="{% url detail-venue series.venue.id %}">{{ series.venue }}</a>
+				{% else %}
+				{{ series.venue }}
+				{% endif %}
+				<br />
+				{% if series.regular %}
+				{{ series.week_within_month.get_week_within_month_display }} {{ series.day_of_week.get_day_display }}s, {{ series.time }}
+				{% else %}
+				{{ series.irregular_date_description }}
+				{% endif %}
+				<br />
+				{% for genre in series.genre.all %}
+				{{ genre.get_genre_display }}{% if not forloop.last %},{% endif %}
+				{% endfor %}
+				{% if not forloop.last %}
+				<div style="text-align:center">&#10018;</div>
+				{% endif %}
+			<li>
+	    {% endfor %}
+		</ul>
+	{% else %}
+	    <p>We don't know about any reading series here yet. <a href="edit/">Add one!</a></p>
+	{% endif %}
+
+
 </div>
 
-<div style="width: 55%; float: left">
-	<p>
-	<iframe width="300" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://local.google.com/maps?q={{ venue.address.street_address}}+{{ venue.addrers.city_address}}&amp;f=q&amp;hl=en&amp;ie=UTF8&amp;hq={{ venue.address.street_address}}+{{ venue.address.city_address}}&amp;z=13&amp;iwloc=A&amp;output=embed"></iframe><br /><small><a href="http://local.google.com/maps?q={{ venue.address.street_address}}+{{ venue.address.city_address}}&amp;f=q&amp;hl=en&amp;ie=UTF8&amp;hq={{ venue.address.street_address}}+{{ venue.address.city_address}}&amp;z=13&amp;iwloc=A&amp;source=embed" style="color:#0000FF;text-align:left">View Larger Map</a></small>
-	</p>
-	</div>
+
 
 {% endblock details %}

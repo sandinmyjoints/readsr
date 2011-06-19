@@ -14,10 +14,9 @@ var end_date = "{{ end_date }}";
 
 <div id="banner">
 	<h1>Upcoming readings in {{ city_site.city }}, {{ city_site.state }}</h1>
+</div>
 
 {% include "choose_date_snippet.html" %}
-
-</div>
 
 	<div id="reading_list">
 		<img id="load_image" src="{{ MEDIA_URL }}spinner-large.gif">
