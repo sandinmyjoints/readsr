@@ -807,6 +807,8 @@ dt.series_info {
 dd.series_info {
 	margin-left: 1em;
 	padding: 5px;
+	width: 50%;
+	text-align: left;
 }
 
 dt.first {
