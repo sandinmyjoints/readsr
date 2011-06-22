@@ -17,7 +17,9 @@
 	<h3>{{ reading.date_and_time }} - <a href="{{ reading.series.get_absolute_url }}">Full Series Schedule</a></h3>
 	
 	<div id="{{ reading.id }}" class="edit_reading_description reading_description">
-	{{ reading.description|linebreaks }}
+		{% if reading.description %}
+			{{ reading.description|linebreaks }}
+		{% endif %}
 	</div>
 </div>
 {% endblock content %}

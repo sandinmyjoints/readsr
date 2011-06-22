@@ -518,6 +518,7 @@ li.message {
 	padding: .3em;
 	border: 2px solid #555 !important;
 	background-color: #FFD4B3;
+	text-align: left;
 }
 
 .reading_description textarea {
