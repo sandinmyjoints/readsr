@@ -1,6 +1,8 @@
 # Django settings for dcreadings project.
 import os
 
+ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -47,7 +49,7 @@ USE_L10N = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'media')
+MEDIA_ROOT = os.path.join(ROOT_PATH, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -59,7 +61,7 @@ MEDIA_URL = 'http://127.0.0.1:8000/readsr/media/'
 # Examples: "	http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/media/admin/'
 
-STATIC_DOC_ROOT = '/Users/wbert/Sites/django/readsr/media'
+STATIC_DOC_ROOT = os.path.join(ROOT_PATH, 'media')
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '9(ff*vntzzm^v&lw69j2k5(6y&parqy-u4i9lcad_j-o38+zuz'
@@ -128,10 +130,11 @@ AUTH_PROFILE_MODULE = 'series.Contact'
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-EMAIL_HOST = ('smtp.gmail.com')
-EMAIL_PORT = ('587')
-EMAIL_HOST_USER = ('william.bert@gmail.com')
-EMAIL_HOST_PASSWORD = ('glbnocb9')
+# set in local_settings.py
+EMAIL_HOST = ()
+EMAIL_PORT = ()
+EMAIL_HOST_USER = ()
+EMAIL_HOST_PASSWORD = ()
 EMAIL_USE_TLS = True
 
 LOGIN_REDIRECT_URL = "/"

@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Hi, {{ user.username }}.</h1>
+<div id="banner">
+<h1 class="">{{ user.username }}'s profile</h1>
+</div>
+
 <p>
 <ul>
 	<li>{{ profile.first_name}} {{ profile.last_name}} | <a href="{% url profiles_edit_profile %}">Edit</a></li>
