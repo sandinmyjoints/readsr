@@ -19,9 +19,8 @@ $(document).ready(function() {
 		e.preventDefault();
 		window.location.href = "http://" + e.target.value;
 
-	})
+	});
 	
-
 	/* 
 	 * Datepickerscript -- helpful functions for the datepicker 
 	 */
@@ -39,9 +38,12 @@ $(document).ready(function() {
 	});
 	
 	//alert("setting date 2: " + start_date + " " + end_date);
-	start.datepicker("setDate", start_date);
-	end.datepicker("setDate", end_date);
 
+	if(start.length && end.length) {
+		start.datepicker("setDate", start_date);
+		end.datepicker("setDate", end_date);
+	}
+	
 	// put the handlers on the buttons to be clicked, and prevent them from
 	// the default action, submitting the form. If js is disabled, they will 
 	// submit the form so the page still works, albeit without the nice
@@ -102,7 +104,7 @@ $(document).ready(function() {
 	});
 	
 	// List controls 
-	$("#next_week").click(function(e) {
+	$("#one_week").click(function(e) {
 		// if 
 		e.preventDefault();
 		var today = new Date();
@@ -110,7 +112,7 @@ $(document).ready(function() {
 		loadReadingList(today, one_week, true);
 	});
 
-	$("#next_month").click(function(e) {
+	$("#one_month").click(function(e) {
 		e.preventDefault();
 		var today = new Date();
 		var one_month = new Date(today.getTime()+1000*60*60*24*31);
@@ -180,7 +182,6 @@ function bind_editable_descriptions(url) {
 	    },
 		control: 'textarea',
 	});
-	
 }
 
 // functions for date/calendar control changing
@@ -210,21 +211,21 @@ function change_view(list_view) {
 
 	loadReadingList(start_date, end_date, list_view);
 	
-	$("#load_image").fadeIn("fast");
-	$("#reading_list").fadeOut("fast");
-	$("#reading_list").load(new_loc + " #reading_list", function() {
+	var load_image = $("load_image");
+	var reading_list = $("#reading_list");
+	load_image.fadeIn("fast");
+	reading_list.fadeOut("fast");
+	reading_list.load(new_loc + " #reading_list", function() {
 		// callback function
-		$("#load_image").fadeOut("fast");
+		load_image.fadeOut("fast");
 	}); // pull data using ajax
-	$("#reading_list").fadeIn("fast");
-
+	reading_list.fadeIn("fast");
+	
 	// now change the controls to reflect the new view
 	if(list_view) {
 		// changing to list view
 		// first, hide the calendar controls
 		$(".calendar_controls").fadeOut("fast", function() {
-			// now get the full month of data for the calendar
-			
 			// then, show the list controls
 			$(".list_controls").fadeIn("fast");
 		});
@@ -301,8 +302,7 @@ function loadReadingList(start_date, end_date, list_view) {
 			return;
 		}
 		// call the function to make the reading description of the newly
-		// pulled readings editable. this is in list_readings.html, but that
-		// may not be the best place to put it.
+		// pulled readings editable. 
 		bind_editable_descriptions();
 		
 	}

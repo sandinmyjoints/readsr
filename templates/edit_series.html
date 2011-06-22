@@ -9,11 +9,7 @@
 {% block name %}
 <div id="banner">
 <h1>Tell us all about
-{% if series.primary_name %}
-{{ series.primary_name }}.
-{% else %}
-your reading series.
-{% endif %}
+{{ series.primary_name|default:"your reading series" }}.
 </h1>
 </div>
 {% endblock name %}
@@ -172,7 +168,7 @@ your reading series.
 				    </ol>
 				{% endif %}
 			</dd>
-			<dt><label for="id_wiki_mode">Start in <a href="#" title="Wiki mode lets anyone update the reading description--for example, adding the names of readers. If the series isn't in Wiki mode, only the contact (that's you!) can update it. You can always come back and change the setting later.">Wiki mode</a>?</label></dt>
+			<dt><label for="id_wiki_mode">Start in <a href="#" class="tooltip_link" title="Wiki mode lets anyone update the reading description--for example, adding the names of readers. If the series isn't in Wiki mode, only the contact (that's you!) can update it. You can always come back and change the setting later.">Wiki mode</a>?</label></dt>
 			<dd>
 				{{ form.wiki_mode }}
 				{% if form.wiki_mode.errors %}
@@ -189,14 +185,11 @@ your reading series.
 		<div class="submit-row"><input type="submit" value="{% if series.primary_name %}Update{% else %}Submit{% endif %}" /><input type="button" id="cancel_button" value="Cancel"></div>
 	</form>
 
-	
 {% endblock details %}
 
 {% block script %}
 	{{ block.super }}
 	<script src="http://cdn.jquerytools.org/1.2.5/jquery.tools.min.js" type="text/javascript"></script>
-
-	
 		
 	<script type="text/javascript">
 	$(document).ready(function() {
@@ -206,7 +199,8 @@ your reading series.
 		$(".regular").hide();
 		{% endif %}
 
-		$("label a[title]").tooltip();
+		//$("label a[title]").tooltip(); // Show the tooltip that explains what wiki mode is
+		$(".tooltip_link").tooltip({'position': "top center"});
 		
 		var rprops = /^(checked|selectedIndex)$/;
 		var field = $("#id_regular");

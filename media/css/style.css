@@ -73,14 +73,14 @@ h1.reading_name {
 }
 
 /* header */
-div#header {
+#header {
 	width:900px;
 	margin-left: auto;
 	margin-right: auto;
 }
 /* navbar */
 
-div#navbar {  
+#navbar {  
 	clear: both;
 	width: 100%;
 	margin-left: auto;
@@ -95,14 +95,14 @@ div#navbar {
 	border: 2px solid #6083CA;
 }
 
-div#navbar ul {
+#navbar ul {
 	list-style: none;
 	display: block;
 	margin: 0 10px;
 	
 }
 
-div#navbar ul li {
+#navbar ul li {
 	float: left;
 	/* margin: 0 1.5em; */
 	list-style-type: none;
@@ -129,7 +129,7 @@ div#navbar ul li {
 	background-color:#00297A;
 }
 
-div#navbar a.long_nav {
+#navbar a.long_nav {
 	width: 110%;
 }
 
@@ -139,7 +139,7 @@ div#navbar a.long_nav {
 	padding: 0px 15px;
 }
 /* messages */
-div#messages {
+#messages {
 	margin-left: .5em;
 	margin-right: .5em;
 	margin-bottom: .5em;
@@ -156,7 +156,7 @@ div#messages {
 
 /* page */
 
-div#page {
+#page {
 	width: 900px;
 	margin-left: auto;
 	margin-right: auto;
@@ -168,7 +168,7 @@ div#page {
 }
 
 /* content */
-div#content {
+#content {
 	font-size: 1em;
 	float: left;
 	width: 68%;
@@ -179,7 +179,7 @@ div#content {
 }
 
 /* banner at top of content */
-div#banner {
+#banner {
 	background: #BBB;
 	margin: 0em .5em;
 	/*padding: .2em;*/
@@ -190,7 +190,7 @@ div#banner {
 	
 }
 
-div#choose_date {
+#choose_date {
 	background: #DDD;
 	margin: 0em .5em;
 	/*padding: .2em;*/
@@ -206,7 +206,7 @@ div.inside_banner {
 
 
 /* sidebar */
-div#sidebar {
+#sidebar {
 	float: right;
 	width: 30%;
 	margin-right: .5em;
@@ -257,7 +257,7 @@ div.spacerblank {
 }
 
 /* footer */
-div#footer {
+#footer {
 	clear: both;
 	width: 900px;
 	margin-left: auto;
@@ -501,7 +501,7 @@ li.message {
 	display:none;
 	background:transparent url(/media/black_arrow.png);
 	font-size:.75em;
-	height:70px;
+	height:160px;
 	width:160px;
 	padding:25px;
 	color:#fff;	

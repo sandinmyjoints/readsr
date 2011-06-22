@@ -19,7 +19,7 @@ var end_date = "{{ end_date }}";
 {% include "choose_date_snippet.html" %}
 
 	<div id="reading_list">
-		<img id="load_image" src="{{ MEDIA_URL }}spinner-large.gif">
+		<img id="load_image" alt="Loading" src="{{ MEDIA_URL }}spinner-large.gif">
 		{% if list_view %}
 			{% include "list_readings.html" %}
 		{% else %}

@@ -3,10 +3,10 @@
 		<!-- First, set up the controls for the list view -->
 		<input name="start" id="datepicker_start" class="list_controls" type="text" size="11" {% if not js_available %}value="{{ start_date }}"{% endif %} />
 		<span class="list_controls">to</span>
-		<input name="end" id="datepicker_end" class="list_controls" type="text" size="11" {% if not js_available %}value="{{ end_date }}"{% endif %} /></span>
+		<input name="end" id="datepicker_end" class="list_controls" type="text" size="11" {% if not js_available %}value="{{ end_date }}"{% endif %} />
 	
-		<a href="#NextWeek" id="next_week" class="list_controls">One Week</a>
-		<a href="#NextMonth" id="next_month" class="list_controls">One Month</a>
+		<a href="#NextWeek" id="one_week" class="list_controls">One Week</a>
+		<a href="#NextMonth" id="one_month" class="list_controls">One Month</a>
 
 		<!-- Then set up the controls for the calendar view -->
 		<a href="#CalPreviousYear" id="previous_year" class="calendar_controls">&lt;&lt;</a>
