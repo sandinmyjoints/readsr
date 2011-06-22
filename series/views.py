@@ -398,7 +398,8 @@ def edit_series(request, series_id=None):
 			except ValueError:
 				messages.add_message(request, message.ERROR, 'Error %s %s.' % (created_new and "creating" or "updating", sr.primary_name))
 				return HttpResponseRedirect(reverse('edit-series', args=(sr.id,)))
-			return HttpResponseRedirect(reverse('detail-series', args=(sr.id,)))
+
+			return HttpResponseRedirect(sr.get_absolute_url())
 		else:
 			messages.error(request, "Please correct the errors below.")
 			

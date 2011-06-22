@@ -36,7 +36,7 @@ if settings.DEBUG:
 	urlpatterns += patterns('', 
 	(r'^media/(?P<path>.*)$', 
 	'django.views.static.serve', 
-	{'document_root': '/Users/wbert/Sites/django/readsr/media', 'show_indexes': True }))
+	{'document_root': settings.MEDIA_ROOT, 'show_indexes': True }))
 
 #if settings.DEBUG:
 #    urlpatterns += patterns('',
