@@ -211,16 +211,6 @@ function change_view(list_view) {
 
 	loadReadingList(start_date, end_date, list_view);
 	
-	var load_image = $("load_image");
-	var reading_list = $("#reading_list");
-	load_image.fadeIn("fast");
-	reading_list.fadeOut("fast");
-	reading_list.load(new_loc + " #reading_list", function() {
-		// callback function
-		load_image.fadeOut("fast");
-	}); // pull data using ajax
-	reading_list.fadeIn("fast");
-	
 	// now change the controls to reflect the new view
 	if(list_view) {
 		// changing to list view
@@ -295,11 +285,19 @@ function loadReadingList(start_date, end_date, list_view) {
 	new_loc = "?" +"list_view=" + list_view + "&" + "start=" + (start_date.getMonth()+1) + "-" + start_date.getDate() + "-" + start_date.getFullYear() + "&" + "end=" + (end_date.getMonth()+1) + "-" + end_date.getDate() + "-" + end_date.getFullYear();
 	//alert(new_loc);
 
+	var load_image = $("load_image");
+	var reading_list = $("#reading_list");
+	load_image.fadeIn("fast");
+	reading_list.fadeOut("fast");
 	$("#reading_list").load(new_loc + " #reading_list", function(response, status, xhr) {
 		if(status == "error") {
 			var msg = "Sorry, there was an error: ";
 		 	$("#messages").append("<p>" + msg + xhr.status + " " + xhr.statusText + "</p>");
 			return;
+		}
+		else {
+			load_image.fadeOut("fast");
+			reading_list.fadeIn("fast");
 		}
 		// call the function to make the reading description of the newly
 		// pulled readings editable. 
