@@ -561,6 +561,14 @@ li.reading_list {
 .list_controls {
 }
 
+#id_list_controls {
+	display: inline;
+}
+
+#id_calendar_controls {
+	display: inline;
+}
+
 a.list_controls {
 	padding-left: .5em;
 	padding-right: .5em;

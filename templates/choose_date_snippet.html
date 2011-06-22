@@ -1,21 +1,29 @@
 <div id="choose_date">
 	<form name="submit_dates" action="{% url index %}" method="get">
 		<!-- First, set up the controls for the list view -->
+		<div id="id_list_controls">
 		<input name="start" id="datepicker_start" class="list_controls" type="text" size="11" {% if not js_available %}value="{{ start_date }}"{% endif %} />
 		<span class="list_controls">to</span>
 		<input name="end" id="datepicker_end" class="list_controls" type="text" size="11" {% if not js_available %}value="{{ end_date }}"{% endif %} />
 	
+		{% if js_available %}
 		<a href="#NextWeek" id="one_week" class="list_controls">One Week</a>
 		<a href="#NextMonth" id="one_month" class="list_controls">One Month</a>
-
+		{% endif %}
+		<input id="calendar_view" class="select_view_type list_controls" type="submit" name="list_view" value="Calendar" />
+		
+		</div>
+		
+		<div id="id_calendar_controls">
 		<!-- Then set up the controls for the calendar view -->
+		{% if js_available %}
 		<a href="#CalPreviousYear" id="previous_year" class="calendar_controls">&lt;&lt;</a>
 		<a href="#CalPreviousMonth" id="previous_month" class="calendar_controls">&lt;</a>
 		<span id="cal_name" class="calendar_controls">{{ cal_name }}</span>
 		<a href="#CalNextMonth" id="next_month" class="calendar_controls">&gt;</a>
 		<a href="#CalNextYear" id="next_year" class="calendar_controls">&gt;&gt;</a>
-
-		<input id="calendar_view" class="select_view_type list_controls" type="submit" name="list_view" value="Calendar" />
+		{% endif %}
 		<input id="list_view" class="select_view_type calendar_controls" type="submit" name="list_view" value="List" />
+		</div>
 	</form>
 </div>
