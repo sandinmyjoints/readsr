@@ -21,7 +21,7 @@ from django.conf import settings
 import tweepy # for tweeting about updated series
 import bitlyapi # for shortening urls for tweets
 
-from series.models import Series, Affiliate, Venue, Address
+from series.models import Series, Affiliate, Venue, Address, SeriesTweet
 from series.forms import SeriesForm, ReadsrContactForm, RemoveSeriesContactForm, VenueForm, AffiliateForm, AddressForm, ProfileForm
 from reading.models import Reading
 from city_site.models import CitySite
@@ -282,7 +282,6 @@ def generic_edit_view(request, edit_object, form_class, template_name, success_u
 	for key, value in extra_context.items():
 		context[key] = callable(value) and value() or value
 		
-	print "Type of object is %s" % type(edit_object)
 	return render_to_response(template_name, { 'form': form }, context_instance=context)
 	
 
@@ -359,24 +358,6 @@ def edit_series(request, series_id=None):
 					tweet_or_not = True
 					tweet_message.append("New venue: %s" % form.cleaned_data["venue"])
 					# The location has changed, so add that to the tweet.
-					
-				if tweet_or_not:
-					# append shortened URL
-					api = bitlyapi.BitLy(settings.BITLY_USER, settings.BITLY_KEY) 
-					url = request.build_absolute_uri().replace("/edit", "")
-					res = api.shorten(longUrl=url)
-					tweet_message.append("%s" % res['url'])
-
-					try:
-						auth = tweepy.OAuthHandler(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
-						auth.set_access_token(settings.TWITTER_ACCESS_KEY, settings.TWITTER_ACCESS_SECRET)
-						api = tweepy.API(auth)
-						if settings.DEBUG:
-							print "tweeting %s" % ' '.join(tweet_message)
-						api.update_status(' '.join(tweet_message))
-					except tweepy.TweepError:
-						if settings.DEBUG:
-							print "tweep error"
 									
 			# If the series has a regular time, day of the week, and week of the month, and
 			# it is new or its time has changed, then create new reading objects for the new year
@@ -384,7 +365,42 @@ def edit_series(request, series_id=None):
 				new_reading_list = new_series_readings(sr)
 				
 			try:
+				# First, save the new series.
 				form.save()
+				
+				# Now if that was successful, tweet and save the tweet.
+				if tweet_or_not:
+					# append shortened URL
+					api = bitlyapi.BitLy(settings.BITLY_USER, settings.BITLY_KEY) 
+					url = request.build_absolute_uri().replace("/edit", "")
+					res = api.shorten(longUrl=url)
+					tweet_message.append("%s" % res['url'])
+					send_msg = ' '.join(tweet_message)
+
+					try:
+						auth = tweepy.OAuthHandler(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
+						auth.set_access_token(settings.TWITTER_ACCESS_KEY, settings.TWITTER_ACCESS_SECRET)
+						api = tweepy.API(auth)
+						if settings.DEBUG:
+							print "tweeting %s" % send_msg
+						api.update_status(send_msg)
+						last_msg = api.user_timeline(count=1)[0]
+						if settings.DEBUG:
+							print "saving new tweet sr=%s, tweet=%s, url=%s, id=%s" % (sr, send_msg, res['url'], last_msg.id)
+						SeriesTweet.objects.create(
+							series = sr,
+							tweet = send_msg,
+							bitly_url = res['url'],
+							twitter_status_id = last_msg.id
+						)
+
+
+					except tweepy.TweepError as terror:
+						tweet_or_not = False # so we won't be able to save it to the DB
+						if settings.DEBUG:
+							print "tweep error: %s" % terror
+							
+					
 				# Now that the new series is saved, tell all the new readings what its id is, and save them to the db
 				for reading in new_reading_list:
 					reading.series = sr
