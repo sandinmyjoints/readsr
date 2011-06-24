@@ -307,3 +307,12 @@ class Series(models.Model):
 	class Meta:
 		ordering = ('primary_name',)
 		verbose_name_plural = 'Series'
+
+class SeriesTweet(models.Model):
+	series = models.ForeignKey(Series, null=True)
+	tweet = models.CharField(max_length=140)
+	bitly_url = models.URLField()
+	twitter_status_id = models.CharField(max_length=15)
+
+	def __unicode__(self):
+		return self.tweet
