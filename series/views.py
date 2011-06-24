@@ -18,9 +18,10 @@ from django.views.generic import list_detail
 from django.contrib.sites.models import Site
 from django.conf import settings
 
-import tweepy # for tweeting about updated series
+#import tweepy # for tweeting about updated series
 import bitlyapi # for shortening urls for tweets
 
+from series.util import get_tweepy_api
 from series.models import Series, Affiliate, Venue, Address, SeriesTweet
 from series.forms import SeriesForm, ReadsrContactForm, RemoveSeriesContactForm, VenueForm, AffiliateForm, AddressForm, ProfileForm
 from reading.models import Reading
@@ -378,9 +379,7 @@ def edit_series(request, series_id=None):
 					send_msg = ' '.join(tweet_message)
 
 					try:
-						auth = tweepy.OAuthHandler(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
-						auth.set_access_token(settings.TWITTER_ACCESS_KEY, settings.TWITTER_ACCESS_SECRET)
-						api = tweepy.API(auth)
+						api = get_tweepy_api()
 						if settings.DEBUG:
 							print "tweeting %s" % send_msg
 						api.update_status(send_msg)
@@ -617,11 +616,11 @@ def edit_affiliate(request, affiliate_id=None):
 # site_redirect ##############
 def site_redirect(request):
 	"""
-	Site_rirect is used for switching between different city_sites when javascript is disabled.
+	Site_redirect is used for switching between different city_sites when javascript is disabled.
 	"""
 	if request.method == "GET":
 		new_site = request.GET.get('new_site', None)
 		if not new_site.startswith("http://"):
 			new_site = "".join(["http://", new_site])
 		return redirect(urlparse(new_site).geturl())
-  
+ 

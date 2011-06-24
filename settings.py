@@ -1,5 +1,6 @@
 # Django settings for dcreadings project.
 import os
+import tweepy
 
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 
@@ -147,6 +148,10 @@ TWITTER_ACCESS_SECRET = "GXZBz82nLkytDbnFaU1nHrNhavCuhnKTFx3ACS59k"
 
 BITLY_USER = "readsr"
 BITLY_KEY = "R_8b4787749bdbc284709fc4dca825cc9b"
+
+TWEEPY_CACHE_DIR = os.path.join(ROOT_PATH, 'tweepy_cache')
+ 
+TWEEPY_CACHE = tweepy.cache.FileCache(TWEEPY_CACHE_DIR, 3600)
 
 # Grab local settings from local settings fie
 try:

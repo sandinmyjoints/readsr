@@ -196,7 +196,7 @@ twttr.anywhere(function (T) {
 		</dl>
 		<p class="clear">
 		You'll be listed as the point of contact for this series. Your email address will be listed, but in a form that prevents spammers from harvesting it. If that's not cool, hit cancel and we won't create this series.</p>
-		<div class="submit-row"><input type="submit" value="{% if series.primary_name %}Update{% else %}Submit{% endif %}" /><input type="button" id="cancel_button" value="Cancel"></div>
+		<div class="submit-row"><input type="submit" value="{% if series.primary_name %}Update{% else %}Submit{% endif %}" class="button" /><input type="button" id="cancel_button" value="Cancel" class="button" /></div>
 	</form>
 
 {% endblock content %}

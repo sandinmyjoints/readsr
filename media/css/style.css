@@ -430,7 +430,7 @@ li.message {
 }
 
 /* set the look and feel of all input elements */
-#page input, #page select, #page textarea, #page button {
+#page input, #page select, #page textarea {
 	border-bottom-color: #DDD;
     border-bottom-style: solid;
     border-bottom-width: 1px;
@@ -446,7 +446,26 @@ li.message {
 
     color: #4C4C4C;
 	font-size: .9em;
-	font-family: "EB Garamond", "Hoefler Text", "Times New Roman", Times, serif;
+	font-family: Garamond, "Hoefler Text", "Times New Roman", Times, serif;
+}
+
+#page input.button {
+	border-bottom-color: #999;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color: #DDD;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-top-color: #DDD;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-right-color: #999;
+    border-right-style: solid;
+    border-right-width: 1px;
+
+    color: #4C4C4C;
+	font-size: .9em;
+	font-family: Garamond, "Hoefler Text", "Times New Roman", Times, serif;	
 }
 
 /*  formFieldWrapper wraps the elements on the generic edit pages */
