@@ -1,12 +1,22 @@
-{% extends "generic_list.html" %}
+{% extends "base.html" %}
 
 {% block styles %}
 {{ block.super }}
 {{ form.media.css }}
 {% endblock styles %}
 
+{% block title %}
+{{ block.super }} - {{ series.primary_name|default:"Add new series" }}
+{% endblock title %}
 
+
+{% block content %}
 {% block name %}
+<script type="text/javascript">
+twttr.anywhere(function (T) {
+  T.hovercards();
+});
+ </script>
 <div id="banner">
 <h1>Tell us all about
 {{ series.primary_name|default:"your reading series" }}.
@@ -14,9 +24,13 @@
 </div>
 {% endblock name %}
 
-{% block update_listing %}{% endblock %}
-
-{% block details %}
+	<p>
+	{% if series.primary_name %}
+	Please enter the most current info for {{ series.primary_name }}, and we'll update the series and tweet the changes (from our @readsr account) so everyone knows about them. Thanks for helping us keep up to date! 
+	{% else %}
+	Thanks for adding a new series! Once you're done, we'll send out a tweet (from our @readsr account) so everyone knows about it.
+	{% endif %}
+	</p>
 	{% if form.errors %}
 	<p>Please correct the error{{ form.errors|pluralize }} below.</p>
 	{% endif %}
@@ -47,7 +61,7 @@
 				{% endif %}
 				
 			</dd>
-			<dt><label for="id_genre">What genres are typically represented?</label></dt>
+			<dt><label for="id_genre">What genres are typically represented? (Hold shift to select more than one.)</label></dt>
 			<dd>
 				{{ form.genre }} 
 				{% if form.genre.errors %}
@@ -185,7 +199,7 @@
 		<div class="submit-row"><input type="submit" value="{% if series.primary_name %}Update{% else %}Submit{% endif %}" /><input type="button" id="cancel_button" value="Cancel"></div>
 	</form>
 
-{% endblock details %}
+{% endblock content %}
 
 {% block script %}
 	{{ block.super }}

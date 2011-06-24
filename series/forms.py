@@ -77,6 +77,7 @@ class AddressForm(forms.Form):
 		model = Address
 		
 class AffiliateForm(forms.ModelForm):
+	my_type = "Afilliate"
 	class Meta:
 		model = Affiliate
 		

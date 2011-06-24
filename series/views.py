@@ -281,7 +281,8 @@ def generic_edit_view(request, edit_object, form_class, template_name, success_u
 	context = RequestContext(request) 
 	for key, value in extra_context.items():
 		context[key] = callable(value) and value() or value
-
+		
+	print "Type of object is %s" % type(edit_object)
 	return render_to_response(template_name, { 'form': form }, context_instance=context)
 	
 

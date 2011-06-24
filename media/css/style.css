@@ -431,33 +431,22 @@ li.message {
 
 /* set the look and feel of all input elements */
 #page input, #page select, #page textarea, #page button {
-	border-bottom-color: #CCCCCC;
+	border-bottom-color: #DDD;
     border-bottom-style: solid;
     border-bottom-width: 1px;
-    border-left-color-ltr-source: physical;
-    border-left-color-rtl-source: physical;
-    border-left-color-value: #CCCCCC;
-    border-left-style-ltr-source: physical;
-    border-left-style-rtl-source: physical;
-    border-left-style-value: solid;
-    border-left-width-ltr-source: physical;
-    border-left-width-rtl-source: physical;
-    border-left-width-value: 1px;
-    border-right-color-ltr-source: physical;
-    border-right-color-rtl-source: physical;
-    border-right-color-value: #CCCCCC;
-    border-right-style-ltr-source: physical;
-    border-right-style-rtl-source: physical;
-    border-right-style-value: solid;
-    border-right-width-ltr-source: physical;
-    border-right-width-rtl-source: physical;
-    border-right-width-value: 1px;
-    border-top-color: #CCCCCC;
+    border-left-color: #999;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-top-color: #999;
     border-top-style: solid;
     border-top-width: 1px;
+    border-right-color: #DDD;
+    border-right-style: solid;
+    border-right-width: 1px;
+
     color: #4C4C4C;
-	font-size: 1em;
-	font-family: Garamond, "Hoefler Text", "Times New Roman", Times, serif;
+	font-size: .9em;
+	font-family: "EB Garamond", "Hoefler Text", "Times New Roman", Times, serif;
 }
 
 /*  formFieldWrapper wraps the elements on the generic edit pages */
@@ -499,9 +488,9 @@ li.message {
 
 .tooltip {
 	display:none;
-	background:transparent url(/media/black_arrow.png);
+	background:transparent url(/media/black_arrow_tall.png);
 	font-size:.75em;
-	height:160px;
+	height:192px;
 	width:160px;
 	padding:25px;
 	color:#fff;	

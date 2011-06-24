@@ -21,9 +21,6 @@ $(document).ready(function() {
 
 	});
 	
-	/* 
-	 * Datepickerscript -- helpful functions for the datepicker 
-	 */
 	// Javascript's setMonth and getMonth are 0-indexed
 
 	// Set the dates for the datepicker
@@ -48,64 +45,50 @@ $(document).ready(function() {
 	// the default action, submitting the form. If js is disabled, they will 
 	// submit the form so the page still works, albeit without the nice
 	// UI elements.
-	$("#calendar_view").click(function(e) {
+	$("#calendar_view, #list_view").click(function(e) {
 		e.preventDefault();
 		change_view(false);
 	});
 
-	$("#list_view").click(function(e) {
-		e.preventDefault();
-		change_view(true);
-	});
-
 	// Calendar view controls
 	$('a[href$="CalPreviousYear"]').click(function(e) {
-		// 
 		e.preventDefault();
 		var start_date = start.datepicker("getDate");
 		start_date.setYear(start_date.getFullYear()-1);
 		var end_date = new Date(start_date.getFullYear(), start_date.getMonth()+1, 1, 0, 0, 0);
 
 		loadReadingList(start_date, end_date, false);	
-
 	});
 
 	$('a[href$="CalPreviousMonth"]').click(function(e) {
-		// 
 		e.preventDefault();
 		var start_date = start.datepicker("getDate");
 		start_date.setMonth(start_date.getMonth()-1);
 		var end_date = new Date(start_date.getFullYear(), start_date.getMonth()+1, 1, 0, 0, 0);
 
 		loadReadingList(start_date, end_date, false);	
-
 	});
 
 	$('a[href$="CalNextMonth"]').click(function(e) {
-		// 
 		e.preventDefault();
 		var start_date = start.datepicker("getDate");
 		start_date.setMonth(start_date.getMonth()+1);
 		var end_date = new Date(start_date.getFullYear(), start_date.getMonth()+1, 1, 0, 0, 0);
 
 		loadReadingList(start_date, end_date, false);	
-
 	});
 
 	$('a[href$="CalNextYear"]').click(function(e) {
-		// 
 		e.preventDefault();
 		var start_date = start.datepicker("getDate");
 		start_date.setYear(start_date.getFullYear()+1);
 		var end_date = new Date(start_date.getFullYear(), start_date.getMonth()+1, 1, 0, 0, 0);
 
 		loadReadingList(start_date, end_date, false);	
-
 	});
 	
 	// List controls 
 	$("#one_week").click(function(e) {
-		// if 
 		e.preventDefault();
 		var today = new Date();
 		var one_week = new Date(today.getTime()+1000*60*60*24*7);
