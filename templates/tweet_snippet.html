@@ -1,0 +1,15 @@
+<h2>Latest Tweets</h2>
+    <ul id="latest_tweets">
+        {% for tweet in tweets %}
+
+          <li class="{% cycle 'even' 'odd' %}
+			{% if forloop.last %}
+			last-row
+			{% endif %}
+			{% if forloop.first %}
+			first-row
+			{% endif %}">
+            {{ tweet|safe|urlize }}
+          </li>
+{% endfor %}
+</ul>

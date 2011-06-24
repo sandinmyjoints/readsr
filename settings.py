@@ -93,6 +93,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 	"city_site.context_processors.all_city_sites",
 	"series.context_processors.series_list",
 	"series.context_processors.contact",
+	"series.context_processors.tweets",
 )
 
 

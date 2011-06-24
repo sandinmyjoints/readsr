@@ -1,9 +1,12 @@
+import re
+
 from django.conf import settings
 from django.contrib.sites.models import Site
 
 from profiles import urls
 
 from series.models import Series, Contact
+import tweepy
 
 def series_list(request):
 	"""
@@ -31,5 +34,43 @@ def contact(request):
 			c = Contact.objects.get(user__exact=request.user.id)
 			return { 'contact': c }
 	except Exception as ex:
-		print "exception: %s" % ex
+		print "Exception in contact context processor: %s" % ex
 		return { 'contact': "" }
+
+def tweets(request):
+	"""
+	Adds the most recent tweets to the template context.
+	"""
+	try:
+		return { 'tweets': get_latest_tweets() }
+	except Exception as ex:
+		if settings.DEBUG:
+			print "Exception in tweets context processor: %s" % ex
+		return { 'tweets': "" }
+	
+
+def get_latest_tweets():
+	user = 'readsr'
+	messages_to_display = 5
+	auth = tweepy.OAuthHandler(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
+	auth.set_access_token(settings.TWITTER_ACCESS_KEY, settings.TWITTER_ACCESS_SECRET)
+	api = tweepy.API(auth)
+	statuses = api.user_timeline(count=messages_to_display)
+	messages = []
+
+	for status in statuses:
+		# Replaces the @username mentions with a URL	
+		replaced_mentions = re.sub(r'\b(@\w+)\b', r'<a href="http://twitter.com/\1">\1</a>',status.text);
+		print "replaced_mentions is %s" % replaced_mentions
+		# Replaces the #tag's with a URL
+		replaced_hashtags = re.sub(r'\b(#\w+)\b', r'<a href="http://twitter.com/#!/search?q=%23\1">\1</a>',replaced_mentions);
+		print "replaced_hashtags is %s" % replaced_hashtags
+		# Replaces the published times with a URL
+		replaced_times = (replaced_hashtags + " "+
+			"<span class='tiny-font'><a href='http://twitter.com/#!/"+
+			user+"/status/"+str(status.id)+"'>"+str(status.created_at)+
+			"</a></span>")
+		print "replaced_times is %s" % replaced_times
+		messages.append(replaced_times)
+		
+	return messages

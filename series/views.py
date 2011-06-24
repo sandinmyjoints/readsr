@@ -624,3 +624,4 @@ def site_redirect(request):
 		if not new_site.startswith("http://"):
 			new_site = "".join(["http://", new_site])
 		return redirect(urlparse(new_site).geturl())
+  

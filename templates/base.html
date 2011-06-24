@@ -102,7 +102,10 @@
 		<div id="sidebar">
 			{% block sidebar %}
 			<div class="sidebar_element">
-			{% include "sidebar_snippet.html" %}
+				{% include "sidebar_snippet.html" %}
+			</div>
+			<div class="sidebar_element">
+				{% include "tweet_snippet.html" %}
 			</div>
 			{% endblock sidebar %}
 		</div>

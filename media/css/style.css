@@ -841,3 +841,45 @@ ul.series_info {
 	width: 54%;
 	margin-bottom: 1em;
 }
+
+
+#twitter-icon{
+  padding-top: 0px;
+  margin-top: 39px;
+  text-align: right;
+  margin-right:0px;
+}
+
+#latest_tweets {
+	padding: .25em;
+}
+
+#latest_tweets li {
+   padding: .25em;
+   list-style: none;
+	border: 1px solid #CCC;
+}
+
+#latest_tweets ul:before {
+  border-bottom:10px solid transparent;
+  border-right:10px solid #F0F0F0;
+  border-top:10px solid transparent;
+  content:"";
+  display:block;
+  font-size:14px;
+  left:-10px;
+  line-height:0;
+  margin:0;
+  position:relative;
+  top:43px;
+  width:0;
+}
+
+ 
+#latest_tweets li.even{
+   background-color: #FFF;
+ }
+ 
+#latest_tweets li.odd{
+   background-color:#D5DFFF;
+ }
