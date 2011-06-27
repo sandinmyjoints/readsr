@@ -37,7 +37,7 @@ class SeriesForm(forms.ModelForm):
 	
 	class Meta:
 		model = Series
-		exclude = ('last_update', 'created', 'site', 'contact')
+		exclude = ('site', 'contact')
 		
 	class Media:
 		css = {

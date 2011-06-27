@@ -18,7 +18,7 @@ class ModelBase(models.Model):
 	class Meta:
 		abstract = True
 		
-class Contact(models.Model):
+class Contact(ModelBase):
 	"""
 	Represents a person who can be contacted about a particular reading series. Currently 
 	associated one-to-one with a user in the system.
@@ -72,7 +72,7 @@ class Contact(models.Model):
 	post_save.connect(create_contact, sender=User)
 		
 	
-class Genre(models.Model):
+class Genre(ModelBase):
 	"""
 	Represents the genre of writing available at a given reading.
 	The built-in choices are fiction, poetry, and non-fiction. They are loaded into the 
@@ -95,7 +95,7 @@ class Genre(models.Model):
 		return self.genre
 		
 
-class Address(models.Model):
+class Address(ModelBase):
 	"""
 	Represents a street address in the United States. Used by Venue.
 	"""
@@ -130,7 +130,7 @@ class Venue(ModelBase):
 	def __unicode__(self):
 		return self.name
 		
-class Affiliate(models.Model):
+class Affiliate(ModelBase):
 	"""
 	Represents an organization with which a reading series can optionally be affiliated.
 	"""
@@ -139,7 +139,7 @@ class Affiliate(models.Model):
 	def __unicode__(self):
 		return self.name
 				
-class DayOfWeek(models.Model):
+class DayOfWeek(ModelBase):
 	"""
 	Represents a day of the week (on which a reading series can take place). 
 	Because the dates of reading series are often designated by terms like 'first Monday'
@@ -194,7 +194,7 @@ class DayOfWeek(models.Model):
 	class Meta(object):
 		verbose_name_plural = 'DaysOfWeek'
 
-class WeekWithinMonth(models.Model):
+class WeekWithinMonth(ModelBase):
 	"""
 	Represents a week within the month. See note under DayOfTheWeek for why this is 
 	useful for tracking when individual readings take place.
@@ -222,7 +222,7 @@ class WeekWithinMonth(models.Model):
 	class Meta(object):
 		verbose_name_plural = 'WeeksWithinMonth'
 		
-class Series(models.Model):
+class Series(ModelBase):
 	"""
 	Represents one reading series, defined as a recurring event at a particular
 	location on a particular day of a particular week within a month at which
@@ -244,8 +244,6 @@ class Series(models.Model):
 	admission_description = models.CharField("Admission", max_length=300, blank=True, null=True)
 	notes = models.CharField("Notes", max_length=300, blank=True, null=True)
 	wiki_mode = models.BooleanField("Wiki Mode", default=True)
-	created = models.DateTimeField(default=datetime.now)
-	last_update = models.DateTimeField("Last Updated", default=datetime.now)
 	#site = models.ForeignKey(CitySite, default=CitySite.objects.get(pk=settings.SITE_ID))
 	site = models.ForeignKey(CitySite)
 
@@ -315,7 +313,7 @@ class Series(models.Model):
 		ordering = ('primary_name',)
 		verbose_name_plural = 'Series'
 
-class SeriesTweet(models.Model):
+class SeriesTweet(ModelBase):
 	series = models.ForeignKey(Series, null=True)
 	tweet = models.CharField(max_length=140)
 	bitly_url = models.URLField()
