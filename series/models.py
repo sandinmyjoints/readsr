@@ -12,8 +12,8 @@ from city_site.models import CitySite
 
 
 class ModelBase(models.Model):
-	created_on = models.DateTimeField(auto_now_add=True)
-	updated_on = models.DateTimeField(auto_now=True)
+	created_on = models.DateTimeField(auto_now_add=True, default=datetime.now)
+	updated_on = models.DateTimeField(auto_now=True, default=datetime.now)
 	
 	class Meta:
 		abstract = True
@@ -115,7 +115,7 @@ class Address(models.Model):
 	class Meta(object):
 		verbose_name_plural = 'Addresses'
 	
-class Venue(models.Model):
+class Venue(ModelBase):
 	"""
 	Represents the location of a reading series. Associated with an Address.
 	"""
