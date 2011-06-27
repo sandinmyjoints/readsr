@@ -126,6 +126,7 @@ INSTALLED_APPS = (
 	'hideemail',
 	'registration',
 	'profiles',
+	'south',
 )
 
 AUTH_PROFILE_MODULE = 'series.Contact'

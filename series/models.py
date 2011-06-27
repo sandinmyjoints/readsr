@@ -11,6 +11,13 @@ from django.db.models.signals import post_save
 from city_site.models import CitySite
 
 
+class ModelBase(models.Model):
+	created_on = models.DateTimeField(auto_now_add=True)
+	updated_on = models.DateTimeField(auto_now=True)
+	
+	class Meta:
+		abstract = True
+		
 class Contact(models.Model):
 	"""
 	Represents a person who can be contacted about a particular reading series. Currently 
