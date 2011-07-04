@@ -1,4 +1,4 @@
-from datetime import datetime, time, timedelta
+from datetime import datetime, date, time, timedelta
 
 from django.db import models
 from django.db.models import permalink
@@ -138,7 +138,10 @@ class Affiliate(ModelBase):
 	website = models.URLField(blank = True, null = True)
 	def __unicode__(self):
 		return self.name
-				
+		
+class InvalidDayOfWeekError(Exception):
+	pass
+		
 class DayOfWeek(ModelBase):
 	"""
 	Represents a day of the week (on which a reading series can take place). 
@@ -146,12 +149,14 @@ class DayOfWeek(ModelBase):
 	or 'third Friday', this field is useful in determining on which dates individual
 	readings take place.
 	"""
+
+
+	# The pk in the db is 1-indexed (Monday=1, Tuesday=2, etc), but python's days 
+	# of the week are 0-indexed if you use .weekday(), so we are using .isoweekday()
+	# instead. That means 
 	days =[ 'No day', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
 	       'Sunday' ]
 
-	# the pk in the db is 1-indexed (Monday=1, Tuesday=2, etc), but python's days 
-	# of the week are 0-indexed if you use .weekday(), so we are using .isoweeky()
-	# instead	
 	DAYS_OF_WEEK_CHOICES = (
 	('MO', days[1]),
 	('TU', days[2]),
@@ -163,6 +168,7 @@ class DayOfWeek(ModelBase):
 	)
 	
 	day = models.CharField(max_length=2, choices=DAYS_OF_WEEK_CHOICES)
+	
 	def __unicode__(self):
 		for daypair in self.DAYS_OF_WEEK_CHOICES:
 			if self.day in daypair:
@@ -170,25 +176,25 @@ class DayOfWeek(ModelBase):
 
 		# this shouldn't happen
 		print "self.day = %s, was not in DAY_OF_WEEK_CHOICES. Did you add all the days of the week to the database?" % self.day
-		return self.day
+		raise InvalidDayOfWeekError
 		
-	# my_next_day_of_the_week returns a datetime equal to the start (midnight+min) of the next day that is this instance's day of the week.
+	# my_next_day_of_week returns a datetime equal to the start (midnight+min) of the next day that is this instance's day of the week.
 	# it doesn't know what time the reading is, so if today is the day of the week the reading falls on,
 	# it simply returns today rather than checking whether the reading time has passed already.
 	# so we need to check for that outside of this method. 
-	def my_next_day_of_the_week(self):
+	def my_next_day_of_week(self):
 		""" 
-		Returns a datetime equal to the start of the next day that is this instance's day of the week. 
+		Returns a date equal to the start of the next day that is this instance's day of the week. 
 		"""
 		
 		# need to find the number of the current day of the week
-		today_day = datetime.today().isoweekday() # today_day is Sunday, 7
+		today_day = date.today().isoweekday() # today_day is Sunday, 7
+		print "my today_day is %s" % date.today()
 		reading_day = self.days.index(self.__unicode__()) # reading_Day is Friday, 5
-		next_day = datetime.today().date() # next day is today
+		next_day = date.today() # next day is today
 		while next_day.isoweekday() != reading_day:
 			next_day = next_day + timedelta(1)
 				
-		#print "my next day of the week should be %s, actually is %s" % (reading_day, next_day)
 		return next_day
 	
 	class Meta(object):
@@ -260,8 +266,8 @@ class Series(ModelBase):
 		Return the date of the next instance of this reading (assumes reading is monthly) 
 		"""
 
-		today = datetime.today().date()
-		next_reading_day = self.day_of_week.my_next_day_of_the_week()
+		today = date.today()
+		next_reading_day = self.day_of_week.my_next_day_of_week()
 
 		# need to find the right day of the right month
 		# take a day of the week, and a week of the month. figure out if that
@@ -312,7 +318,7 @@ class Series(ModelBase):
 	class Meta:
 		ordering = ('primary_name',)
 		verbose_name_plural = 'Series'
-
+	
 class SeriesTweet(ModelBase):
 	series = models.ForeignKey(Series, null=True)
 	tweet = models.CharField(max_length=140)
