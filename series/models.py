@@ -70,7 +70,9 @@ class Contact(ModelBase):
 	       profile, created = Contact.objects.get_or_create(user=instance)  
 
 	post_save.connect(create_contact, sender=User)
-		
+
+class InvalidGenreError(Exception):
+	pass	
 	
 class Genre(ModelBase):
 	"""
@@ -92,7 +94,7 @@ class Genre(ModelBase):
 				
 		# this should only happen if all the genres were not added to the db
 		print "Self.genre = %s, was not in self.GENRE_CHOICES. Did you add all the genres to the database?" % self.genre
-		return self.genre
+		raise InvalidGenreError
 		
 
 class Address(ModelBase):
@@ -189,7 +191,6 @@ class DayOfWeek(ModelBase):
 		
 		# need to find the number of the current day of the week
 		today_day = date.today().isoweekday() # today_day is Sunday, 7
-		print "my today_day is %s" % date.today()
 		reading_day = self.days.index(self.__unicode__()) # reading_Day is Friday, 5
 		next_day = date.today() # next day is today
 		while next_day.isoweekday() != reading_day:
@@ -200,6 +201,9 @@ class DayOfWeek(ModelBase):
 	class Meta(object):
 		verbose_name_plural = 'DaysOfWeek'
 
+class InvalidWeekWithinMonthError(Exception):
+	pass
+	
 class WeekWithinMonth(ModelBase):
 	"""
 	Represents a week within the month. See note under DayOfTheWeek for why this is 
@@ -223,7 +227,7 @@ class WeekWithinMonth(ModelBase):
 
 		# this will happen if all the choices haven't been added but should not happen otherwise
 		print "self.week_within_month = %s, was not in WEEK_WITHIN_MONTH_CHOICES. Did you add all the weeks of the month to the database?" % self.week_within_month
-		return self.week_within_month
+		raise InvalidWeekWithinMonthError
 				
 	class Meta(object):
 		verbose_name_plural = 'WeeksWithinMonth'
@@ -268,6 +272,7 @@ class Series(ModelBase):
 
 		today = date.today()
 		next_reading_day = self.day_of_week.my_next_day_of_week()
+		one_week = timedelta(7)
 
 		# need to find the right day of the right month
 		# take a day of the week, and a week of the month. figure out if that
@@ -277,7 +282,7 @@ class Series(ModelBase):
 
 		# count backwards to get the reading day in the last week of the previous month
 		while next_reading_day.month == today.month:
-			next_reading_day = next_reading_day - timedelta(7)
+			next_reading_day = next_reading_day - one_week
 
 		# now add which_week weeks to it to get the day of the reading this month
 		this_month_reading_day = next_reading_day = next_reading_day + timedelta(7*(which_week))
@@ -286,7 +291,7 @@ class Series(ModelBase):
 		if this_month_reading_day < today:
 			# this while loop gives us the first reading_day of the next month
 			while next_reading_day.month == today.month:
-				next_reading_day = next_reading_day + timedelta(7)
+				next_reading_day = next_reading_day + one_week
 			# this gives us the which_weekth reading_day of the next month, which is what we want
 			next_reading_day = next_reading_day + timedelta(7*(which_week-1))
 		

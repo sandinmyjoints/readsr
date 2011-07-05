@@ -6,7 +6,7 @@ Replace these with more appropriate tests for your application.
 """
 
 from django.test import TestCase
-from series.models import DayOfWeek, InvalidDayOfWeekError
+from series.models import Series, WeekWithinMonth, DayOfWeek, InvalidDayOfWeekError, InvalidWeekWithinMonthError
 from datetime import date
 import mock
 
@@ -63,6 +63,41 @@ class TestDayOfWeek(TestCase):
 		new_day_of_week.day = "MT"
 		self.assertRaises(InvalidDayOfWeekError, new_day_of_week.my_next_day_of_week)
 
+	def test_invalid_my_next_day_of_week_blank(self):
+		new_day_of_week = DayOfWeek.objects.create()
+		new_day_of_week.day = ""
+		self.assertRaises(InvalidDayOfWeekError, new_day_of_week.my_next_day_of_week)
 
+class WeekWithinMonthTestCase(TestCase):
+	def test_valid_week_within_month(self):
+		w = WeekWithinMonth.objects.create()
+		w.week_within_month = "1"
+		self.assertEquals(w.__unicode__(), "The First")
+		
+	def test_invalid_week_within_month(self):
+		w = WeekWithinMonth.objects.create()
+		w.week_within_month = "9"
+		self.assertRaises(InvalidWeekWithinMonthError, w.__unicode__)
+		
 class SeriesTestCase(TestCase):
-	pass
+	@mock.patch('series.models.date', FakeDate)
+	def test_next_reading_day_nextmonth(self):
+		from datetime import date
+		FakeDate.today = classmethod(lambda cls: date(2011, 7, 4))
+		s = Series()
+		s.day_of_week = DayOfWeek()
+		s.day_of_week.day = "SU"
+		s.week_within_month = WeekWithinMonth()
+		s.week_within_month.week_within_month = "1" # Test first Sunday after Monday July 4, 2011
+		self.assertEquals(s.next_reading_day(), date(2011, 8, 7))
+		
+	@mock.patch('series.models.date', FakeDate)
+	def test_next_reading_day_thismonth(self):
+		from datetime import date
+		FakeDate.today = classmethod(lambda cls: date(2011, 7, 4))
+		s = Series()
+		s.day_of_week = DayOfWeek()
+		s.day_of_week.day = "MO"
+		s.week_within_month = WeekWithinMonth()
+		s.week_within_month.week_within_month = "1" # Test first Sunday after Monday July 4, 2011
+		self.assertEquals(s.next_reading_day(), date(2011, 7, 4))
