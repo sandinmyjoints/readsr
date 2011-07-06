@@ -101,3 +101,58 @@ class SeriesTestCase(TestCase):
 		s.week_within_month = WeekWithinMonth()
 		s.week_within_month.week_within_month = "1" # Test first Sunday after Monday July 4, 2011
 		self.assertEquals(s.next_reading_day(), date(2011, 7, 4))
+		
+	@mock.patch('series.models.date', FakeDate)
+	def test_reading_days_ahead_by_month_lessthanzero(self):
+		from datetime import date
+		FakeDate.today = classmethod(lambda cls: date(2011, 7, 4))
+		s = Series()
+		s.day_of_week = DayOfWeek()
+		s.day_of_week.day = "SU"
+		s.week_within_month = WeekWithinMonth()
+		s.week_within_month.week_within_month = "1" # Test first Sunday
+		self.assertEquals(s.reading_days_ahead_by_month(-1), [date(2011, 8, 7)])
+		
+	def test_reading_days_ahead_by_month_zero(self):
+		from datetime import date
+		FakeDate.today = classmethod(lambda cls: date(2011, 7, 4))
+		s = Series()
+		s.day_of_week = DayOfWeek()
+		s.day_of_week.day = "SU"
+		s.week_within_month = WeekWithinMonth()
+		s.week_within_month.week_within_month = "1" # Test first Sunday
+		self.assertEquals(s.reading_days_ahead_by_month(0), [date(2011, 8, 7)])
+
+	def test_reading_days_ahead_by_month_one(self):
+		from datetime import date
+		FakeDate.today = classmethod(lambda cls: date(2011, 7, 4))
+		s = Series()
+		s.day_of_week = DayOfWeek()
+		s.day_of_week.day = "SU"
+		s.week_within_month = WeekWithinMonth()
+		s.week_within_month.week_within_month = "1" # Test first Sunday
+		self.assertEquals(s.reading_days_ahead_by_month(1), [date(2011, 8, 7)])
+
+	def test_reading_days_ahead_by_month_twelve(self):
+		from datetime import date
+		FakeDate.today = classmethod(lambda cls: date(2011, 7, 4))
+		s = Series()
+		s.day_of_week = DayOfWeek()
+		s.day_of_week.day = "SU"
+		s.week_within_month = WeekWithinMonth()
+		s.week_within_month.week_within_month = "1" # Test first Sunday
+		self.assertEquals(s.reading_days_ahead_by_month(12), [ 
+																date(2011, 8, 7),
+																date(2011, 9, 4),
+																date(2011, 10, 2),
+																date(2011, 11, 6),
+																date(2011, 12, 4),
+																date(2012, 1, 1),
+																date(2012, 2, 5),
+																date(2012, 3, 4),
+																date(2012, 4, 1),
+																date(2012, 5, 6),
+																date(2012, 6, 3),
+																date(2012, 7, 1),
+																date(2012, 8, 5),
+															])

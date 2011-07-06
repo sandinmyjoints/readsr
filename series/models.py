@@ -298,7 +298,7 @@ class Series(ModelBase):
 		return next_reading_day
 		
 	def reading_days_ahead_by_month(self, months_ahead=0):
-		""" Returns a list of reading days up to months_ahead months ahead. If month_ahead is 0, returns this month's reading day. """
+		""" Returns a list of reading days up to months_ahead months ahead. If month_ahead is 0, returns the next reading day. """
 
 		my_next_reading_day = self.next_reading_day()
 		my_ahead_readings = [my_next_reading_day]
@@ -309,7 +309,6 @@ class Series(ModelBase):
 		limit_date = datetime.today().date() + timedelta(months_ahead * 31)
 
 		while my_next_reading_day <= limit_date:
-		#for counter in range(months_ahead):
 			# advance by week to get to the first occurence of the next month
 			cur_month = my_next_reading_day.month
 			while my_next_reading_day.month == cur_month: 
