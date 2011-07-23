@@ -927,3 +927,7 @@ ul.series_info {
 .splash_content {
 	width: 80%;
 }
+
+.ui-tooltip-content {
+	font-size: 1.3em;
+}

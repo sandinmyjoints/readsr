@@ -43,18 +43,35 @@ var end_date = "{{ end_date }}";
 
 $(document).ready(function() {
 
-	$("#login").simpletip({
-		content: "Login/register to begin adding series<br /> or contributing info about upcoming readings!",
-		position: "bottom",
-		showEffect: "slide",
-		showTime: "1000"
+	$("#login").qtip({
+		content: {
+			text: 'Register and login to use all available features, <br />including adding series and contributing info<br /> about upcoming readings!'
+		},
+		show: {
+			ready: true,
+			delay: 600,
+			effect: function() {
+				$(this).fadeIn(600);
+			}
+		},
+		position: {
+			my: "top center",
+			at: "bottom center",
+			target: $("#login")
+		},
+		style: {
+			classes: 'ui-tooltip-blue ui-tooltip-shadow ui-tooltip-rounded'
+		},
+		events: {
+			hide: function(event, api) {
+				$('#login').qtip('disable'); // disable the qtip so it won't be shown again
+			}
+		}
 	});
+	$(document).click(function() {
+		$("#login").qtip('hide');
+	})
 	
-	var api = $("#login").eq(0).simpletip();
-	$.delay(1000);
-	api.show();
-	$.delay(5000);
-	api.hide();
 });	
 </script>
 
