@@ -41,7 +41,21 @@ var end_date = "{{ end_date }}";
 	$(".list_controls").hide();
 {% endif %}
 
-// set the initial dates
+$(document).ready(function() {
+
+	$("#login").simpletip({
+		content: "Login/register to begin adding series<br /> or contributing info about upcoming readings!",
+		position: "bottom",
+		showEffect: "slide",
+		showTime: "1000"
+	});
+	
+	var api = $("#login").eq(0).simpletip();
+	$.delay(1000);
+	api.show();
+	$.delay(5000);
+	api.hide();
+});	
 </script>
 
 {% endblock script %}

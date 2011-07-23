@@ -177,8 +177,7 @@ class DayOfWeek(ModelBase):
 				return daypair[1]
 
 		# this shouldn't happen
-		print "self.day = %s, was not in DAY_OF_WEEK_CHOICES. Did you add all the days of the week to the database?" % self.day
-		raise InvalidDayOfWeekError
+		raise InvalidDayOfWeekError, "self.day = %s, was not in DAY_OF_WEEK_CHOICES. Did you add all the days of the week to the database?" % self.day
 		
 	# my_next_day_of_week returns a datetime equal to the start (midnight+min) of the next day that is this instance's day of the week.
 	# it doesn't know what time the reading is, so if today is the day of the week the reading falls on,
@@ -226,8 +225,8 @@ class WeekWithinMonth(ModelBase):
 				return "The %s" % weekpair[1];
 
 		# this will happen if all the choices haven't been added but should not happen otherwise
-		print "self.week_within_month = %s, was not in WEEK_WITHIN_MONTH_CHOICES. Did you add all the weeks of the month to the database?" % self.week_within_month
-		raise InvalidWeekWithinMonthError
+		#print "self.week_within_month = %s, was not in WEEK_WITHIN_MONTH_CHOICES. Did you add all the weeks of the month to the database?" % self.week_within_month
+		raise InvalidWeekWithinMonthError, "self.week_within_month = %s, was not in WEEK_WITHIN_MONTH_CHOICES. Did you add all the weeks of the month to the database?" % self.week_within_month
 				
 	class Meta(object):
 		verbose_name_plural = 'WeeksWithinMonth'

@@ -505,7 +505,7 @@ li.message {
 	clear: both;
 }
 
-.tooltip {
+.tooltip1 {
 	display:none;
 	background:transparent url(/media/black_arrow_tall.png);
 	font-size:.75em;
@@ -514,6 +514,22 @@ li.message {
 	padding:25px;
 	color:#fff;	
 }
+
+.tooltip
+{ 
+	position: absolute; 
+	top: 0; 
+	left: 0; 
+	z-index: 3; 
+	display: none; 
+	text-transform: none;
+	color: #303030;
+    background-color: #ddd;
+    border: 1px solid #000;
+	font-size: .75em;
+	padding: 10px 13px;
+}
+
 
 .reading_info {
 	float: left;
@@ -902,3 +918,12 @@ ul.series_info {
 #latest_tweets li.odd{
    background-color:#D5DFFF;
  }
+
+
+.splash_image {
+	float: right;
+}
+
+.splash_content {
+	width: 80%;
+}

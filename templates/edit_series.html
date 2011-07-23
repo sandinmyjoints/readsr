@@ -214,7 +214,10 @@ twttr.anywhere(function (T) {
 		{% endif %}
 
 		//$("label a[title]").tooltip(); // Show the tooltip that explains what wiki mode is
-		$(".tooltip_link").tooltip({'position': "top center"});
+		$(".tooltip_link").tooltip({
+			'position': "top center",
+			'tipClass': "tooltip1"
+		});
 		
 		var rprops = /^(checked|selectedIndex)$/;
 		var field = $("#id_regular");
