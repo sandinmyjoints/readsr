@@ -294,8 +294,6 @@ def edit_venue(request, venue_id=None, success_url=None, extra_context=None):
         venue_form = VenueForm(data=request.POST) 
         address_form = AddressForm(data=request.POST)
         if venue_form.is_valid() and address_form.is_valid():
-            #venue_form.save() 
-            #address_form.save()
             address.street_address = address_form.cleaned_data["street_address"]
             address.city_name = address_form.cleaned_data["city"]
             address.state = address_form.cleaned_data["state"]
@@ -311,12 +309,11 @@ def edit_venue(request, venue_id=None, success_url=None, extra_context=None):
             venue.save()
             
             messages.success(request, "Venue updated.")
-            # need to get the success_url out of the query string? or could it be in the post
+
             return HttpResponseRedirect(success_url)  
         else:
             messages.error(request, "Could not update venue.")
         
-    # need to figure out how to pass the success_url as next url in query string
     if extra_context is None: 
         extra_context = { } 
     context = RequestContext(request) 
@@ -434,13 +431,14 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
         start = request.GET.get('start', "")
         end = request.GET.get('end', "")
         series_id = request.GET.get('series_id', series_id)
+        # If js is enabled, list_view will be true or false coming from the js AJAX.
         list_view = request.GET.get('list_view', "True")
         if settings.DEBUG:
             print "method is get, list_view is %s, start out of GET is %s, end is %s" % (list_view, start, end)
 
-        # If list_view is Calendar or List, then the client is not using js. We know
+        # If list_view is "Calendar" or "List", then the client is not using js. We know
         # this because they submitted a form, rather than the js capturing the event
-        # and preventing it from submitting.
+        # and preventing it from submitting, and sending true or false via AJAX.
         if list_view == "Calendar":
             # js is disabled
             list_view = False
@@ -456,17 +454,15 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 
         if not start=="" and not end=="":
             try:
-                # first try with dashes
                 if string.find(start, "-") > -1:
                     start_date = datetime.strptime(start, "%m-%d-%Y")
                     end_date = datetime.strptime(end, "%m-%d-%Y")
                 else:
-                    # then try with slashes
                     start_date = datetime.strptime(start, "%m/%d/%Y")
                     end_date = datetime.strptime(end, "%m/%d/%Y")
 
             except ValueError:
-                # Raise an error if neither of those formats works
+                # Raise an error if neither of those date formats works
                 raise Http404
 
             if not list_view and not js_available:
