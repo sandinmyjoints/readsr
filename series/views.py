@@ -157,14 +157,15 @@ def edit_series(request, series_id=None):
                     tweet_or_not = True
                     tweet_message.append("New venue: %s" % form.cleaned_data["venue"])
                                     
-            # If the series has a regular time, day of the week, and week of the month, and
-            # it is new or its time has changed, then create new reading objects for the new year
-            if need_to_create_new_readings_list: 
-                new_reading_list = new_series_readings(sr)
                 
             try:
                 form.save()
                 
+                # If the series has a regular time, day of the week, and week of the month, and
+                # it is new or its time has changed, then create new reading objects for the new year
+                if need_to_create_new_readings_list: 
+                    new_reading_list = sr.get_future_readings(1)
+
                 # Tweet and save the tweet to the db.
                 if tweet_or_not:
                     api = bitlyapi.BitLy(settings.BITLY_USER, settings.BITLY_KEY) 
@@ -208,29 +209,6 @@ def edit_series(request, series_id=None):
         form = SeriesForm(instance=sr)
 
     return render_to_response('edit_series.html', { 'form': form, 'series': sr }, context_instance=RequestContext(request))
-    
-def new_series_readings(sr, years=1):
-    """
-    Returns a list of Reading objects for a given Series for a number of years ahead.
-    
-    ** Arguments **
-    
-    ``years``
-        The number of years ahead to create Reading objects for for this series.
-    """
-    
-    new_reading_list = []
-    if not sr:
-        return new_reading_list
-        
-    for reading_day in sr.reading_days_ahead_by_month(12*years):
-        r = Reading()
-        r.date_and_time = datetime.combine(reading_day, sr.time)
-        # we can't save r here because sr.id is null because it hasn't been saved yet, so
-        # add r to the list of readings to be saved after sr is saved.
-        new_reading_list.append(r)
-
-    return new_reading_list
     
 @login_required
 def remove_series(request, template_name="remove_series.html", series_id=None, success_url=None, extra_context=None, fail_silently=False, message_success=False):

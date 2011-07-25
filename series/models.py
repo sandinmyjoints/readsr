@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
 from city_site.models import CitySite
-
+import reading
 
 class ModelBase(models.Model):
     """ Abstract base model that provides some timestamps. """
@@ -320,6 +320,26 @@ class Series(ModelBase):
             my_ahead_readings.append(my_next_reading_day + timedelta(7*(which_week-1)))
 
         return my_ahead_readings
+
+    def get_future_readings(self, years=1):
+        """
+        Returns a list of Reading objects for a given Series for a number of years ahead.
+
+        ** Arguments **
+
+        ``years``
+            The number of years ahead to create Reading objects for for this series.
+        """
+
+        new_reading_list = []
+
+        for reading_day in self.reading_days_ahead_by_month(12*years):
+            r = reading.models.Reading()
+            r.date_and_time = datetime.combine(reading_day, self.time)
+            r.series = self
+            new_reading_list.append(r)
+
+        return new_reading_list
                 
     class Meta:
         ordering = ('primary_name',)
