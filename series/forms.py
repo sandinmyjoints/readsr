@@ -8,6 +8,7 @@ from registration.forms import RegistrationFormUniqueEmail
 from django.conf import settings
 from city_site.models import CitySite
 
+
 class SeriesForm(forms.ModelForm):
     primary_name = forms.CharField();
     secondary_name = forms.CharField(required=False);

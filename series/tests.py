@@ -1,24 +1,13 @@
-from django.test import TestCase
-from series.models import Series, WeekWithinMonth, DayOfWeek, InvalidDayOfWeekError, InvalidWeekWithinMonthError
 from datetime import date
 import mock
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
+from django.test import TestCase
 
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
+from series.models import Series, WeekWithinMonth, DayOfWeek, InvalidDayOfWeekError, InvalidWeekWithinMonthError
 
->>> 1 + 1 == 2
-True
-"""}
 
 class FakeDate(date):
-	"A fake replacement for date that can be mocked for testing."
+	"""A fake replacement for date that can be mocked for testing."""
 	def __new__(cls, *args, **kwargs):
 		return date.__new__(date, *args, **kwargs)
 

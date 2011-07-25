@@ -11,59 +11,14 @@ from city_site.models import CitySite
 
 
 class ModelBase(models.Model):
+    """ Abstract base model that provides some timestamps. """
+    
     created_on = models.DateTimeField(auto_now_add=True, default=datetime.now)
     updated_on = models.DateTimeField(auto_now=True, default=datetime.now)
     
     class Meta:
         abstract = True
         
-class Contact(ModelBase):
-    """
-    Represents a person who can be contacted about a particular reading series. Currently 
-    associated one-to-one with a django User object (a user of the system).
-
-    By associating a contact with a user in the system, we assure that people can't create
-    a new series and designate some arbitrary person as the contact, which would mean they
-    would get emails from the system when someone requested the series be deleted, etc.
-    This way, a user can only create a series with themself as the contact.
-    """
-    
-    user = models.OneToOneField(User)
-    
-    @permalink
-    def get_absolute_url(self):
-        return ('profiles_profile_detail', (), { 'username': self.user.username })
-    
-    def _get_first_name(self):
-        return self.user.first_name
-        
-    first_name = property(_get_first_name)
-        
-    def _get_last_name(self):
-        return self.user.last_name
-        
-    last_name = property(_get_last_name)
-        
-    def _get_email(self):
-        return self.user.email
-        
-    email = property(_get_email)
-        
-    def _get_full_name(self):
-        # Returns the contact's full name.
-        return u'%s %s' % (self.first_name, self.last_name)
-
-    full_name = property(_get_full_name)
-        
-    def __unicode__(self):
-        return self.full_name
-        
-    def create_contact(sender, instance, created, **kwargs):  
-        if created:  
-           profile, created = Contact.objects.get_or_create(user=instance)  
-
-    post_save.connect(create_contact, sender=User)
-
 class InvalidGenreError(Exception):
     pass    
     
@@ -99,8 +54,7 @@ class Address(ModelBase):
     zip_code = models.CharField(max_length=5)
     def __unicode__(self):
         return self.street_number + " " + self.street_name + " " + self.zip_code
-        
-        
+                
     def _get_city_address(self):
         return self.city_name + ", " + self.state
         
@@ -115,7 +69,6 @@ class Venue(ModelBase):
     """
     name = models.CharField(max_length=100)
     secondary_name = models.CharField(max_length=100, blank=True, null=True)
-    #address = models.CharField(max_length=200)
     address = models.OneToOneField(Address)
     phone = PhoneNumberField(blank=True, null=True)
     notes = models.CharField(max_length=200, blank=True, null=True)
@@ -223,6 +176,53 @@ class WeekWithinMonth(ModelBase):
 
 class UnknownNextReadingDayException(Exception):
     pass
+
+class Contact(ModelBase):
+    """
+    Represents a person who can be contacted about a particular reading series. Currently 
+    associated one-to-one with a django User object (a user of the system).
+
+    By associating a contact with a user in the system, we assure that people can't create
+    a new series and designate some arbitrary person as the contact, which would mean they
+    would get emails from the system when someone requested the series be deleted, etc.
+    This way, a user can only create a series with themself as the contact.
+    """
+
+    user = models.OneToOneField(User)
+
+    @permalink
+    def get_absolute_url(self):
+        return ('profiles_profile_detail', (), { 'username': self.user.username })
+
+    def _get_first_name(self):
+        return self.user.first_name
+
+    first_name = property(_get_first_name)
+
+    def _get_last_name(self):
+        return self.user.last_name
+
+    last_name = property(_get_last_name)
+
+    def _get_email(self):
+        return self.user.email
+
+    email = property(_get_email)
+
+    def _get_full_name(self):
+        # Returns the contact's full name.
+        return u'%s %s' % (self.first_name, self.last_name)
+
+    full_name = property(_get_full_name)
+
+    def __unicode__(self):
+        return self.full_name
+
+    def create_contact(sender, instance, created, **kwargs):  
+        if created:  
+           profile, created = Contact.objects.get_or_create(user=instance)  
+
+    post_save.connect(create_contact, sender=User)
         
 class Series(ModelBase):
     """
