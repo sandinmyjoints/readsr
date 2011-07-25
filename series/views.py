@@ -155,16 +155,19 @@ def edit_series(request, series_id=None):
                 if old_sr.venue.id != form.cleaned_data["venue"].id:
                     # The location has changed, so add that to the tweet.
                     tweet_or_not = True
-                    tweet_message.append("New venue: %s" % form.cleaned_data["venue"])
-                                    
+                    tweet_message.append("New venue: %s" % form.cleaned_data["venue"])                                    
                 
             try:
                 form.save()
                 
                 # If the series has a regular time, day of the week, and week of the month, and
-                # it is new or its time has changed, then create new reading objects for the new year
+                # it is new or its time has changed, then create new reading objects for a year ahead.
+				# TODO: Set a date at which to refresh the reading list for the next year, when 
+				# the ones created here run out.
                 if need_to_create_new_readings_list: 
                     new_reading_list = sr.get_future_readings(1)
+                for reading in new_reading_list:
+                    reading.save()
 
                 # Tweet and save the tweet to the db.
                 if tweet_or_not:
@@ -188,12 +191,7 @@ def edit_series(request, series_id=None):
                     except tweepy.TweepError as terror:
                         if settings.DEBUG:
                             print "tweep error: %s" % terror                            
-                    
-                # Now that the new series is saved, tell all the new readings what its id is, and save them to the db
-                for reading in new_reading_list:
-                    reading.series = sr
-                    reading.save()
-                    
+                                        
                 # Add a successful series creation message 
                 messages.add_message(request, messages.SUCCESS, '%s %s. Thanks!' % (created_new and "Created" or "Updated", sr.primary_name))
                 
