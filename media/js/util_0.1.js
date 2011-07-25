@@ -34,8 +34,6 @@ $(document).ready(function() {
 		onSelect: change_end_list_view
 	});
 	
-	//alert("setting date 2: " + start_date + " " + end_date);
-
 	if(start.length && end.length) {
 		start.datepicker("setDate", start_date);
 		end.datepicker("setDate", end_date);
@@ -45,9 +43,14 @@ $(document).ready(function() {
 	// the default action, submitting the form. If js is disabled, they will 
 	// submit the form so the page still works, albeit without the nice
 	// UI elements.
-	$("#calendar_view, #list_view").click(function(e) {
+	$("#calendar_view").click(function(e) {
 		e.preventDefault();
 		change_view(false);
+	});
+	
+	$("#list_view").click(function(e) {
+		e.preventDefault();
+		change_view(true);
 	});
 
 	// Calendar view controls
@@ -171,6 +174,7 @@ function bind_editable_descriptions(url) {
 function change_view(list_view) {
 	// Change the view between calendar view and list view.
 	// Default is list view.
+
 	var start_date = start.datepicker("getDate");
 	var end_date = end.datepicker("getDate");
 		
