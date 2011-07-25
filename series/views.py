@@ -87,13 +87,13 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
     current_site = Site.objects.get_current()
     
     # Start assuming client's js is enabled. We will get a value that indicates otherwise
-	# through the submitted form if it is not.
+    # through the submitted form if it is not.
     # The template will use this value to decide whether to show some extra information
     # that would otherwise be shown using js (start date and end date).
     js_available = True
     
     # If we're on the generic www.readsrs.com site, show the splash screen with
-	# a list of available cities.
+    # a list of available cities.
     if current_site.id == settings.WWW_SITE:
         return splash(request)
             
@@ -270,43 +270,46 @@ def edit_series(request, series_id=None):
     Edits an existing series if a series_id is passed in.
     """
 
-    # if there is a reading_id, then we are editing an existing Reading
+    # If there is a reading_id, then we are editing an existing Reading
     if series_id:
         sr = get_object_or_404(Series, pk=series_id)
-    else: # otherwise, we are creating a new Series
+    else: # Otherwise, we are creating a new Series
         sr = Series()
         
-    if request.method == 'POST': # if we are receiving POST data, then we're getting the result of a form submission, so we save it to the database and show the detail template
+    if request.method == 'POST': # If we are receiving POST data, then we're getting the result of a form submission, so we save it to the database and show the detail template
         form = SeriesForm(request.POST, instance=sr)
-        sr.site = CitySite.objects.get(pk=settings.SITE_ID) # site can only be the current site
-        tweet_or_not = False
-        tweet_message = []
+        tweet_or_not = False # Start assuming we won't tweet, but if any of the changes occur that trigger a tweet, this value will change to true.
+        tweet_message = [] # Start with an empty tweet message.
         
-        # We are creating a new reading series, so give it the current user as the contact, and
-        if not sr.id:
-            sr.contact = request.user
-            tweet_message.append("New series: %s!" % sr.primary_name)
-            tweet_or_not = True
+        # For updating existing series, need to create a copy here because is_valid() will trigger 
+        # model validation, which will update the model object with the new values
+        # and we won't be able to tell what changed to determine whether we should tweet or not.
+        # (A new series won't use old_sr for anything.)
+        old_sr = copy.deepcopy(sr) 
 
-        old_sr = copy.deepcopy(sr) # need to create a copy because is_valid() will trigger model validation, which will update the model object with the new time values
         if form.is_valid():
             new_reading_list = []
-            created_new = create_new_readings_list = False
+            created_new = need_to_create_new_readings_list = False
+
             if not sr.id:
-                # We are creating a new reading series, so 
+                # We are creating a new reading series, so give it the current user as the contact
+                sr.contact = request.user
+                sr.site = CitySite.objects.get(pk=settings.SITE_ID) # For a new series, set the site of the series to the current active site
+                tweet_message.append("New series: %s!" % sr.primary_name)
+                tweet_or_not = True
+
+                # We are creating a new reading series, so if it is a regular reading series,
                 # create all its reading events for a year.
                 created_new = True
                 if sr.regular:
-                    create_new_readings_list = True
+                    need_to_create_new_readings_list = True
 
-            # If so, we will need to update its reading events.
             else:
-                # We are updating an existing series. 
-                
+                # We are updating an existing series.                 
                 # Depending on what changed, we may want to tweet about it, so start constructing
                 # a tweet message.
                 tweet_message.append("%s has been updated!" % old_sr.primary_name)
-                tweet_or_not = False
+                tweet_or_not = False # Only particular updates trigger a tweet, so set this to false for now.
                 
                 # If the name has changed, tweet about it:
                 if form.cleaned_data["primary_name"] != old_sr.primary_name:
@@ -316,17 +319,19 @@ def edit_series(request, series_id=None):
                 # We are updating an existing reading series, so need to check if its time or regularity changed.               
                 # Loop through items in sr and compare them to items in form.cleaned_data
                 # to see if any of the date/times have changed.                 
-                if old_sr.regular != form.cleaned_data["regular"] or old_sr.day_of_week != form.cleaned_data["day_of_week"] or old_sr.week_within_month != form.cleaned_data["week_within_month"] or old_sr.irregular_date_description != form.cleaned_data["irregular_date_description"] or old_sr.time != form.cleaned_data["time"] or old_sr.regular != form.cleaned_data["regular"] :
-                    # For now, we hose all the items if the series changed regularity
-                    # If what is being changed is the date, then                
-                    # go into the db and hose all future readings.
+                if old_sr.regular != form.cleaned_data["regular"] \
+                    or old_sr.day_of_week != form.cleaned_data["day_of_week"] \
+                    or old_sr.week_within_month != form.cleaned_data["week_within_month"] \
+                    or old_sr.irregular_date_description != form.cleaned_data["irregular_date_description"] \
+                    or old_sr.time != form.cleaned_data["time"] :
+                    # Hose all the reading events if the series changed regularity, day of week, week 
+                    # within month, irregular date description, or time.
                     # Then insert new readings to replace them.
-                    # Need to warn the user this will delete all existing readings.
-                    # Would be nice to someday fix it so it updates readings more intelligently, 
-                    # but not sure what that would entail.
+                    # Future enhancement: update readings more intelligently, 
+                    # but would need to think about what that would entail.
                     future_readings = Reading.objects.filter(series=sr.id).filter(date_and_time__gte=datetime.today()).delete()
                     if sr.regular:
-                        create_new_readings_list = True
+                        need_to_create_new_readings_list = True
                     
                     tweet_or_not = True
                     tweet_message.append("New time.")
@@ -338,16 +343,14 @@ def edit_series(request, series_id=None):
                                     
             # If the series has a regular time, day of the week, and week of the month, and
             # it is new or its time has changed, then create new reading objects for the new year
-            if create_new_readings_list: 
+            if need_to_create_new_readings_list: 
                 new_reading_list = new_series_readings(sr)
                 
             try:
-                # First, save the new series.
                 form.save()
                 
                 # Tweet and save the tweet to the db.
                 if tweet_or_not:
-                    # append shortened URL
                     api = bitlyapi.BitLy(settings.BITLY_USER, settings.BITLY_KEY) 
                     url = request.build_absolute_uri().replace("/edit", "")
                     res = api.shorten(longUrl=url)
@@ -356,12 +359,8 @@ def edit_series(request, series_id=None):
 
                     try:
                         api = get_tweepy_api()
-                        if settings.DEBUG:
-                            print "tweeting %s" % send_msg
                         api.update_status(send_msg)
                         last_msg = api.user_timeline(count=1)[0]
-                        if settings.DEBUG:
-                            print "saving new tweet sr=%s, tweet=%s, url=%s, id=%s" % (sr, send_msg, res['url'], last_msg.id)
                         SeriesTweet.objects.create(
                             series = sr,
                             tweet = send_msg,
@@ -370,10 +369,8 @@ def edit_series(request, series_id=None):
                         )
 
                     except tweepy.TweepError as terror:
-                        tweet_or_not = False # so we won't be able to save it to the DB
                         if settings.DEBUG:
-                            print "tweep error: %s" % terror
-                            
+                            print "tweep error: %s" % terror                            
                     
                 # Now that the new series is saved, tell all the new readings what its id is, and save them to the db
                 for reading in new_reading_list:
@@ -391,9 +388,10 @@ def edit_series(request, series_id=None):
         else:
             messages.error(request, "Please correct the errors below.")
             
-    else: # otherwise, we create a blank form and show it in the edit template
+    else: # If not POST, create a blank form and show it in the edit template.
         form = SeriesForm(instance=sr)
-    return render_to_response('edit_series.html', {'form': form, 'series': sr}, context_instance=RequestContext(request))
+
+    return render_to_response('edit_series.html', { 'form': form, 'series': sr }, context_instance=RequestContext(request))
     
 def new_series_readings(sr, years=1):
     """
