@@ -1,28 +1,23 @@
 {% extends "base.html" %}
 
 {% block styles %}
-{{ block.super }}
-{{ form.media.css }}
+	{{ block.super }}
+	{{ form.media.css }}
 {% endblock styles %}
 
 {% block title %}
-{{ block.super }} - {{ series.primary_name|default:"Add new series" }}
+	{{ block.super }} - {{ series.primary_name|default:"Add new series" }}
 {% endblock title %}
 
-
 {% block content %}
-{% block name %}
-<script type="text/javascript">
-twttr.anywhere(function (T) {
-  T.hovercards();
-});
- </script>
-<div id="banner">
-<h1>Tell us all about
-{{ series.primary_name|default:"your reading series" }}.
-</h1>
-</div>
-{% endblock name %}
+
+	{% block name %}
+	<div id="banner">
+	<h1>Tell us all about
+	{{ series.primary_name|default:"your reading series" }}.
+	</h1>
+	</div>
+	{% endblock name %}
 
 	<p>
 	{% if series.primary_name %}
@@ -34,19 +29,9 @@ twttr.anywhere(function (T) {
 	{% if form.errors %}
 	<p>Please correct the error{{ form.errors|pluralize }} below.</p>
 	{% endif %}
-	<!--
-	{% for error in form.errors %}
-	{{ error }}
-	{% endfor %}
-	-->
 
 	{{ form.non_field_errors }}
-	<!-- 
-	><ul class="form">
-		{{ form.as_ul }}
-	</ul>
-	-->
-		<form action="" method="post">
+	<form action="" method="post">
 		{% csrf_token %}
 		<dl class="edit_list">
 			<dt><label for="id_primary_name">{% if series.primary_name %}Is this still the right name?{% else %}What's the name?{% endif %}</label></dt>
@@ -182,7 +167,7 @@ twttr.anywhere(function (T) {
 				    </ol>
 				{% endif %}
 			</dd>
-			<dt><label for="id_wiki_mode">Start in <a href="#" id="wiki_mode_description" title="Wiki mode lets anyone update the reading description--for example, adding the names of readers. If the series isn't in Wiki mode, only the contact (that's you!) can update it. You can always come back and change the setting later.">Wiki mode</a>?</label></dt>
+			<dt><label for="id_wiki_mode">Start in <a href="#" id="wiki_mode_description" title="Wiki mode lets anyone update the reading description&mdash;for example, adding the names of readers. If the series isn't in Wiki mode, only the contact (that's you!) can update it. You can always come back and change the setting later.">Wiki mode</a>?</label></dt>
 			<dd>
 				{{ form.wiki_mode }}
 				{% if form.wiki_mode.errors %}
@@ -221,8 +206,11 @@ twttr.anywhere(function (T) {
 			}
 		});
 
-		// 
+		/* Bind changing the regular and admission checkboxes to toggle
+		sliding textboxes for the user to explain the series's irregular date
+		or admission policies. */
 		var rprops = /^(checked|selectedIndex)$/;
+		
 		var field = $("#id_regular");
 		eventType = (field.type == 'checkbox')
 		&& ("onpropertychange" in document.body) ? 'propertychange' : 'change';
@@ -247,8 +235,6 @@ twttr.anywhere(function (T) {
 		});
 	
 		$(".admission_description").hide();
-		//$(".edit_list").hide();
-		//$(".edit_list").slideToggle();
 
 	});
 	
@@ -263,9 +249,9 @@ twttr.anywhere(function (T) {
 	</script>
 	
 	{{ form.media.js }}
+	
 	<script type="text/javascript">
 	$("#id_time").timePicker({
-	  //startTime: "12:00", // Using string. Can take string or Date object.
 	  show24Hours: false,
 	  });
 	</script>
