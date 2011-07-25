@@ -1,10 +1,3 @@
-"""
-This file demonstrates two different styles of tests (one doctest and one
-unittest). These will both pass when you run "manage.py test".
-
-Replace these with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
 from series.models import Series, WeekWithinMonth, DayOfWeek, InvalidDayOfWeekError, InvalidWeekWithinMonthError
 from datetime import date
@@ -30,7 +23,7 @@ class FakeDate(date):
 		return date.__new__(date, *args, **kwargs)
 
 class TestDayOfWeek(TestCase):
-	"""Test the day of the week functions."""
+	"""Test the day of the week functions from series.models DayOfWeek."""
 
 	@mock.patch('series.models.date', FakeDate)
 	def test_valid_my_next_day_of_week_sameday(self):
@@ -69,6 +62,9 @@ class TestDayOfWeek(TestCase):
 		self.assertRaises(InvalidDayOfWeekError, new_day_of_week.my_next_day_of_week)
 
 class WeekWithinMonthTestCase(TestCase):
+	"""
+	Test the WeekWithinMonth model from series.models.
+	"""
 	def test_valid_week_within_month(self):
 		w = WeekWithinMonth.objects.create()
 		w.week_within_month = "1"
@@ -80,6 +76,11 @@ class WeekWithinMonthTestCase(TestCase):
 		self.assertRaises(InvalidWeekWithinMonthError, w.__unicode__)
 		
 class SeriesTestCase(TestCase):
+	"""
+	Test the functions that series.models.series uses to report its next event
+	occurrence date.
+	"""
+	
 	@mock.patch('series.models.date', FakeDate)
 	def test_next_reading_day_nextmonth(self):
 		from datetime import date

@@ -170,11 +170,11 @@ class DayOfWeek(ModelBase):
         # This shouldn't happen unless the days of the week were not loaded from the fixture.
         raise InvalidDayOfWeekError, "self.day = %s, was not in DAY_OF_WEEK_CHOICES. Did you add all the days of the week to the database?" % self.day
         
-    # my_next_day_of_week returns a datetime equal to the start (midnight+min) of the next day that is this instance's day of the week.
+    # next_my_day_of_week returns a datetime equal to the start (midnight+min) of the next day that is this instance's day of the week.
     # It doesn't know what time the reading is, so if today is the day of the week the reading falls on,
     # it simply returns today rather than checking whether the reading time has passed already.
     # So we need to check for that outside of this method. 
-    def my_next_day_of_week(self):
+    def next_my_day_of_week(self):
         """ 
         Returns a date equal to the start of the next day that is this instance's day of the week. 
         """
@@ -220,6 +220,9 @@ class WeekWithinMonth(ModelBase):
                 
     class Meta(object):
         verbose_name_plural = 'WeeksWithinMonth'
+
+class UnknownNextReadingDayException(Exception):
+    pass
         
 class Series(ModelBase):
     """
@@ -250,37 +253,48 @@ class Series(ModelBase):
         
     @models.permalink
     def get_absolute_url(self):
-        return ('detail-series', (), { 
-            'series_id': self.id })
+        return ('detail-series', (), { 'series_id': self.id } )
         
     def next_reading_day(self):
         """ 
-        Return the date of the next instance of this reading (assumes reading is monthly) 
+        Return the date of the next instance of this reading.
+        Series can only know this if it is a regular event that occurs on the same
+        day of each month.
         """
 
-        today = date.today()
-        next_reading_day = self.day_of_week.my_next_day_of_week()
+        if not self.regular:
+            raise UnknownNextReadingDayException, "Series %s is irregular. Cannot determine next reading date."
+
         one_week = timedelta(7)
+        today = date.today()
 
-        # need to find the right day of the right month
-        # take a day of the week, and a week of the month. figure out if that
-        # day/week has already happened this month. if not, that's it. if yes,
-        # then add weeks until we get that day/week next month.
-        which_week = int(self.week_within_month.week_within_month)
+        # To find the next day that this series has a reading event, first we get 
+        # the date of the next occurence of the day of the week that this series
+        # happens on (e.g., the date of the next Monday if this series happens on 
+        # Mondays).
+        next_reading_day = self.day_of_week.next_my_day_of_week()
+        
+        # Next we need to find the right day of the right month--either this month 
+        # if the next reading day hasn't happened yet this month, or next month if it has.
 
-        # count backwards to get the reading day in the last week of the previous month
+        # First, subtract until we get to the last reading day of the previous month as
+        # a starting point.
         while next_reading_day.month == today.month:
             next_reading_day = next_reading_day - one_week
 
-        # now add which_week weeks to it to get the day of the reading this month
+        # Next get the week within the month the reading day occurs 
+        # (e.g., the first week within the month).
+        which_week = int(self.week_within_month.week_within_month)
+
+        # Now add which_week weeks to get the day of the reading this month.
         this_month_reading_day = next_reading_day = next_reading_day + timedelta(7*(which_week))
 
-        # if this month's reading day has passed, add time to get to the next month
+        # If this month's reading day has passed, add time until we get to next month's reading day.
         if this_month_reading_day < today:
-            # this while loop gives us the first reading_day of the next month
+            # This loop gives us the first reading_day of the next month.
             while next_reading_day.month == today.month:
                 next_reading_day = next_reading_day + one_week
-            # this gives us the which_weekth reading_day of the next month, which is what we want
+            # This addition us the which_weekth reading_day of the next month, which is what we want.
             next_reading_day = next_reading_day + timedelta(7*(which_week-1))
         
         return next_reading_day
@@ -297,12 +311,12 @@ class Series(ModelBase):
         limit_date = datetime.today().date() + timedelta(months_ahead * 31)
 
         while my_next_reading_day <= limit_date:
-            # advance by week to get to the first occurence of the next month
+            # Advance by week to get to the first occurence of the next month
             cur_month = my_next_reading_day.month
             while my_next_reading_day.month == cur_month: 
                 my_next_reading_day = my_next_reading_day + timedelta(7)
 
-            # once we are at the first week of the right month, advance to the right week of this month
+            # Once we are at the first week of the right month, advance to the right week of this month
             my_ahead_readings.append(my_next_reading_day + timedelta(7*(which_week-1)))
 
         return my_ahead_readings

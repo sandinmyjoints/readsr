@@ -22,7 +22,8 @@ from profiles.views import profile_detail as profile_profile_detail
 from profiles.views import create_profile as profile_create_profile
 from profiles.views import edit_profile as profile_edit_profile
 
-import bitlyapi # for shortening urls for tweets
+import tweepy
+import bitlyapi 
 
 from series.util import get_tweepy_api
 from series.models import Series, Affiliate, Venue, Address, SeriesTweet
