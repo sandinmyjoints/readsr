@@ -5,9 +5,10 @@ from django.contrib.sites.models import Site
 
 from profiles import urls
 
+import tweepy
+
 from series.models import Series, Contact
 from series.util import get_tweepy_api
-import tweepy
 
 def series_list(request):
 	"""
@@ -48,14 +49,10 @@ def tweets(request):
 		if settings.DEBUG:
 			print "Exception in tweets context processor: %s" % ex
 		return { 'tweets': "" }
-	
 
 def get_latest_tweets():
 	user = 'readsr'
 	messages_to_display = 5
-	#auth = tweepy.OAuthHandler(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
-	#auth.set_access_token(settings.TWITTER_ACCESS_KEY, settings.TWITTER_ACCESS_SECRET)
-	#api = tweepy.API(auth)
 	api = get_tweepy_api()
 	statuses = api.user_timeline(count=messages_to_display)
 	messages = []

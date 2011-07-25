@@ -4,21 +4,18 @@ from django.views.generic.simple import direct_to_template
 from series import views
 from series.models import Series
 
-# series views
 urlpatterns = patterns('',
-    # Example:
 	url(r'^readings/', include('reading.urls')),
 	url(r'^about/$', views.about, name="about"),
 	url(r'^(?P<series_id>\d+)/readings/', include('reading.urls')),
-	#url(r'^(?P<series_id>\d+)/$', views.series_detail, name="detail-series"),
 	url(r'^(?P<series_id>\d+)/$', views.index, name="detail-series"),
 	url(r'^edit/$', views.edit_series, name="create-series"), 
 	url(r'^(?P<series_id>\d+)/edit/$', views.edit_series, name="edit-series"),
 	url(r'^(?P<series_id>\d+)/remove/$', views.remove_series, name="remove-series"),
 	url(r'^contact/(?P<contact_id>\d+)/$', views.contact_detail, name="detail-contact"),
-	url(r'^contact/list/$', views.contact_list, name="list-contact"),
-	url(r'^contact/edit/$', views.edit_contact, name="create-contact"),
-	url(r'^contact/(?P<contact_id>\d+)/edit/$', views.edit_contact, name="edit-contact"),	
+	#url(r'^contact/list/$', views.contact_list, name="list-contact"),
+	#url(r'^contact/edit/$', views.edit_contact, name="create-contact"),
+	#url(r'^contact/(?P<contact_id>\d+)/edit/$', views.edit_contact, name="edit-contact"),	
 	url(r'^venue/list/$', views.venue_list, name="list-venue"),
 	url(r'^venue/edit/$', views.edit_venue, name="create-venue"),
 	url(r'^venue/(?P<venue_id>\d+)/$', views.venue_detail, name="detail-venue"),

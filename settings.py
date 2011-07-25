@@ -154,6 +154,12 @@ TWEEPY_CACHE_DIR = os.path.join(ROOT_PATH, 'tweepy_cache')
  
 TWEEPY_CACHE = tweepy.cache.FileCache(TWEEPY_CACHE_DIR, 3600)
 
+# Override the absolute url for django user objects to use the profiles app
+# detail page, per the instructions in the django-registration simple-backend docs.
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda o: "/profiles/%s/" % o.username
+}
+
 # Grab local settings from local settings fie
 try:
  from local_settings import *

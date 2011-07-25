@@ -18,7 +18,10 @@ from django.views.generic import list_detail
 from django.contrib.sites.models import Site
 from django.conf import settings
 
-#import tweepy # for tweeting about updated series
+from profiles.views import profile_detail as profile_profile_detail
+from profiles.views import create_profile as profile_create_profile
+from profiles.views import edit_profile as profile_edit_profile
+
 import bitlyapi # for shortening urls for tweets
 
 from series.util import get_tweepy_api
@@ -28,12 +31,6 @@ from reading.models import Reading
 from city_site.models import CitySite
 from contact_form.forms import ContactForm
 
-from profiles.views import profile_detail as profile_profile_detail
-from profiles.views import create_profile as profile_create_profile
-from profiles.views import edit_profile as profile_edit_profile
-
-
-# profiles ######################
 @login_required
 def profile_detail(request, username):
     """
@@ -43,14 +40,7 @@ def profile_detail(request, username):
 
     user_owned_series = Series.objects.filter(contact__exact=request.user)
     
-#   return render_to_response("registration/profile.html", { "user": request.user, "user_series": user_series }, context_instance=RequestContext(request))
     return profile_profile_detail(request, username, extra_context={ 'user_series': user_owned_series })
-
-#   if request.user.is_authenticated():
-#       return render_to_response("registration/profile.html", { "user": request.user }, context_instance=RequestContext(request))
-#   else:
-#       messages.info(request, "You aren't logged in. Please log in or create an account.")
-#   return render_to_response("registration/login.html", {}, context_instance=RequestContext(request))
 
 @login_required
 def create_profile(request):
@@ -61,7 +51,6 @@ def edit_profile(request):
     user_owned_series = Series.objects.filter(contact__exact=request.user)
     return profile_edit_profile(request, form_class=ProfileForm, extra_context={ 'user_series': user_owned_series })
 
-# index and upcoming #################### 
 def index(request, series_id=None, genre_id=None, list_view=True, start_date=datetime.today().date(), end_date=(datetime.today() + timedelta(37)).date()):
     """
     Displays a list of readings ordered chronologically. Takes a start date and an end date.
@@ -82,6 +71,8 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
         
     ``series_id``
         Default is none, which will cause index to display readings from all series.
+        If series_id is supplied, index will only display the readings for that particular
+        series. 
         Can be passed as a GET parameter.
         
     ``genre_id``
@@ -91,19 +82,22 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
         Whether to show in list view or in calendar view.
         
     """
+
     current_site = Site.objects.get_current()
     
-    # assume client's js is enabled until we get a value that indicates otherwise.
-    # the template will use this value to decide whether to show some extra information
-    # that would otherwise be shown using js (start date and end date)
+    # Start assuming client's js is enabled. We will get a value that indicates otherwise
+	# through the submitted form if it is not.
+    # The template will use this value to decide whether to show some extra information
+    # that would otherwise be shown using js (start date and end date).
     js_available = True
     
-    # If we're on the generic www.readsrs.com site, show a list of available cities
+    # If we're on the generic www.readsrs.com site, show the splash screen with
+	# a list of available cities.
     if current_site.id == settings.WWW_SITE:
         return splash(request)
             
     if request.method == "GET":
-        # If request is get, then we can get start and end dates from that
+        # If request is get, then we can extract start and end dates from that.
         start = request.GET.get('start', "")
         end = request.GET.get('end', "")
         series_id = request.GET.get('series_id', series_id)
@@ -139,7 +133,7 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
                     end_date = datetime.strptime(end, "%m/%d/%Y")
                 
             except ValueError:
-                # raise an error if neither of those formats works
+                # Raise an error if neither of those formats works
                 raise Http404
                 
             if not list_view and not js_available:
@@ -148,11 +142,10 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
                 # the first of the month and the end date to
                 # one month after the start date.
                 start_date = start_date.replace(day=1)
-                end_date = end_date.replace(month=start_date.month, day=calendar.monthrange(start_date.year, start_date.month)[1], year=start_date.year)
-                
+                end_date = end_date.replace(month=start_date.month, day=calendar.monthrange(start_date.year, start_date.month)[1], year=start_date.year)    
                 
         else:
-            # if both dates are not supplied, default to a range of today + one month
+            # If neither dates are supplied, default to a range of today + one month.
             start_date = datetime.today()
             td = timedelta(31)
             end_date = start_date + td
@@ -198,37 +191,17 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
                                                 }, context_instance=RequestContext(request))
 
 def splash(request):
+    """
+    Present a splash screen that shows all the cities that Readsr is currently tracking.
+    """
+    
     current_site = Site.objects.get_current()
     return render_to_response('splash.html', { 'sites_list': Site.objects.exclude(id__exact=current_site.id) }, context_instance=RequestContext(request))
 
-
-# THIS VIEW IS DEPRECATED, REPLACED BY INDEX
-def series_detail(request, series_id, list_view=True):
-    """
-    Displays a page about one particular series object, and a list of all its readings 
-    that happen today or in the future.
-
-    ``series_id``
-        Series id must be supplied or else we get a 404 error.
-
-    ``list_view``
-        Whether to display in list view or calendar view. Default is list.
-    """
-    sr = get_object_or_404(Series, pk=series_id)
-    reading_list=Reading.objects.filter(date_and_time__gte=datetime.today()).filter(series=series_id)
-    if settings.DEBUG:
-        print "series is %s, series contact_id is %s, series contact is X, series contact user is X" % (sr, sr.contact_id, )
-    return render_to_response('series_detail.html', {
-                                                        'series': sr, 
-                                                        'reading_list': reading_list,
-                                                        'list_view': list_view,
-                                                    }, context_instance=RequestContext(request))
-
-
-
-# about ##############################
 def about(request, form_class=ContactForm, success_url=None, extra_context=None, fail_silently=False, message_success=False):
     """
+    About
+
     Displays some information about the website.
     Also displays a contact form which can be used to send an email to site managers.
     """
@@ -236,10 +209,13 @@ def about(request, form_class=ContactForm, success_url=None, extra_context=None,
     
 def contact_form_view(request, form_class, template_name, success_url=None, extra_context=None, fail_silently=False, message_success=False):
     """
+    Contact Form
+
     Displays a contact form which can be used to send an email to site managers.
     If message is successfully sent, queues a message for the user and returns them to
     the site index page.
     """
+
     if success_url is None:
         success_url = reverse('series.views.index')
     if request.method == 'POST': # if user is submitting a message through the contact form
@@ -285,16 +261,14 @@ def generic_edit_view(request, edit_object, form_class, template_name, success_u
         context[key] = callable(value) and value() or value
         
     return render_to_response(template_name, { 'form': form }, context_instance=context)
-    
-
-# series ####################
-    
+        
 @login_required 
 def edit_series(request, series_id=None):
     """
     Creates a new series if no series_id is passed in.
     Edits an existing series if a series_id is passed in.
     """
+
     # if there is a reading_id, then we are editing an existing Reading
     if series_id:
         sr = get_object_or_404(Series, pk=series_id)
@@ -357,9 +331,9 @@ def edit_series(request, series_id=None):
                     tweet_message.append("New time.")
 
                 if old_sr.venue.id != form.cleaned_data["venue"].id:
+                    # The location has changed, so add that to the tweet.
                     tweet_or_not = True
                     tweet_message.append("New venue: %s" % form.cleaned_data["venue"])
-                    # The location has changed, so add that to the tweet.
                                     
             # If the series has a regular time, day of the week, and week of the month, and
             # it is new or its time has changed, then create new reading objects for the new year
@@ -370,7 +344,7 @@ def edit_series(request, series_id=None):
                 # First, save the new series.
                 form.save()
                 
-                # Now if that was successful, tweet and save the tweet.
+                # Tweet and save the tweet to the db.
                 if tweet_or_not:
                     # append shortened URL
                     api = bitlyapi.BitLy(settings.BITLY_USER, settings.BITLY_KEY) 
@@ -394,7 +368,6 @@ def edit_series(request, series_id=None):
                             twitter_status_id = last_msg.id
                         )
 
-
                     except tweepy.TweepError as terror:
                         tweet_or_not = False # so we won't be able to save it to the DB
                         if settings.DEBUG:
@@ -406,10 +379,7 @@ def edit_series(request, series_id=None):
                     reading.series = sr
                     reading.save()
                     
-                #updated_reading = form.save(commit=False)
-                #updated_reading.save()
-                #form.save_m2m()
-                # add a successful series creation message 
+                # Add a successful series creation message 
                 messages.add_message(request, messages.SUCCESS, '%s %s. Thanks!' % (created_new and "Created" or "Updated", sr.primary_name))
                 
             except ValueError:
@@ -431,7 +401,7 @@ def new_series_readings(sr, years=1):
     ** Arguments **
     
     ``years``
-        The number of years to create Reading objects for for this series.
+        The number of years ahead to create Reading objects for for this series.
     """
     
     new_reading_list = []
@@ -450,7 +420,7 @@ def new_series_readings(sr, years=1):
 @login_required
 def remove_series(request, template_name="remove_series.html", series_id=None, success_url=None, extra_context=None, fail_silently=False, message_success=False):
     """
-    Displays a  form which can be used to requet removal of a series.
+    Displays a form which can be used to requet removal of a series.
     The request is emailed to site managers. If they decide to remove the series, that
     can be done through the admin site.
     """
@@ -472,67 +442,62 @@ def remove_series(request, template_name="remove_series.html", series_id=None, s
         form = RemoveSeriesContactForm(request=request, initial={ 'series_id': sr.id, 'series_primary_name': sr.primary_name, 'username': request.user.username, 'email': request.user.email, 'name': request.user.get_full_name() })
 
     if extra_context is None: 
-        extra_context = {'series': sr} 
+        extra_context = { 'series': sr } 
     context = RequestContext(request) 
     for key, value in extra_context.items():
         context[key] = callable(value) and value() or value
 
     return render_to_response(template_name, { 'form': form, 'user': request.user }, context_instance=context)
-    
-# contact ####################
-def contact_list(request):
-    """
-    Uses a generic view to return a list of all the contacts on the site.
-    This is deprecated, because in practice, this probably will not be used often or at 
-    all. Any listing of contacts would be done by an admin from the admin site.
-    Consider removing entirely.
-    """
-    return list_detail.object_list(request, queryset=User.objects.all(), template_name="generic_list.html")
-    
+        
 def contact_detail(request, contact_id):
     """
+    Contact
+
     Presents the details of a particular contact.
     """
     c = get_object_or_404(User, pk=contact_id)
     return render_to_response('contact_detail.html', {'contact': c}, context_instance=RequestContext(request))
     
-@login_required
-def edit_contact(request, contact_id=None):
-    """
-    This is deprecated now that Contacts are Users. A user can only edit his/her own
-    information, and they can do that through the account profile page.
-    """
-    if contact_id:
-        c = get_object_or_404(User, pk=contact_id)
-    else:
-        c = User()
-    if request.method == 'POST':
-        form = ReadsrContactForm(request.POST, instance=c)
-        if form.is_valid():
-            try:
-                form.save()
-                messages.success(request, 'Updated %' % c)
-            except ValueError:
-                # need to figure out how to display more about this error
-                messages.error(request, 'ValueError')
-                return HttpResponseRedirect(reverse('series.views.contact_detail', args=(c.id,)))
-    else:
-        form = ReadsrContactForm(instance=c)    
-    return render_to_response('edit_contact.html', {'form': form, 'contact': c}, context_instance=RequestContext(request))
+# @login_required
+# def edit_contact(request, contact_id=None):
+#     """
+#     This is deprecated now that Contacts are Users. A user can only edit his/her own
+#     information, and they can do that through the account profile page.
+#     """
+#     if contact_id:
+#         c = get_object_or_404(User, pk=contact_id)
+#     else:
+#         c = User()
+#     if request.method == 'POST':
+#         form = ReadsrContactForm(request.POST, instance=c)
+#         if form.is_valid():
+#             try:
+#                 form.save()
+#                 messages.success(request, 'Updated %' % c)
+#             except ValueError:
+#                 # need to figure out how to display more about this error
+#                 messages.error(request, 'ValueError')
+#                 return HttpResponseRedirect(reverse('series.views.contact_detail', args=(c.id,)))
+#     else:
+#         form = ReadsrContactForm(instance=c)    
+#     return render_to_response('edit_contact.html', {'form': form, 'contact': c}, context_instance=RequestContext(request))
 
-# venue ########################
 def venue_list(request):
     """
-    Lists all the venues on the site. A better way to use this would be as a snipper
-    that presents a list of series by venue.
+    Venue List
+
+    Lists all the venues on the site. 
     """
     return list_detail.object_list(request, queryset=Venue.objects.all(), template_name="generic_list.html")
 
 @login_required
 def edit_venue(request, venue_id=None, success_url=None, extra_context=None):
     """
-    Allows editing of a venue.
+    Edit Venue
+
+    Allows editing of a venue object.
     """
+
     if venue_id:
         venue = get_object_or_404(Venue, pk=venue_id)
         venue_form = VenueForm({
@@ -601,20 +566,27 @@ def venue_detail(request, venue_id):
     venue_series_list = series_list.filter(venue=venue_id)
     return render_to_response("venue_detail.html", { 'venue': Venue.objects.get(pk=venue_id), 'series_list': series_list, 'venue_series_list': venue_series_list}, context_instance=RequestContext(request))
     
-# affiliation ##################    
 def affiliate_list(request):
+    """
+    Affiliate List
+    
+    List all the affiliate objects.
+    """
     return list_detail.object_list(request, queryset=Affiliate.objects.all(), template_name="generic_list.html")
 
 @login_required
 def edit_affiliate(request, affiliate_id=None):
+    """
+    Edit Affiliate
+    """
+    
     if affiliate_id:
         affiliate = get_object_or_404(Affiliate, pk=affiliate_id)
     else:
         affiliate = Affiliate()
+
     return generic_edit_view(request, edit_object=affiliate, form_class=AffiliateForm, template_name="generic_form.html")
 
-
-# site_redirect ##############
 def site_redirect(request):
     """
     Site_redirect is used for switching between different city_sites when javascript is disabled.
