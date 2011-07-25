@@ -1,7 +1,7 @@
 import copy
 import string
-from datetime import datetime, timedelta
 import calendar
+from datetime import datetime, timedelta
 from urlparse import urlparse
 
 from django import forms
@@ -14,8 +14,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import logout
-from django.views.generic import list_detail
 from django.contrib.sites.models import Site
+from django.views.generic import list_detail
 from django.conf import settings
 
 from profiles.views import profile_detail as profile_profile_detail
