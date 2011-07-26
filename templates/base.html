@@ -75,15 +75,15 @@ twttr.anywhere(function (T) {
 	    <div id="navbar" class="">
 			{% block navbar %}
 			<ul>
-			    <li><a href="/">Home</a></li>
-				<li><a href="/edit/">Add a Series</a></li>
-			    <li><a href="/about/">About</a></li>
+			    <li><a href="{% url index %}">Home</a></li>
+				<li><a href="{% url create-series %}">Add a Series</a></li>
+			    <li><a href="{% url about %}">About</a></li>
 				{% if user.is_authenticated %}
 				<li><a href="{{ contact.get_absolute_url }}">Profile</a></li>
-				<li><a href="/accounts/logout" id="logout">Logout</a></li>
+				<li><a href="{% url auth_logout %}" id="logout">Logout</a></li>
 				{% else %}
 				<!--<li><a href="#" id="opener">Login</a></li>-->
-				<li><a href="/accounts/login" class="long_nav" id="login" >Login/Register</a></li>
+				<li><a href="{% url auth_login %}" class="long_nav" id="login" >Login/Register</a></li>
 				{% endif %}
 			</ul>
 	        {% endblock navbar %}

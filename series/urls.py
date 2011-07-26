@@ -26,11 +26,11 @@ urlpatterns = patterns('',
 	url(r'^affiliate/(?P<affiliate_id>\d+)/edit/$', views.edit_affiliate, name="edit-affiliate"),
 	url(r'^site/', views.site_redirect, name="site-redirect"),
 	url(r'^$', views.index, name="index"),
-	url(r'^splash/$', views.splash, name="splash"),
 )
 
 if settings.DEBUG:		
 	urlpatterns += patterns('', 
+	url(r'^splash/$', views.splash, name="splash"),
 	(r'^media/(?P<path>.*)$', 
 	'django.views.static.serve', 
 	{'document_root': settings.MEDIA_ROOT, 'show_indexes': True }))
