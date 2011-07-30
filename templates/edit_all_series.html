@@ -2,13 +2,15 @@
 
 {% block content %}
 
-<form method="post" action="">
+<form method="post" action="{% url edit-user-series contact.id %}">
+	{% csrf_token %}
 	{{ formset.management_form }}
 	<table>
 	{% for form in formset.forms %}
 	{{ form }}
 	{% endfor %}
 	</table>
+	<input type="submit" value="Update" class="button">
 </form>
 
 {% endblock %}

@@ -575,14 +575,15 @@ def edit_user_series(request, contact_id=None):
     if contact_id is None:
         raise Http404
         
-    SeriesFormSet = modelformset_factory(Series)
-    # formset = SeriesFormSet(queryset=Series.objects.filter(contact__exact=contact_id))
-    formset = SeriesFormSet()
+    SeriesFormSet = modelformset_factory(Series, form=SeriesForm)
     
-    # if request.method == "POST":
-    #     pass
-    # else:
-    #     formset = SeriesFormSet()
+    if request.method == "POST":
+        formset = SeriesFormSet(request.POST)
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, "Updated")
+
+    formset = SeriesFormSet(queryset=Series.objects.filter(contact__exact=contact_id))
     
     return render_to_response("edit_all_series.html", { 'formset': formset }, context_instance=RequestContext(request))
     
