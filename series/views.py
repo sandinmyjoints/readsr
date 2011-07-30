@@ -17,6 +17,7 @@ from django.contrib.auth.views import logout
 from django.contrib.sites.models import Site
 from django.views.generic import list_detail
 from django.conf import settings
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
 from profiles.views import profile_detail as profile_profile_detail
 from profiles.views import create_profile as profile_create_profile
@@ -78,7 +79,17 @@ def contact_form_view(request, form_class, template_name, success_url=None, extr
         context[key] = callable(value) and value() or value
 
     return render_to_response(template_name, { 'form': form }, context_instance=context)
+   
+def list_series(request):
+    try:
+        series_list = Series.objects.filter(site__exact=settings.SITE_ID)
+        
+        return render_to_response("list_all_series.html", { 'series_list': series_list }, context_instance=RequestContext(request))
+        
+    except Site.DoesNotExist:
+        raise Http404
     
+     
 @login_required 
 def edit_series(request, series_id=None):
     """

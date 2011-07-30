@@ -2,27 +2,27 @@
     <ul class="series_list">
     {% for series in series_list %}
         <li>
-			<a href="{% url detail-series series.id %}">{{ series.primary_name }}</a> at {% if series.venue.website %}
-			<a href="{% url detail-venue series.venue.id %}">{{ series.venue }}</a>
-			{% else %}
-			{{ series.venue }}
-			{% endif %}
-			<br />
-			{% if series.regular %}
-				{{ series.week_within_month.get_week_within_month_display }} {{ series.day_of_week.get_day_display }}s, {{ series.time }}
-			{% else %}
-				{{ series.irregular_date_description }}
-			{% endif %}
-			<br />
-			{% for genre in series.genre.all %}
-				{{ genre.get_genre_display }}{% if not forloop.last %},{% endif %}
-			{% endfor %}
-			<div style="text-align:center">&#10018;</div>
-		<li>
+            <a href="{% url detail-series series.id %}">{{ series.primary_name }}</a> at {% if series.venue.website %}
+            <a href="{% url detail-venue series.venue.id %}">{{ series.venue }}</a>
+            {% else %}
+            {{ series.venue }}
+            {% endif %}
+            <br />
+            {% if series.regular %}
+                {{ series.week_within_month.get_week_within_month_display }} {{ series.day_of_week.get_day_display }}s, {{ series.time }}
+            {% else %}
+                {{ series.irregular_date_description }}
+            {% endif %}
+            <br />
+            {% for genre in series.genre.all %}
+                {{ genre.get_genre_display }}{% if not forloop.last %},{% endif %}
+            {% endfor %}
+            <div style="text-align:center">&#10018;</div>
+        <li>
     {% endfor %}
-	</ul>
+    </ul>
 {% else %}
-	<div class="series_list">
-	    <p>We don't know about any reading series here yet.</a></p>
-	</div>
+    <div class="series_list">
+        <p>We don't know about any reading series here yet.</a></p>
+    </div>
 {% endif %}

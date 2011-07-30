@@ -7,6 +7,7 @@ from series.models import Series
 urlpatterns = patterns('',
 	url(r'^readings/', include('reading.urls')),
 	url(r'^about/$', views.about, name="about"),
+	url(r'^list/$', views.list_series, name="list-series"),
 	url(r'^(?P<series_id>\d+)/readings/', include('reading.urls')),
 	url(r'^(?P<series_id>\d+)/$', views.index, name="detail-series"),
 	url(r'^edit/$', views.edit_series, name="create-series"), 
