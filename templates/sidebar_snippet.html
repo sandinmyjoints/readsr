@@ -1,3 +1,6 @@
-<h2>All Reading Series </h2>
+<h2>Reading Series </h2>
 {% include "list_series.html" %}
+{% if more_series %}
+<h3>View the <a href="{% url list-series %}">{{ more_series }} additional series</a>.</h3>
+{% endif %}
 <h3><a href="{% url create-series %}">Add a new series</a>.</h3>

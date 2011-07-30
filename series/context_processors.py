@@ -10,14 +10,22 @@ import tweepy
 from series.models import Series, Contact
 from series.util import get_tweepy_api
 
+MAX_SERIES_SIDEBAR_LIST = 5 # The maximum number of series to list in the sidebar.
+
 def series_list(request):
     """
-    Adds the current list of all readings series for this city_site based on the settings file to the template context.
+    Grabs the current list of all readings series for this city_site based on the settings 
+    file to the template context. If there are more than MAX_SERIES_SIDEBAR_LIST, show only
+    that many series, sorted by next reading date, and provide a link to the full list.
     """
 
     try:
         series_list = Series.objects.filter(site__exact=settings.SITE_ID)
-        return { 'series_list': series_list }
+        if series_list.count() > MAX_SERIES_SIDEBAR_LIST:
+            more_series = series_list.count() - MAX_SERIES_SIDEBAR_LIST
+            series_list = series_list[:MAX_SERIES_SIDEBAR_LIST]
+            
+        return { 'series_list': series_list, 'more_series': more_series }
     except Site.DoesNotExist:
         return { 'series_list': ""}
 
@@ -36,7 +44,8 @@ def contact(request):
             c = Contact.objects.get(user__exact=request.user.id)
             return { 'contact': c }
     except Exception as ex:
-        print "Exception in contact context processor: %s" % ex
+        if settings.DEBUG:
+            print "Exception in contact context processor: %s" % ex
         return { 'contact': "" }
 
 def tweets(request):
