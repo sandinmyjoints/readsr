@@ -92,7 +92,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 	"django.core.context_processors.request",
 	"city_site.context_processors.city_site",
 	"city_site.context_processors.all_city_sites",
-	"series.context_processors.series_list",
+    # "series.context_processors.series_list",
 	"series.context_processors.contact",
 	"series.context_processors.tweets",
 )
