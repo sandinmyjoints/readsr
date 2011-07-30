@@ -162,8 +162,8 @@ def edit_series(request, series_id=None):
                 
                 # If the series has a regular time, day of the week, and week of the month, and
                 # it is new or its time has changed, then create new reading objects for a year ahead.
-				# TODO: Set a date at which to refresh the reading list for the next year, when 
-				# the ones created here run out.
+                # TODO: Set a date at which to refresh the reading list for the next year, when 
+                # the ones created here run out.
                 if need_to_create_new_readings_list: 
                     new_reading_list = sr.get_future_readings(1)
                 for reading in new_reading_list:
@@ -374,10 +374,20 @@ def profile_detail(request, username):
 
 @login_required
 def create_profile(request):
+    """
+    Create the profile via django-profiles.
+    """
+    
     return profile_create_profile(request)
 
 @login_required 
 def edit_profile(request):
+    """
+    Edit the profile via django-profiles, but 
+    using the custom form class ProfileForm and passing in a list
+    of series that this user owns.
+    """
+    
     user_owned_series = Series.objects.filter(contact__exact=request.user)
     return profile_edit_profile(request, form_class=ProfileForm, extra_context={ 'user_series': user_owned_series })
 

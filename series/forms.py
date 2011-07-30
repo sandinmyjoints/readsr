@@ -93,7 +93,7 @@ class FullNameRegistrationForm(RegistrationFormUniqueEmail):
 class ProfileForm(forms.ModelForm):
     """
     Custom form class to allow users to edit their email address and name through 
-	django-profiles.
+    django-profiles.
     """
 
     def __init__(self, *args, **kwargs):
@@ -104,8 +104,10 @@ class ProfileForm(forms.ModelForm):
             self.fields['first_name'].initial = self.instance.user.first_name
             self.fields['last_name'].initial = self.instance.user.last_name
         except User.DoesNotExist as ex:
-            print "exception %s" % ex
+            if settings.DEBUG:
+                print "In ProfileForm constructor: %s" % ex
             pass
+
 
     email = forms.EmailField(label="Primary email", help_text='Your primary email address')
     first_name = forms.CharField(widget=forms.TextInput(), required=False)
