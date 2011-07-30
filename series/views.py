@@ -18,6 +18,8 @@ from django.contrib.sites.models import Site
 from django.views.generic import list_detail
 from django.conf import settings
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.forms.models import modelformset_factory
+from django.forms.formsets import formset_factory
 
 from profiles.views import profile_detail as profile_profile_detail
 from profiles.views import create_profile as profile_create_profile
@@ -565,3 +567,22 @@ def generic_edit_view(request, edit_object, form_class, template_name, success_u
 
     return render_to_response(template_name, { 'form': form }, context_instance=context)
 
+def edit_user_series(request, contact_id=None):
+    """
+    Allows a user to edit all his/her own series via a formset.
+    """
+    
+    if contact_id is None:
+        raise Http404
+        
+    SeriesFormSet = modelformset_factory(Series)
+    # formset = SeriesFormSet(queryset=Series.objects.filter(contact__exact=contact_id))
+    formset = SeriesFormSet()
+    
+    # if request.method == "POST":
+    #     pass
+    # else:
+    #     formset = SeriesFormSet()
+    
+    return render_to_response("edit_all_series.html", { 'formset': formset }, context_instance=RequestContext(request))
+    

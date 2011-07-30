@@ -53,7 +53,7 @@ class Address(ModelBase):
     state = USStateField()
     zip_code = models.CharField(max_length=5)
     def __unicode__(self):
-        return self.street_number + " " + self.street_name + " " + self.zip_code
+        return " ".join([self.street_address, self.city_name, self.state, self.zip_code])
                 
     def _get_city_address(self):
         return self.city_name + ", " + self.state
