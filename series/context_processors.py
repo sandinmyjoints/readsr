@@ -16,7 +16,7 @@ def series_list(request):
     """
     Grabs the current list of all readings series for this city_site based on the settings 
     file to the template context. If there are more than MAX_SERIES_SIDEBAR_LIST, show only
-    that many series, sorted by next reading date, and provide a link to the full list.
+    that many series and provide a link to the full list.
     """
 
     try:
