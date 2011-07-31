@@ -80,7 +80,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-	#'city_site.middleware.CitySiteMiddleware'
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -127,6 +127,7 @@ INSTALLED_APPS = (
 	'registration',
 	'profiles',
 	'south',
+	'debug_toolbar',
 )
 
 AUTH_PROFILE_MODULE = 'series.Contact'
