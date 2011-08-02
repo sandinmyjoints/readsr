@@ -1,10 +1,67 @@
 from datetime import date
 import mock
 
-from django.test import TestCase
+from django.test import TestCase, Client
+from django.contrib.auth.models import User
 
 from series.models import Series, WeekWithinMonth, DayOfWeek, InvalidDayOfWeekError, InvalidWeekWithinMonthError
+from series.views import about
 
+class Authenticator():
+    def __init__(self):
+        self.user = None
+        self.client = None
+
+    def create_user(self):
+        u = User()
+        u.username = "test_user"
+        u.set_password("test1")
+        u.email = "test@test.com"
+        u.save()
+        
+    def login_valid_user(self):
+        self.client = Client()
+
+        self.client.login(username="test_user", password="test1")
+
+        
+class TestAbout(TestCase):
+    """
+    Test the about page.
+    """
+
+    # Load test data that creates a user
+    fixtures = ['test-readsr'] 
+    
+    def setup(self):
+        self.auth = Authenticator()
+        auth.create_user()
+        
+    def test_createuser(self):
+        # self.auth.create_user()        
+        setup()
+        self.assertEquals(auth.user.username, "test_user")
+        self.assertEquals(auth.user.email, "test@test.com")        
+        
+    def test_login_valid_user(self):
+        # self.auth.login_valid_user()
+        auth = Authenticator()
+        auth.login_valid_user()
+        
+    def test_login_invalid_user(self):
+        auth = Authenticator()
+        response = auth.client.login(username="Noname", password="Nopassword")
+        self.assertEquals(response, False)
+        
+    # def test_unauthenticated_edit(self):
+    #     pass
+        
+    def test_about_page(self):
+        # response = self.auth.client.get("/about/")
+        auth = Authenticator()
+        auth.client.get("/about/")
+        self.assertEquals(response.status_code, 200)
+    
 
 class FakeDate(date):
 	"""A fake replacement for date that can be mocked for testing."""
