@@ -126,6 +126,7 @@ INSTALLED_APPS = (
 	'hideemail',
 	'registration',
 	'profiles',
+	'swingtime',
 	'south',
 	'debug_toolbar',
 )
