@@ -7,6 +7,8 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
+from swingtime.models import Event
+
 from city_site.models import CitySite
 import reading
 
@@ -224,12 +226,14 @@ class Contact(ModelBase):
 
     post_save.connect(create_contact, sender=User)
         
-class Series(ModelBase):
+class Series(Event):
     """
     Represents one reading series, defined as a recurring event at a particular
     location on a particular day of a particular week within a month.
     """
-
+    
+    created_on = models.DateTimeField(auto_now_add=True, default=datetime.now)
+    updated_on = models.DateTimeField(auto_now=True, default=datetime.now)
     primary_name = models.CharField("Reading Name", max_length=200, unique=True)
     secondary_name = models.CharField("Reading Secondary Name", max_length=200, blank=True, null=True)
     contact = models.ForeignKey(User)
@@ -237,14 +241,14 @@ class Series(ModelBase):
     venue = models.ForeignKey(Venue)
     regular = models.BooleanField("Regular", default=True)
     irregular_date_description = models.CharField("Date and Time", max_length=200, blank=True, null=True)
-    day_of_week = models.ForeignKey(DayOfWeek, blank=True, null=True)
-    week_within_month = models.ForeignKey(WeekWithinMonth, blank=True, null=True)
-    time = models.TimeField(default=time(18))
+    #day_of_week = models.ForeignKey(DayOfWeek, blank=True, null=True)
+    #week_within_month = models.ForeignKey(WeekWithinMonth, blank=True, null=True)
+    #time = models.TimeField(default=time(18))
     affiliations = models.ManyToManyField(Affiliate, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
     admission = models.BooleanField("Admission", default=False)
     admission_description = models.CharField("Admission", max_length=300, blank=True, null=True)
-    notes = models.CharField("Notes", max_length=300, blank=True, null=True)
+    #notes = models.CharField("Notes", max_length=300, blank=True, null=True)
     wiki_mode = models.BooleanField("Wiki Mode", default=True)
     site = models.ForeignKey(CitySite)
 

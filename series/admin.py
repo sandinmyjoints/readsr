@@ -3,11 +3,15 @@ from django.contrib import admin
 
 	
 class SeriesAdmin(admin.ModelAdmin):
+    
+    # TODO: Restore notes to the fieldset. Notes is a generic relation on 
+    # swingtime.models.Event so I don't know why django complains when I add it here, 
+    # because Series is descended from Event.
 	fieldsets = [
-		(None, {'fields': ['primary_name', 'secondary_name', 'genre', 'notes', 'affiliations', 'admission', 'admission_description']}),
+		(None, {'fields': ['primary_name', 'secondary_name', 'genre', 'affiliations', 'admission', 'admission_description']}),
 		('Contact', {'fields': ['contact']}), 
 		('Venue', {'fields': ['venue']}),
-		('When', {'fields': ['regular', 'day_of_week', 'week_within_month', 'time', 'irregular_date_description']})
+		('When', {'fields': ['regular', 'irregular_date_description']})
 		]
 	#filter_horizontal = ['contact', 'genre', 'affiliation', 'websites']
 	search_fields = ['primary_name']
