@@ -4,6 +4,7 @@ from itertools import groupby
 from django import template
 from django.conf import settings
 from django.utils.html import conditional_escape as esc
+from django.contrib.sites.models import Site
 
 from series.models import Series
 
@@ -18,14 +19,14 @@ def show_series_list(max_series=MAX_SERIES_SIDEBAR_LIST):
     """
     
     try:
-        series_list = Series.objects.filter(site__exact=settings.SITE_ID)
+        series_list, more_series = Series.objects.filter(site__exact=settings.SITE_ID), 0
         if series_list.count() > max_series:
             more_series = series_list.count() - max_series
             series_list = series_list[:max_series]
             
         return { 'series_list': series_list, 'more_series': more_series }
     except Site.DoesNotExist:
-        return { 'series_list': '', 'more_series': ''}
+        return { 'series_list': '', 'more_series': 0 }
     
 
 # Register the template tag so it is available to templates
