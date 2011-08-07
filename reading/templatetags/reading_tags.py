@@ -74,7 +74,7 @@ class ReadingCalendar(HTMLCalendar):
 				for reading in self.readings[day]:
 					body.append('<li>')
 					body.append('<a href="%s">' % reading.get_absolute_url())
-					body.append(esc(reading.series.primary_name))
+					body.append(esc(reading.series.title))
 					body.append('</a></li>')
 				body.append('</ul>')
 				return self.day_cell(cssclass, '<span class="dayNumber">%d</span> %s' % (day, ''.join(body)))

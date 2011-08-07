@@ -8,7 +8,7 @@ class SeriesAdmin(admin.ModelAdmin):
     # swingtime.models.Event so I don't know why django complains when I add it here, 
     # because Series is descended from Event.
 	fieldsets = [
-		(None, {'fields': ['primary_name', 'secondary_name', 'genre', 'affiliations', 'admission', 'admission_description']}),
+		(None, {'fields': ['title', 'genre', 'affiliations', 'admission', 'admission_description']}),
 		('Contact', {'fields': ['contact']}), 
 		('Venue', {'fields': ['venue']}),
 		('When', {'fields': ['regular', 'irregular_date_description']})

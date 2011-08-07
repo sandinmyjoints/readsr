@@ -28,6 +28,10 @@ from profiles.views import edit_profile as profile_edit_profile
 import tweepy
 import bitlyapi 
 
+from swingtime.models import Event
+from swingtime.forms import MultipleOccurrenceForm
+from swingtime.views import event_view, add_event
+
 from series.util import get_tweepy_api
 from series.models import Series, Affiliate, Venue, Address, SeriesTweet
 from series.forms import SeriesForm, ReadsrContactForm, RemoveSeriesContactForm, VenueForm, AffiliateForm, AddressForm, ProfileForm
@@ -102,11 +106,16 @@ def edit_series(request, series_id=None):
     # If there is a reading_id, then we are editing an existing Reading
     if series_id:
         sr = get_object_or_404(Series, pk=series_id)
+        # event = get_object_or_404(Event, pk=series_id)
     else: # Otherwise, we are creating a new Series
         sr = Series()
-        
+        # event = Event()
+        print "got here 1"
+            
     if request.method == 'POST': # If we are receiving POST data, then we're getting the result of a form submission, so we save it to the database and show the detail template
+        print "method is POST"
         form = SeriesForm(request.POST, instance=sr)
+        print "created form instance"
         tweet_or_not = False # Start assuming we won't tweet, but if any of the changes occur that trigger a tweet, this value will change to true.
         tweet_message = [] # Start with an empty tweet message.
         
@@ -114,17 +123,20 @@ def edit_series(request, series_id=None):
         # model validation, which will update the model object with the new values
         # and we won't be able to tell what changed to determine whether we should tweet or not.
         # (A new series won't use old_sr for anything.)
+        print "creating deepcopy"
         old_sr = copy.deepcopy(sr) 
 
         if form.is_valid():
+            print "form is valid"
             new_reading_list = []
             created_new = need_to_create_new_readings_list = False
 
             if not sr.id:
+                print "not sr.id"
                 # We are creating a new reading series, so give it the current user as the contact
                 sr.contact = request.user
                 sr.site = CitySite.objects.get(pk=settings.SITE_ID) # For a new series, set the site of the series to the current active site
-                tweet_message.append("New series: %s!" % sr.primary_name)
+                tweet_message.append("New series: %s!" % sr.title)
                 tweet_or_not = True
 
                 # We are creating a new reading series, so if it is a regular reading series,
@@ -134,16 +146,17 @@ def edit_series(request, series_id=None):
                     need_to_create_new_readings_list = True
 
             else:
+                print "sr.id means we are updating an existing series"
                 # We are updating an existing series.                 
                 # Depending on what changed, we may want to tweet about it, so start constructing
                 # a tweet message.
-                tweet_message.append("%s has been updated!" % old_sr.primary_name)
+                tweet_message.append("%s has been updated!" % old_sr.title)
                 tweet_or_not = False # Only particular updates trigger a tweet, so set this to false for now.
                 
                 # If the name has changed, tweet about it:
-                if form.cleaned_data["primary_name"] != old_sr.primary_name:
+                if form.cleaned_data["primary_name"] != old_sr.title:
                     tweet_or_not = True
-                    tweet_message.append("New name: %s" % sr.primary_name)
+                    tweet_message.append("New name: %s" % sr.title)
                 
                 # We are updating an existing reading series, so need to check if its time or regularity changed.               
                 # Loop through items in sr and compare them to items in form.cleaned_data
@@ -171,16 +184,18 @@ def edit_series(request, series_id=None):
                     tweet_message.append("New venue: %s" % form.cleaned_data["venue"])                                    
                 
             try:
-                form.save()
-                
-                # If the series has a regular time, day of the week, and week of the month, and
-                # it is new or its time has changed, then create new reading objects for a year ahead.
-                # TODO: Set a date at which to refresh the reading list for the next year, when 
-                # the ones created here run out.
-                if need_to_create_new_readings_list: 
-                    new_reading_list = sr.get_future_readings(1)
-                for reading in new_reading_list:
-                    reading.save()
+                print "skipping save in this view because swingtime view will save"
+                # Commenting the below out pending changes now that we're using Swingtime
+                # form.save()
+                # 
+                # # If the series has a regular time, day of the week, and week of the month, and
+                # # it is new or its time has changed, then create new reading objects for a year ahead.
+                # # TODO: Set a date at which to refresh the reading list for the next year, when 
+                # # the ones created here run out.
+                # if need_to_create_new_readings_list: 
+                #     new_reading_list = sr.get_future_readings(1)
+                # for reading in new_reading_list:
+                #     reading.save()
 
                 # Tweet and save the tweet to the db.
                 if tweet_or_not:
@@ -205,21 +220,28 @@ def edit_series(request, series_id=None):
                         if settings.DEBUG:
                             print "tweep error: %s" % terror                            
                                         
-                # Add a successful series creation message 
-                messages.add_message(request, messages.SUCCESS, '%s %s. Thanks!' % (created_new and "Created" or "Updated", sr.primary_name))
+                # Add a successful series creation message. TODO this doesn't really come after the event has been saved now that we are using swingtime's add_event view 
+                messages.add_message(request, messages.SUCCESS, '%s %s. Thanks!' % (created_new and "Created" or "Updated", sr.title))
+
+                #return HttpResponseRedirect(sr.get_absolute_url())
+                return add_event(request, template="edit_series.html", event_form_class=SeriesForm)
                 
             except ValueError:
-                messages.add_message(request, message.ERROR, 'Error %s %s.' % (created_new and "creating" or "updating", sr.primary_name))
+                messages.add_message(request, message.ERROR, 'Error %s %s.' % (created_new and "creating" or "updating", sr.title))
                 return HttpResponseRedirect(reverse('edit-series', args=(sr.id,)))
 
-            return HttpResponseRedirect(sr.get_absolute_url())
         else:
+            print "form is not valid. errors = %s" % form.errors
             messages.error(request, "Please correct the errors below.")
+            return add_event(request, template="edit_series.html", event_form_class=SeriesForm)
             
     else: # If not POST, create a blank form and show it in the edit template.
-        form = SeriesForm(instance=sr)
+        return add_event(request, template="edit_series.html", event_form_class=SeriesForm)
+        #return render_to_response('edit_series.html', { 'series_form': SeriesForm(), }, context_instance=RequestContext(request))
 
-    return render_to_response('edit_series.html', { 'form': form, 'series': sr }, context_instance=RequestContext(request))
+    print "got here 2, series_id is %s" % (series_id, )
+    return event_view(request, pk=series_id, template="edit_series.html", event_form_class=SeriesForm)
+    # return render_to_response('edit_series.html', { 'series_form': series_form, recurring_form: 'recurring_form', 'series': sr }, context_instance=RequestContext(request))
     
 @login_required
 def remove_series(request, template_name="remove_series.html", series_id=None, success_url=None, extra_context=None, fail_silently=False, message_success=False):
@@ -243,7 +265,7 @@ def remove_series(request, template_name="remove_series.html", series_id=None, s
         else:
             messages.error(request, "Could not send your message.")
     else: 
-        form = RemoveSeriesContactForm(request=request, initial={ 'series_id': sr.id, 'series_primary_name': sr.primary_name, 'username': request.user.username, 'email': request.user.email, 'name': request.user.get_full_name() })
+        form = RemoveSeriesContactForm(request=request, initial={ 'series_id': sr.id, 'series_primary_name': sr.title, 'username': request.user.username, 'email': request.user.email, 'name': request.user.get_full_name() })
 
     if extra_context is None: 
         extra_context = { 'series': sr } 

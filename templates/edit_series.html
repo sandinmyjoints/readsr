@@ -2,11 +2,12 @@
 
 {% block styles %}
 	{{ block.super }}
-	{{ form.media.css }}
+	{{ event_form.media.css }}
+	{{ recurrence_form.media.css }}
 {% endblock styles %}
 
 {% block title %}
-	{{ block.super }} - {{ series.primary_name|default:"Add new series" }}
+	{{ block.super }} - {{ series.title|default:"Add new series" }}
 {% endblock title %}
 
 {% block content %}
@@ -14,32 +15,39 @@
 	{% block name %}
 	<div id="banner">
 	<h1>Tell us all about
-	{{ series.primary_name|default:"your reading series" }}.
+	{{ series.title|default:"your reading series" }}.
 	</h1>
 	</div>
 	{% endblock name %}
 
 	<p>
-	{% if series.primary_name %}
-	Please enter the most current info for {{ series.primary_name }}, and we'll update the series and tweet the changes (from our @readsr account) so everyone knows about them. Thanks for helping us keep up to date! 
+	{% if series.title %}
+	Please enter the most current info for {{ series.title }}, and we'll update the series and tweet the changes (from our @readsr account) so everyone knows about them. Thanks for helping us keep up to date! 
 	{% else %}
 	Thanks for adding a new series! Once you're done, we'll send out a tweet (from our @readsr account) so everyone knows about it.
 	{% endif %}
 	</p>
-	{% if form.errors %}
-	<p>Please correct the error{{ form.errors|pluralize }} below.</p>
-	{% endif %}
+	{% if event_form.errors or recurrence_form.errors %}
+	<p>Please correct the event error{{ event_form.errors|pluralize }} below.</p>
+	<p>Please correct the recurrence error{{ recurrence_form.errors|pluralize }} below.</p>
 
-	{{ form.non_field_errors }}
+	{% endif %}
+	<p>
+	{{ event_form.non_field_errors }}
+	</p>
+	<p>
+    {{ recurrence_form.non_field_errors }}
+	</p>
+
 	<form action="" method="post">
 		{% csrf_token %}
 		<dl class="edit_list">
-			<dt><label for="id_primary_name">{% if series.primary_name %}Is this still the right name?{% else %}What's the name?{% endif %}</label></dt>
+			<dt><label for="id_primary_name">{% if series.title %}Is this still the right name?{% else %}What's the name?{% endif %}</label></dt>
 			<dd>
-				{{ form.primary_name }}
-				{% if form.primary_name.errors %}
+				{{ event_form.title }}
+				{% if event_form.title.errors %}
 				    <ol class="errorlist">
-				    {% for error in form.primary_name.errors %}
+				    {% for error in event_form.title.errors %}
 				        <li><strong>{{ error|escape }}</strong></li>
 				    {% endfor %}
 				    </ol>
@@ -48,10 +56,10 @@
 			</dd>
 			<dt><label for="id_genre">What genres are typically represented? (Hold shift to select more than one.)</label></dt>
 			<dd>
-				{{ form.genre }} 
-				{% if form.genre.errors %}
+				{{ event_form.genre }} 
+				{% if event_form.genre.errors %}
 				    <ol class="errorlist">
-				    {% for error in form.genre.errors %}
+				    {% for error in event_form.genre.errors %}
 				        <li><strong>{{ error|escape }}</strong></li>
 				    {% endfor %}
 				    </ol>
@@ -59,10 +67,10 @@
 			</dd>
 			<dt><label for="id_venue">Where does it happen?</label></dt>
 			<dd>
-				{{ form.venue }} <a href="{% url create-venue %}?next={{ request.path }}"><img src="{{ MEDIA_URL }}add.png" alt="Add new venue" title="Add a new venue" class="add-icon"></a>
-				{% if form.venue.errors %}
+				{{ event_form.venue }} <a href="{% url create-venue %}?next={{ request.path }}"><img src="{{ MEDIA_URL }}add.png" alt="Add new venue" title="Add a new venue" class="add-icon"></a>
+				{% if event_form.venue.errors %}
 				    <ol class="errorlist">
-				    {% for error in form.venue.errors %}
+				    {% for error in event_form.venue.errors %}
 				        <li><strong>{{ error|escape }}</strong></li>
 				    {% endfor %}
 				    </ol>
@@ -70,10 +78,10 @@
 			</dd>
 			<dt><label for="id_website">Does it have a website?</label></dt>
 			<dd>
-				{{ form.website }} 
-				{% if form.website.errors %}
+				{{ event_form.website }} 
+				{% if event_form.website.errors %}
 				    <ol class="errorlist">
-				    {% for error in form.website.errors %}
+				    {% for error in event_form.website.errors %}
 				        <li><strong>{{ error|escape }}</strong></li>
 				    {% endfor %}
 				    </ol>
@@ -81,54 +89,54 @@
 			</dd>
 			<dt><label for="id_regular">Does it occur regularly?</label></dt>
 			<dd>
-				{{ form.regular }}
-				{% if form.regular.errors %}
+				{{ event_form.regular }}
+				{% if event_form.regular.errors %}
 				    <ol class="errorlist">
-				    {% for error in form.regular.errors %}
+				    {% for error in event_form.regular.errors %}
 				        <li><strong>{{ error|escape }}</strong></li>
 				    {% endfor %}
 				    </ol>
 				{% endif %}
 			</dd>
-			<dt class="regular"><label for="id_time">What time does it start?</label></dt>
-			<dd class="regular">
-				{{ form.time }}
-				{% if form.time.errors %}
-				    <ol class="errorlist">
-				    {% for error in form.time.errors %}
-				        <li><strong>{{ error|escape }}</strong></li>
-				    {% endfor %}
-				    </ol>
-				{% endif %}
-			</dd>
-			<dt class="regular"><label for="id_day_of_week">What day of the week does it occur?</label></dt>
-			<dd class="regular">
-				{{ form.day_of_week }}
-				{% if form.day_of_week.errors %}
-				    <ol class="errorlist">
-				    {% for error in form.day_of_week.errors %}
-				        <li><strong>{{ error|escape }}</strong></li>
-				    {% endfor %}
-				    </ol>
-				{% endif %}
-			</dd>
-			<dt class="regular"><label for="id_week_within_month">And which week within the month?</label></dt>
-			<dd class="regular">
-				{{ form.week_within_month }}
-				{% if form.week_within_month.errors %}
-				    <ol class="errorlist">
-				    {% for error in form.week_within_month.errors %}
-				        <li><strong>{{ error|escape }}</strong></li>
-				    {% endfor %}
-				    </ol>
-				{% endif %}
-			</dd>
+			{# <dt class="regular"><label for="id_time">What time does it start?</label></dt> #}
+			{# <dd class="regular"> #}
+			{# 	{{ event_form.time }} #}
+			{# 	{% if event_form.time.errors %} #}
+			{# 	    <ol class="errorlist"> #}
+			{# 	    {% for error in event_form.time.errors %} #}
+			{# 	        <li><strong>{{ error|escape }}</strong></li> #}
+			{# 	    {% endfor %} #}
+			{# 	    </ol> #}
+			{# 	{% endif %} #}
+			{# </dd> #}
+			{# <dt class="regular"><label for="id_day_of_week">What day of the week does it occur?</label></dt> #}
+			{# <dd class="regular"> #}
+			{# 	{{ form.day_of_week }} #}
+			{# 	{% if form.day_of_week.errors %} #}
+			{# 	    <ol class="errorlist"> #}
+			{# 	    {% for error in form.day_of_week.errors %} #}
+			{# 	        <li><strong>{{ error|escape }}</strong></li> #}
+			{# 	    {% endfor %} #}
+			{# 	    </ol> #}
+			{# 	{% endif %} #}
+			{# </dd> #}
+			{# <dt class="regular"><label for="id_week_within_month">And which week within the month?</label></dt> #}
+			{# <dd class="regular"> #}
+			{# 	{{ form.week_within_month }} #}
+			{# 	{% if form.week_within_month.errors %} #}
+			{# 	    <ol class="errorlist"> #}
+			{# 	    {% for error in form.week_within_month.errors %} #}
+			{# 	        <li><strong>{{ error|escape }}</strong></li> #}
+			{# 	    {% endfor %} #}
+			{# 	    </ol> #}
+			{# 	{% endif %} #}
+			{# </dd> #}
 			<dt class="irregular"><label for="id_irregular_date_description">How would you describe when it occurs?</label></dt>
 			<dd class="irregular">
-				{{ form.irregular_date_description }}
-				{% if form.irregular_date_description.errors %}
+				{{ event_form.irregular_date_description }}
+				{% if event_form.irregular_date_description.errors %}
 				    <ol class="errorlist">
-				    {% for error in form.irregular_date_description.errors %}
+				    {% for error in event_form.irregular_date_description.errors %}
 				        <li><strong>{{ error|escape }}</strong></li>
 				    {% endfor %}
 				    </ol>
@@ -136,10 +144,10 @@
 			</dd>
 			<dt><label for="id_admission">Is there any kind of admission charge?</label></dt>
 			<dd>
-				{{ form.admission }}
-				{% if form.admission.errors %}
+				{{ event_form.admission }}
+				{% if event_form.admission.errors %}
 				    <ol class="errorlist">
-				    {% for error in form.admission.errors %}
+				    {% for error in event_form.admission.errors %}
 				        <li><strong>{{ error|escape }}</strong></li>
 				    {% endfor %}
 				    </ol>
@@ -147,10 +155,10 @@
 			</dd>
 			<dt class="admission_description"><label for="id_admission_description">What's the admission?</label></dt>
 			<dd class="admission_description">
-				{{ form.admission_description }}
-				{% if form.admission_description.errors %}
+				{{ event_form.admission_description }}
+				{% if event_form.admission_description.errors %}
 				    <ol class="errorlist">
-				    {% for error in form.admission_description.errors %}
+				    {% for error in event_form.admission_description.errors %}
 				        <li><strong>{{ error|escape }}</strong></li>
 				    {% endfor %}
 				    </ol>
@@ -158,10 +166,10 @@
 			</dd>
 			<dt><label for="id_affiliations">Is it affiliated with any organizations?</label></dt>
 			<dd>
-				{{ form.affiliations }} <a href="{% url create-affiliate %}"><img src="{{ MEDIA_URL }}add.png" title="Add a new affiliate" alt="Add new affiliate" class="add-icon" style="padding-left: 5px"></a>
-				{% if form.affiliations.errors %}
+				{{ event_form.affiliations }} <a href="{% url create-affiliate %}"><img src="{{ MEDIA_URL }}add.png" title="Add a new affiliate" alt="Add new affiliate" class="add-icon" style="padding-left: 5px"></a>
+				{% if event_form.affiliations.errors %}
 				    <ol class="errorlist">
-				    {% for error in form.affiliations.errors %}
+				    {% for error in event_form.affiliations.errors %}
 				        <li><strong>{{ error|escape }}</strong></li>
 				    {% endfor %}
 				    </ol>
@@ -169,10 +177,10 @@
 			</dd>
 			<dt><label for="id_wiki_mode">Start in <a href="#" id="wiki_mode_description" title="Wiki mode lets anyone update the reading description&mdash;for example, adding the names of readers. If the series isn't in Wiki mode, only the contact (that's you!) can update it. You can always come back and change the setting later.">Wiki mode</a>?</label></dt>
 			<dd>
-				{{ form.wiki_mode }}
-				{% if form.wiki_mode.errors %}
+				{{ event_form.wiki_mode }}
+				{% if event_form.wiki_mode.errors %}
 				<il class="errorlist">
-					{% for error in form.affiliations.errors %}
+					{% for error in event_form.affiliations.errors %}
 						<li><strong>{{ err|escape }}</strong></li>
 					{% endfor %}
 					</ol>
@@ -180,8 +188,14 @@
 			</dd>
 		</dl>
 		<p class="clear">
+		<table>
+			<tbody>
+			{% include "recurring_form_part.html" %}
+			</tbody>
+		</table>
+		<p class="clear">
 		You'll be listed as the point of contact for this series. Your email address will be listed, but in a form that prevents spammers from harvesting it. If that's not cool, hit cancel and we won't create this series.</p>
-		<div class="submit-row"><input type="submit" value="{% if series.primary_name %}Update{% else %}Submit{% endif %}" class="button" /><input type="button" id="cancel_button" value="Cancel" class="button" /></div>
+		<div class="submit-row"><input type="submit" value="{% if series.title %}Update{% else %}Submit{% endif %}" class="button" /><input type="button" id="cancel_button" value="Cancel" class="button" /></div>
 	</form>
 
 {% endblock content %}

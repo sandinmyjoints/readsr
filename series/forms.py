@@ -10,15 +10,13 @@ from city_site.models import CitySite
 
 
 class SeriesForm(forms.ModelForm):
-    primary_name = forms.CharField();
-    secondary_name = forms.CharField(required=False);
     regular = forms.BooleanField(required=False);
     irregular_date_description = forms.CharField(required=False, widget=forms.Textarea);
-    time = forms.TimeField(
-        input_formats=('%H:%M', '%I:%M %p', '%I %p', '%H.%M', '%I.%M %p'), 
-        widget=forms.TimeInput(format=r"%I:%M %p",), 
-        help_text="HH:MM AM/PM",
-        initial=time(18))
+    # time = forms.TimeField(
+    #     input_formats=('%H:%M', '%I:%M %p', '%I %p', '%H.%M', '%I.%M %p'), 
+    #     widget=forms.TimeInput(format=r"%I:%M %p",), 
+    #     help_text="HH:MM AM/PM",
+    #     initial=time(18))
     affiliations = forms.ModelMultipleChoiceField(
                             queryset=Affiliate.objects.all(),
                             widget=forms.CheckboxSelectMultiple(),

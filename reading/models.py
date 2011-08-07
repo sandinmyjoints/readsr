@@ -23,7 +23,7 @@ class Reading(models.Model):
 #		self.description = description
 		
 	def __unicode__(self):
-		return "%s on %s at %s" % (self.series.primary_name, self.date_and_time.date(), self.date_and_time.time())
+		return "%s on %s at %s" % (self.series.title, self.date_and_time.date(), self.date_and_time.time())
 		
 	def date(self):
 		return self.date_and_time.date()

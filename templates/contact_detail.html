@@ -21,7 +21,7 @@
 	<dd>
 		<ul>
 			{% for series in contact.series_set.all %}
-	<li><a href="{% url detail-series series.id %}">{{ series.primary_name }}</a>{% if not forloop.last %}, {% endif %} 
+	<li><a href="{% url detail-series series.id %}">{{ series.title }}</a>{% if not forloop.last %}, {% endif %} 
 		</li>
 	{% endfor %}
 	</dd>

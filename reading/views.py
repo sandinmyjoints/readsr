@@ -161,7 +161,7 @@ def edit_reading(request, reading_id=None):
 					messages.add_message(request, messages.SUCCESS, 'Reading %s. Thanks!' % (created_new and "Created" or "Updated"))
 				
 				except ValueError:
-					messages.add_message(request, message.ERROR, 'Error %s reading.' % (created_new and "creating" or "updating", r.primary_name))
+					messages.add_message(request, message.ERROR, 'Error %s reading.' % (created_new and "creating" or "updating", r.title))
 					return HttpResponseRedirect(reverse('edit-reading', args=(sr.id,)))
 			else:
 				messages.error(request, "Please correct the errors below.")

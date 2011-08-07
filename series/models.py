@@ -234,8 +234,8 @@ class Series(Event):
     
     created_on = models.DateTimeField(auto_now_add=True, default=datetime.now)
     updated_on = models.DateTimeField(auto_now=True, default=datetime.now)
-    primary_name = models.CharField("Reading Name", max_length=200, unique=True)
-    secondary_name = models.CharField("Reading Secondary Name", max_length=200, blank=True, null=True)
+    #primary_name = models.CharField("Reading Name", max_length=200, unique=True) # replaced by Event.title
+    #secondary_name = models.CharField("Reading Secondary Name", max_length=200, blank=True, null=True) # deprecated
     contact = models.ForeignKey(User)
     genre = models.ManyToManyField(Genre)
     venue = models.ForeignKey(Venue)
@@ -253,7 +253,7 @@ class Series(Event):
     site = models.ForeignKey(CitySite)
 
     def __unicode__(self):
-        return self.primary_name
+        return self.title
         
     @models.permalink
     def get_absolute_url(self):
@@ -346,7 +346,7 @@ class Series(Event):
         return new_reading_list
                 
     class Meta:
-        ordering = ('primary_name',)
+        ordering = ('title',)
         verbose_name_plural = 'Series'
     
 class SeriesTweet(ModelBase):
