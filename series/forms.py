@@ -1,11 +1,13 @@
+from datetime import time
+
 from django import forms
 from django.contrib.localflavor.us.forms import USPhoneNumberField, USStateSelect, USZipCodeField
 from django.contrib.auth.models import User
-from datetime import time
+from django.conf import settings
+
 from series.models import Series, Venue, Affiliate, Address, Contact
 from contact_form.forms import ContactForm
 from registration.forms import RegistrationFormUniqueEmail
-from django.conf import settings
 from city_site.models import CitySite
 
 
@@ -27,9 +29,14 @@ class SeriesForm(forms.ModelForm):
     notes = forms.CharField(required=False)
     wiki_mode = forms.BooleanField(required=False)
     
+    # Hidden fields
+    contact = forms.IntegerField(widget=forms.HiddenInput)
+    event_type = forms.IntegerField(widget=forms.HiddenInput, initial=1) # TODO make this nicer. right it just supplies 1 for the default event_type, Reading Series
+    city_site = forms.IntegerField(widget=forms.HiddenInput, initial=CitySite.objects.get(pk=settings.SITE_ID))
+    
     class Meta:
         model = Series
-        exclude = ('site', 'contact')
+        #exclude = ('site', 'contact')
         
     class Media:
         css = {

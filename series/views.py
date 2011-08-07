@@ -106,10 +106,8 @@ def edit_series(request, series_id=None):
     # If there is a reading_id, then we are editing an existing Reading
     if series_id:
         sr = get_object_or_404(Series, pk=series_id)
-        # event = get_object_or_404(Event, pk=series_id)
     else: # Otherwise, we are creating a new Series
         sr = Series()
-        # event = Event()
         print "got here 1"
             
     if request.method == 'POST': # If we are receiving POST data, then we're getting the result of a form submission, so we save it to the database and show the detail template
@@ -134,8 +132,8 @@ def edit_series(request, series_id=None):
             if not sr.id:
                 print "not sr.id"
                 # We are creating a new reading series, so give it the current user as the contact
-                sr.contact = request.user
-                sr.site = CitySite.objects.get(pk=settings.SITE_ID) # For a new series, set the site of the series to the current active site
+                # sr.contact = request.user
+                # sr.site = CitySite.objects.get(pk=settings.SITE_ID) # For a new series, set the site of the series to the current active site
                 tweet_message.append("New series: %s!" % sr.title)
                 tweet_or_not = True
 
@@ -154,7 +152,7 @@ def edit_series(request, series_id=None):
                 tweet_or_not = False # Only particular updates trigger a tweet, so set this to false for now.
                 
                 # If the name has changed, tweet about it:
-                if form.cleaned_data["primary_name"] != old_sr.title:
+                if form.cleaned_data["title"] != old_sr.title:
                     tweet_or_not = True
                     tweet_message.append("New name: %s" % sr.title)
                 
@@ -218,17 +216,23 @@ def edit_series(request, series_id=None):
 
                     except tweepy.TweepError as terror:
                         if settings.DEBUG:
-                            print "tweep error: %s" % terror                            
-                                        
+                            print "tweep error: %s" % terror                     
+                
+            # Handle possible errors from tweep and bitly
+            except ValueError, ex:
+                messages.add_message(request, messages.ERROR, 'Value error %s %s. Error: %s' % (created_new and "creating" or "updating", sr.title, ex))
+                if sr.id:
+                    return HttpResponseRedirect(reverse('edit-series', args=(sr.id,)))
+                else:
+                    return HttpResponseRedirect(reverse('create-series'))
+            except IOError, ex:
+                messages.add_message(request, messages.ERROR, 'Error %s %s. Could not tweet: %s' % (created_new and "creating" or "updating", sr.title, ex))
+            finally:
                 # Add a successful series creation message. TODO this doesn't really come after the event has been saved now that we are using swingtime's add_event view 
                 messages.add_message(request, messages.SUCCESS, '%s %s. Thanks!' % (created_new and "Created" or "Updated", sr.title))
 
                 #return HttpResponseRedirect(sr.get_absolute_url())
-                return add_event(request, template="edit_series.html", event_form_class=SeriesForm)
-                
-            except ValueError:
-                messages.add_message(request, message.ERROR, 'Error %s %s.' % (created_new and "creating" or "updating", sr.title))
-                return HttpResponseRedirect(reverse('edit-series', args=(sr.id,)))
+                return add_event(request, template="edit_series.html", event_form_class=SeriesForm)          
 
         else:
             print "form is not valid. errors = %s" % form.errors

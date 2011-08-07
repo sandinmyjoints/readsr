@@ -41,6 +41,13 @@
 
 	<form action="" method="post">
 		{% csrf_token %}
+		{% for hidden in event_form.hidden_fields %}
+			{% if hidden.name = "contact" %}
+				<input type="hidden" name="contact" value="{{ request.user.id }}" id="id_contact" />
+			{% else %}
+		        {{ hidden }}
+			{% endif %}
+        {% endfor %}
 		<dl class="edit_list">
 			<dt><label for="id_primary_name">{% if series.title %}Is this still the right name?{% else %}What's the name?{% endif %}</label></dt>
 			<dd>
@@ -175,13 +182,24 @@
 				    </ol>
 				{% endif %}
 			</dd>
+			<dt><label for="id_description">Any other description or information you want to say about this series?</label></dt>
+			<dd>
+				{{ event_form.description }} 
+				{% if event_form.description.errors %}
+				    <ol class="errorlist">
+				    {% for error in event_form.description.errors %}
+				        <li><strong>{{ error|escape }}</strong></li>
+				    {% endfor %}
+				    </ol>
+				{% endif %}
+			</dd>
 			<dt><label for="id_wiki_mode">Start in <a href="#" id="wiki_mode_description" title="Wiki mode lets anyone update the reading description&mdash;for example, adding the names of readers. If the series isn't in Wiki mode, only the contact (that's you!) can update it. You can always come back and change the setting later.">Wiki mode</a>?</label></dt>
 			<dd>
 				{{ event_form.wiki_mode }}
 				{% if event_form.wiki_mode.errors %}
-				<il class="errorlist">
+					<ol class="errorlist">
 					{% for error in event_form.affiliations.errors %}
-						<li><strong>{{ err|escape }}</strong></li>
+						<li><strong>{{ error|escape }}</strong></li>
 					{% endfor %}
 					</ol>
 				{% endif %}
@@ -193,6 +211,16 @@
 			{% include "recurring_form_part.html" %}
 			</tbody>
 		</table>
+		<p class="clear">
+			{{ event_form.event_type }}
+			{% if event_form.event_type.errors %}
+				<ol class="errorlist">
+				{% for error in event_form.event_type.errors %}
+					<li><strong>{{ error|escape }}</strong></li>
+				{% endfor %}
+				</ol>
+			{% endif %}
+		</p>
 		<p class="clear">
 		You'll be listed as the point of contact for this series. Your email address will be listed, but in a form that prevents spammers from harvesting it. If that's not cool, hit cancel and we won't create this series.</p>
 		<div class="submit-row"><input type="submit" value="{% if series.title %}Update{% else %}Submit{% endif %}" class="button" /><input type="button" id="cancel_button" value="Cancel" class="button" /></div>
