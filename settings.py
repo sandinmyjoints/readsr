@@ -1,8 +1,12 @@
 # Django settings for dcreadings project.
-import os
+import os, sys
 import tweepy
 
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
+
+# Add swingtime development version -- TODO need to find a better way of doing this
+SWINGTIME_PATH = os.path.abspath(os.path.join(os.path.join(ROOT_PATH, ".."), "django-swingtime"))
+sys.path.insert(0, SWINGTIME_PATH)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

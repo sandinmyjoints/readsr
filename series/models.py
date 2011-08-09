@@ -218,7 +218,7 @@ class Contact(ModelBase):
     full_name = property(_get_full_name)
 
     def __unicode__(self):
-        return self.full_name
+        return u'%d' % self.id
 
     def create_contact(sender, instance, created, **kwargs):  
         if created:  

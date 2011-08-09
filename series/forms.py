@@ -5,6 +5,8 @@ from django.contrib.localflavor.us.forms import USPhoneNumberField, USStateSelec
 from django.contrib.auth.models import User
 from django.conf import settings
 
+from swingtime.models import EventType
+
 from series.models import Series, Venue, Affiliate, Address, Contact
 from contact_form.forms import ContactForm
 from registration.forms import RegistrationFormUniqueEmail
@@ -30,8 +32,9 @@ class SeriesForm(forms.ModelForm):
     wiki_mode = forms.BooleanField(required=False)
     
     # Hidden fields
-    contact = forms.IntegerField(widget=forms.HiddenInput)
-    event_type = forms.IntegerField(widget=forms.HiddenInput, initial=1) # TODO make this nicer. right it just supplies 1 for the default event_type, Reading Series
+    contact = forms.ModelChoiceField(queryset=Contact.objects.all(),
+                widget=forms.HiddenInput())
+    event_type = forms.IntegerField(widget=forms.HiddenInput, initial=EventType.objects.get(pk=1)) # TODO make this nicer. right it just supplies 1 for the default event_type, Reading Series
     city_site = forms.IntegerField(widget=forms.HiddenInput, initial=CitySite.objects.get(pk=settings.SITE_ID))
     
     class Meta:

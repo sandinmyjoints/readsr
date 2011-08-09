@@ -3,7 +3,7 @@
     <ul class="series_list">
     {% for series in series_list %}
         <li>
-            <a href="{% url detail-series series.id %}">{{ series.primary_name }}</a> at {% if series.venue.website %}
+            <a href="{% url detail-series series.id %}">{{ seriesseries.title }}</a> at {% if series.venue.website %}
             <a href="{% url detail-venue series.venue.id %}">{{ series.venue }}</a>
             {% else %}
             {{ series.venue }}

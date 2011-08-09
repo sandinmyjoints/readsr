@@ -43,7 +43,7 @@
 		{% csrf_token %}
 		{% for hidden in event_form.hidden_fields %}
 			{% if hidden.name = "contact" %}
-				<input type="hidden" name="contact" value="{{ request.user.id }}" id="id_contact" />
+				<input type="hidden" name="contact" value="{{ request.user }}" id="id_contact" />
 			{% else %}
 		        {{ hidden }}
 			{% endif %}
