@@ -34,8 +34,8 @@ class SeriesForm(forms.ModelForm):
     # Hidden fields
     contact = forms.ModelChoiceField(queryset=Contact.objects.all(),
                 widget=forms.HiddenInput())
-    event_type = forms.IntegerField(widget=forms.HiddenInput, initial=EventType.objects.get(pk=1)) # TODO make this nicer. right it just supplies 1 for the default event_type, Reading Series
-    city_site = forms.IntegerField(widget=forms.HiddenInput, initial=CitySite.objects.get(pk=settings.SITE_ID))
+    event_type = forms.IntegerField(widget=forms.HiddenInput, initial=EventType.objects.get(pk=1).id) # TODO make this nicer. right it just supplies 1 for the default event_type, Reading Series
+    city_site = forms.IntegerField(widget=forms.HiddenInput, initial=CitySite.objects.get(pk=settings.SITE_ID).id)
     
     class Meta:
         model = Series
