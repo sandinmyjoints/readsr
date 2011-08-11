@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from urlparse import urlparse
 
 from django import forms
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseBadRequest
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
@@ -165,12 +165,54 @@ def edit_series(request, series_id=None):
     Edits an existing series and its recurring occurrence.
     """
 
-    return event_view(request, series_id, template="edit_series.html", event_form_class=SeriesForm)
+
+    '''
+    View an ``Event`` instance and optionally update either the event or its
+    occurrences.
+
+    Context parameters:
+
+    event
+        the event keyed by ``pk``
+        
+    event_form
+        a form object for updating the event
+        
+    recurrence_form
+        a form object for adding occurrences
+    '''
 	
-    if series_id:
-        sr = get_object_or_404(Series, pk=series_id)        
-    else:
-        raise Http404
+	# TODO add tweets back to this
+	
+    event = get_object_or_404(Series, pk=series_id)
+    event_form = recurrence_form = None
+    if request.method == 'POST':
+        if '_update' in request.POST:
+            event_form = SeriesForm(request.POST, instance=event)
+            if event_form.is_valid():
+                event_form.save(event)
+                return HttpResponseRedirect(request.path)
+        elif '_add' in request.POST:
+            recurrence_form = MultipleOccurrenceForm(request.POST)
+            if recurrence_form.is_valid():
+                recurrence_form.save(event)
+                return HttpResponseRedirect(request.path)
+        else:
+            return HttpResponseBadRequest('Bad Request')
+
+    event_form = event_form or SeriesForm(instance=event)
+    if not recurrence_form:
+        recurrence_form = MultipleOccurrenceForm(
+            initial=dict(dtstart=datetime.now())
+        )
+            
+    return render_to_response(
+        "edit_series.html", 
+        dict(event=event, event_form=event_form, recurrence_form=recurrence_form),
+        context_instance=RequestContext(request)
+    )
+	
+	
             
     if request.method == 'POST': # If we are receiving POST data, then we're getting the result of a form submission, so we save it to the database and show the detail template
         form = SeriesForm(request.POST, instance=sr)

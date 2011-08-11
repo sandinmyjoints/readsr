@@ -14,8 +14,8 @@ from city_site.models import CitySite
 
 
 class SeriesForm(forms.ModelForm):
-    regular = forms.BooleanField(required=False);
-    irregular_date_description = forms.CharField(required=False, widget=forms.Textarea);
+    regular = forms.BooleanField(required=False)
+    irregular_date_description = forms.CharField(required=False, widget=forms.Textarea)
     # time = forms.TimeField(
     #     input_formats=('%H:%M', '%I:%M %p', '%I %p', '%H.%M', '%I.%M %p'), 
     #     widget=forms.TimeInput(format=r"%I:%M %p",), 
@@ -30,6 +30,7 @@ class SeriesForm(forms.ModelForm):
     admission_description = forms.CharField(required=False)
     notes = forms.CharField(required=False)
     wiki_mode = forms.BooleanField(required=False)
+    description = forms.CharField(required=True, widget=forms.Textarea)
 
     class Meta:
         model = Series
