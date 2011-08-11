@@ -1,11 +1,15 @@
-from datetime import time
+from datetime import datetime, time
+from dateutil import rrule
 
 from django import forms
 from django.contrib.localflavor.us.forms import USPhoneNumberField, USStateSelect, USZipCodeField
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
+import swingtime
 from swingtime.models import EventType
+from swingtime.forms import MultipleOccurrenceForm
 
 from series.models import Series, Venue, Affiliate, Address, Contact
 from contact_form.forms import ContactForm
@@ -41,6 +45,27 @@ class SeriesForm(forms.ModelForm):
             'screen': ('js/timePicker/timePicker.css',)
         }
         js = ('js/timePicker/jquery.timePicker.min.js',)
+
+class ReadingMultipleOccurrenceForm(MultipleOccurrenceForm):
+    """
+    Defaults to monthly occurrences.
+    """
+    
+    def __init__(self, *args, **kws):
+        super(ReadingMultipleOccurrenceForm, self).__init__(*args, **kws)
+
+        today = datetime.today().date()
+        self.fields["until"].initial = datetime(today.year+5, today.month, today.day)
+        self.fields["repeats"].initial = "until"
+        self.fields["freq"].initial = rrule.MONTHLY
+        self.fields["month_option"].initial = "on"
+        self.fields["day"].label = _(u"Date of next reading")
+        
+    def clean(self):
+        return super(ReadingMultipleOccurrenceForm, self).clean()
+
+    def save(self, series):
+        return super(ReadingMultipleOccurrenceForm, self).save(series)
 
 class ReadsrContactForm(forms.ModelForm):
     """

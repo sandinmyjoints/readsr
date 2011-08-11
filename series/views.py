@@ -29,12 +29,12 @@ import tweepy
 import bitlyapi 
 
 from swingtime.models import Event, EventType
-from swingtime.forms import MultipleOccurrenceForm
+#from swingtime.forms import MultipleOccurrenceForm
 from swingtime.views import event_view, add_event
 
 from series.util import get_tweepy_api
 from series.models import Series, Affiliate, Venue, Address, SeriesTweet
-from series.forms import SeriesForm, ReadsrContactForm, RemoveSeriesContactForm, VenueForm, AffiliateForm, AddressForm, ProfileForm
+from series.forms import SeriesForm, ReadsrContactForm, RemoveSeriesContactForm, VenueForm, AffiliateForm, AddressForm, ProfileForm, ReadingMultipleOccurrenceForm
 from reading.models import Reading
 from city_site.models import CitySite
 from contact_form.forms import ContactForm
@@ -107,7 +107,7 @@ def create_series(request, extra_context=None):
         print "POST. request.user.pk is %s, request.user is %s" % (request.user.pk, request.user)
         
         event_form = SeriesForm(request.POST) 
-        recurrence_form = MultipleOccurrenceForm(request.POST)
+        recurrence_form = ReadingMultipleOccurrenceForm(request.POST)
         #import pdb; pdb.set_trace()
         if event_form.is_valid() and recurrence_form.is_valid():
             # We are creating a new reading series, so give it the current user as the contact
@@ -140,12 +140,16 @@ def create_series(request, extra_context=None):
             try:
                 dtstart = parser.parse(request.GET['dtstart'])
             except:
-                # TODO A badly formatted date is passed to add_event
-                dtstart = datetime.now()
+                pass
+                
+        if dtstart == None:
+            today = datetime.today().date()
+            dtstart = datetime(today.year, today.month, today.day, 17, 0, 0)
 
-        print "not POST. request.user.pk is %s, request.user is %s" % (request.user.pk, request.user)
+        print "not POST. request.user.pk is %s, request.user is %s, dtstart is %s" % (request.user.pk, request.user, dtstart)
         event_form = SeriesForm()
-        recurrence_form = MultipleOccurrenceForm(initial=dict(dtstart=dtstart))
+        recurrence_form = ReadingMultipleOccurrenceForm(initial=dict(dtstart=dtstart))
+        #import pdb; pdb.set_trace()
 
     if extra_context is None:
         extra_context = {}
@@ -154,7 +158,7 @@ def create_series(request, extra_context=None):
         context[key] = callable(value) and value() or value
         
     return render_to_response(
-        "edit_series.html",
+        "add_series.html",
         dict(dtstart=dtstart, event_form=event_form, recurrence_form=recurrence_form),
         context_instance=context
     )
@@ -193,7 +197,7 @@ def edit_series(request, series_id=None):
                 event_form.save(event)
                 return HttpResponseRedirect(request.path)
         elif '_add' in request.POST:
-            recurrence_form = MultipleOccurrenceForm(request.POST)
+            recurrence_form = ReadingMultipleOccurrenceForm(request.POST)
             if recurrence_form.is_valid():
                 recurrence_form.save(event)
                 return HttpResponseRedirect(request.path)
@@ -202,7 +206,7 @@ def edit_series(request, series_id=None):
 
     event_form = event_form or SeriesForm(instance=event)
     if not recurrence_form:
-        recurrence_form = MultipleOccurrenceForm(
+        recurrence_form = ReadingMultipleOccurrenceForm(
             initial=dict(dtstart=datetime.now())
         )
             
@@ -255,7 +259,7 @@ def edit_series(request, series_id=None):
                 # Then insert new readings to replace them.
                 # Future enhancement: update readings more intelligently, 
                 # but would need to think about what that would entail.
-                future_readings = Reading.objects.filter(series=sr.id).filter(date_and_time__gte=datetime.today()).delete()
+                future_readings = Reading.objects.filter(series=sr.id).filter(start_time__gte=datetime.today()).delete()
                 if sr.regular:
                     need_to_create_new_readings_list = True
                 
@@ -614,7 +618,7 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
             td = timedelta(31)
             end_date = start_date + td
 
-        reading_list = Reading.objects.filter(series__site__exact=current_site.id).filter(date_and_time__gte=start_date).filter(date_and_time__lte=end_date)
+        reading_list = Reading.objects.filter(series__site__exact=current_site.id).filter(start_time__gte=start_date).filter(start_time__lte=end_date)
 
         if series_id:
             # we are in detail_series mode so filter the reading_list down to just the ones for this series_id
