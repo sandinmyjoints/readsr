@@ -1,8 +1,11 @@
 from django.db import models
-from series.models import Series
 from django.contrib.sites.models import Site
 
-class Reading(models.Model):
+from swingtime.models import Occurrence 
+
+from series.models import Series
+
+class Reading(Occurrence):
 	"""
 	A Reading represents one instance of a reading series, that is, an event 
 	taking place on a certain date at a certain time, optionally with a certain
@@ -12,8 +15,8 @@ class Reading(models.Model):
 	who is the main contact for the series, etc.
 	"""
 	
-	date_and_time = models.DateTimeField("Date and Time")
-	series = models.ForeignKey(Series)
+	#date_and_time = models.DateTimeField("Date and Time")
+	series = models.ForeignKey(Series) # This same object is available as an Event through Occurrence.Event 
 	description = models.CharField("Description", max_length=300, blank=True, null=True)
 
 #	def __init__(self, date_and_time=None, series=None, description=None):
@@ -26,10 +29,10 @@ class Reading(models.Model):
 		return "%s on %s at %s" % (self.series.title, self.date_and_time.date(), self.date_and_time.time())
 		
 	def date(self):
-		return self.date_and_time.date()
+		return self.start_time.date()
 		
 	def time(self):
-		return self.date_and_time.time()
+		return self.start_time.time()
 						
 	@models.permalink
 	def get_absolute_url(self):
@@ -37,4 +40,4 @@ class Reading(models.Model):
 			'reading_id': self.id })
 	
 	class Meta(object):
-		ordering = ('date_and_time',)
+		ordering = ('start_time',)

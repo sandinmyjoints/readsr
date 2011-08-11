@@ -210,7 +210,8 @@
 	<ol>
         {% for o in event.occurrence_set.all %}
         <li>
-			<a href="{% url swingtime-occurrence event.id o.id %}">
+			<!--<a href="{% url swingtime-occurrence event.id o.id %}">-->
+			<a href="{% url detail-reading o.id %}">
                 {{ o.start_time|date:"l, F jS, Y P" }} &ndash; 
                 {{ o.end_time|date:"l, F jS, Y P" }}</a>
         </li>
