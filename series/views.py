@@ -111,8 +111,6 @@ def create_series(request, extra_context=None):
         #import pdb; pdb.set_trace()
         if event_form.is_valid() and recurrence_form.is_valid():
             # We are creating a new reading series, so give it the current user as the contact
-            
-
             sr = event_form.save(commit=False)
             sr.contact = request.user
             sr.event_type = EventType.objects.get(pk=1)
@@ -164,20 +162,19 @@ def create_series(request, extra_context=None):
 @login_required 
 def edit_series(request, series_id=None):
     """
-    Edits an existing series if a series_id is passed in.
+    Edits an existing series and its recurring occurrence.
     """
 
-    # If there is a reading_id, then we are editing an existing Reading
+    return event_view(request, series_id, template="edit_series.html", event_form_class=SeriesForm)
+	
     if series_id:
-        sr = get_object_or_404(Series, pk=series_id)
+        sr = get_object_or_404(Series, pk=series_id)        
     else:
         raise Http404
-    # else: # Otherwise, we are creating a new Series
-    #     sr = Series()
-    #     print "got here 1"
             
     if request.method == 'POST': # If we are receiving POST data, then we're getting the result of a form submission, so we save it to the database and show the detail template
         form = SeriesForm(request.POST, instance=sr)
+        recurrence_form = MultipleOccurrenceForm(request.POST, instance=event)
         tweet_or_not = False # Start assuming we won't tweet, but if any of the changes occur that trigger a tweet, this value will change to true.
         tweet_message = [] # Start with an empty tweet message.
         
@@ -230,7 +227,8 @@ def edit_series(request, series_id=None):
                 
             try:
                 # Commenting the below out pending changes now that we're using Swingtime
-                # form.save()
+                series_form.save()
+                occurrence_form.save()
                 # 
                 # # If the series has a regular time, day of the week, and week of the month, and
                 # # it is new or its time has changed, then create new reading objects for a year ahead.
@@ -257,21 +255,18 @@ def edit_series(request, series_id=None):
                 # Add a successful series creation message. TODO this doesn't really come after the event has been saved now that we are using swingtime's add_event view 
                 messages.add_message(request, messages.SUCCESS, '%s %s. Thanks!' % (created_new and "Created" or "Updated", sr.title))
 
-                #return HttpResponseRedirect(sr.get_absolute_url())
-                return add_event(request, template="edit_series.html", event_form_class=SeriesForm)          
+                return HttpResponseRedirect(sr.get_absolute_url())
 
         else:
             print "form is not valid. errors = %s" % form.errors
             messages.error(request, "Please correct the errors below.")
-            return add_event(request, template="edit_series.html", event_form_class=SeriesForm)
-            
-    else: # If not POST, create a blank form and show it in the edit template.
-        return add_event(request, template="edit_series.html", event_form_class=SeriesForm)
-        #return render_to_response('edit_series.html', { 'series_form': SeriesForm(), }, context_instance=RequestContext(request))
-
-    print "got here 2, series_id is %s" % (series_id, )
-    return event_view(request, pk=series_id, template="edit_series.html", event_form_class=SeriesForm)
-    # return render_to_response('edit_series.html', { 'series_form': series_form, recurring_form: 'recurring_form', 'series': sr }, context_instance=RequestContext(request))
+            return render_to_response('edit_series.html', { 'series_form': series_form, 'recurrence_form': recurrence_form, 'series': sr }, context_instance=RequestContext(request))
+    
+    # Handle the case where the request method is not POST
+    print "edit_series not POST, series_id is %s" % (series_id, )
+    series_form = SeriesForm(instance=sr)
+    recurrence_form = MultipleOccurrenceForm(instance=event)
+    return render_to_response('edit_series.html', { 'series_form': series_form, 'recurrence_form': recurrence_form, 'series': sr }, context_instance=RequestContext(request))
     
 def send_tweet(tweet_message, sr=None):
     # Tweet and save the tweet to the db.
