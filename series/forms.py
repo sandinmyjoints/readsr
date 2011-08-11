@@ -30,16 +30,10 @@ class SeriesForm(forms.ModelForm):
     admission_description = forms.CharField(required=False)
     notes = forms.CharField(required=False)
     wiki_mode = forms.BooleanField(required=False)
-    
-    # Hidden fields
-    contact = forms.ModelChoiceField(queryset=Contact.objects.all(),
-                widget=forms.HiddenInput)
-    event_type = forms.IntegerField(widget=forms.HiddenInput, initial=EventType.objects.get(pk=1).id) # TODO make this nicer. right it just supplies 1 for the default event_type, Reading Series
-    city_site = forms.IntegerField(widget=forms.HiddenInput, initial=CitySite.objects.get(pk=settings.SITE_ID).id)
-    
+
     class Meta:
         model = Series
-        #exclude = ('site', 'contact')
+        exclude = ('site', 'contact', 'event_type') # These will be saved when the new instance is saved in the view
         
     class Media:
         css = {

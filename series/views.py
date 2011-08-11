@@ -106,15 +106,19 @@ def create_series(request, extra_context=None):
     if request.method == 'POST':
         print "POST. request.user.pk is %s, request.user is %s" % (request.user.pk, request.user)
         
-        event_form = SeriesForm(request.POST, request, event_type) # TODO fix event_type
+        event_form = SeriesForm(request.POST) 
         recurrence_form = MultipleOccurrenceForm(request.POST)
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
         if event_form.is_valid() and recurrence_form.is_valid():
             # We are creating a new reading series, so give it the current user as the contact
             
 
-            sr = event_form.save()
-            recurrence_form.save(event)
+            sr = event_form.save(commit=False)
+            sr.contact = request.user
+            sr.event_type = EventType.objects.get(pk=1)
+            sr.site = CitySite.objects.get(pk=settings.SITE_ID)
+            sr.save()
+            recurrence_form.save(sr)
             
             # We are creating a new reading series, so if it is a regular reading series,
             # create all its reading events for a year.
@@ -131,6 +135,8 @@ def create_series(request, extra_context=None):
                 send_tweet(sr, tweet_message)
             
             return HttpResponseRedirect(event.get_absolute_url())
+        else: # not valid
+            print "\n".join(["form is not valid.", "event_form errors = %s" % event_form.errors, "recurrence_form errors = %s" % recurrence_form.errors])
     else: # not POST
         if 'dtstart' in request.GET:
             try:
@@ -140,7 +146,7 @@ def create_series(request, extra_context=None):
                 dtstart = datetime.now()
 
         print "not POST. request.user.pk is %s, request.user is %s" % (request.user.pk, request.user)
-        event_form = SeriesForm(initial={ 'contact': request.user, 'city_site': CitySite.objects.get(pk=settings.SITE_ID), 'event_type': EventType.objects.get(pk=1) } )
+        event_form = SeriesForm()
         recurrence_form = MultipleOccurrenceForm(initial=dict(dtstart=dtstart))
 
     if extra_context is None:
@@ -269,7 +275,7 @@ def edit_series(request, series_id=None):
     
 def send_tweet(tweet_message, sr=None):
     # Tweet and save the tweet to the db.
-    api = bitlyapi.BitLy(settings.BITLY_USER, settings.BITLY_KEY) 
+    api = bitly.api(settings.BITLY_USER, settings.BITLY_KEY) 
     url = request.build_absolute_uri().replace("/edit", "")
     res = api.shorten(longUrl=url)
     tweet_message.append("%s" % res['url'])
