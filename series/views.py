@@ -104,8 +104,11 @@ def create_series(request, extra_context=None):
 
     dtstart = None
     if request.method == 'POST':
-        event_form = SeriesForm(request.POST, initial={ 'contact': request.user, 'city_site': CitySite.objects.get(pk=settings.SITE_ID), 'event_type': EventType.objects.get(pk=1)} )
+        print "POST. request.user.pk is %s, request.user is %s" % (request.user.pk, request.user)
+        
+        event_form = SeriesForm(request.POST, request, event_type) # TODO fix event_type
         recurrence_form = MultipleOccurrenceForm(request.POST)
+        import pdb; pdb.set_trace()
         if event_form.is_valid() and recurrence_form.is_valid():
             # We are creating a new reading series, so give it the current user as the contact
             
@@ -136,7 +139,7 @@ def create_series(request, extra_context=None):
                 # TODO A badly formatted date is passed to add_event
                 dtstart = datetime.now()
 
-        print "request.user.pk is %s, request.user is %s" % (request.user.pk, request.user)
+        print "not POST. request.user.pk is %s, request.user is %s" % (request.user.pk, request.user)
         event_form = SeriesForm(initial={ 'contact': request.user, 'city_site': CitySite.objects.get(pk=settings.SITE_ID), 'event_type': EventType.objects.get(pk=1) } )
         recurrence_form = MultipleOccurrenceForm(initial=dict(dtstart=dtstart))
 
