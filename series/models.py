@@ -283,9 +283,9 @@ class Series(Event):
         if 'count' not in rrule_params and 'until' not in rrule_params:
             self.reading_set.create(start_time=start_time, end_time=end_time)
         else:
+            super(Series, self).add_occurrences(start_time, end_time, **rrule_params)
             delta = end_time - start_time
             for ev in rrule.rrule(dtstart=start_time, **rrule_params):
-                super(Series, self).add_occurrences(start_time, end_time, **rrule_params)
                 self.reading_set.create(start_time=ev, end_time=ev + delta, event_id=self.id)
         
     def next_reading_day(self):
