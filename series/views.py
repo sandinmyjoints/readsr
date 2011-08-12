@@ -26,7 +26,7 @@ from profiles.views import create_profile as profile_create_profile
 from profiles.views import edit_profile as profile_edit_profile
 
 import tweepy
-import bitlyapi 
+from bitly import bitly
 
 from swingtime.models import Event, EventType
 #from swingtime.forms import MultipleOccurrenceForm
@@ -130,9 +130,9 @@ def create_series(request, extra_context=None):
             tweet_message = ["New series: %s!" % sr.title] 
             
             if tweet_or_not:
-                send_tweet(sr, tweet_message)
+                send_tweet(request, sr=sr, tweet_message=tweet_message)
             
-            return HttpResponseRedirect(event.get_absolute_url())
+            return HttpResponseRedirect(sr.get_absolute_url())
         else: # not valid
             print "\n".join(["form is not valid.", "event_form errors = %s" % event_form.errors, "recurrence_form errors = %s" % recurrence_form.errors])
     else: # not POST
@@ -286,7 +286,7 @@ def edit_series(request, series_id=None):
                 #     reading.save()
 
                 if tweet_or_not:
-                    send_tweet(sr, tweet_message)
+                    send_tweet(request, sr=sr, tweet_message=tweet_message)
                 
             # Handle possible errors from tweep and bitly
             except ValueError, ex:
@@ -314,12 +314,12 @@ def edit_series(request, series_id=None):
     recurrence_form = MultipleOccurrenceForm(instance=event)
     return render_to_response('edit_series.html', { 'series_form': series_form, 'recurrence_form': recurrence_form, 'series': sr }, context_instance=RequestContext(request))
     
-def send_tweet(tweet_message, sr=None):
+def send_tweet(request, tweet_message=[], sr=None):
     # Tweet and save the tweet to the db.
-    api = bitly.api(settings.BITLY_USER, settings.BITLY_KEY) 
+    api = bitly.Api(settings.BITLY_USER, settings.BITLY_KEY) 
     url = request.build_absolute_uri().replace("/edit", "")
-    res = api.shorten(longUrl=url)
-    tweet_message.append("%s" % res['url'])
+    res = api.shorten(url)
+    tweet_message.append("%s" % res)
     send_msg = ' '.join(tweet_message)
 
     try:
@@ -329,7 +329,7 @@ def send_tweet(tweet_message, sr=None):
         SeriesTweet.objects.create(
             series = sr,
             tweet = send_msg,
-            bitly_url = res['url'],
+            bitly_url = res,
             twitter_status_id = last_msg.id
         )
 

@@ -64,8 +64,15 @@ class ReadingMultipleOccurrenceForm(MultipleOccurrenceForm):
     def clean(self):
         return super(ReadingMultipleOccurrenceForm, self).clean()
 
-    def save(self, series):
-        return super(ReadingMultipleOccurrenceForm, self).save(series)
+    def save(self, series):        
+        """
+        returns the Event these readings are associated with
+        """
+        
+        print "calling super.save in ReadingMultipleOccurrenceForm"
+        event = super(ReadingMultipleOccurrenceForm, self).save(series)
+        
+        return event
 
 class ReadsrContactForm(forms.ModelForm):
     """

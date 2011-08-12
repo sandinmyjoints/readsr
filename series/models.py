@@ -7,6 +7,8 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
+from dateutil import rrule
+
 from swingtime.models import Event
 
 from city_site.models import CitySite
@@ -258,6 +260,33 @@ class Series(Event):
     @models.permalink
     def get_absolute_url(self):
         return ('detail-series', (), { 'series_id': self.id } )
+     
+    def add_occurrences(self, start_time, end_time, **rrule_params):
+        '''
+        Add one or more occurences to the event using a comparable API to 
+        ``dateutil.rrule``. 
+        
+        If ``rrule_params`` does not contain a ``freq``, one will be defaulted
+        to ``rrule.DAILY``.
+        
+        Because ``rrule.rrule`` returns an iterator that can essentially be
+        unbounded, we need to slightly alter the expected behavior here in order
+        to enforce a finite number of occurrence creation.
+        
+        If both ``count`` and ``until`` entries are missing from ``rrule_params``,
+        only a single ``Occurrence`` instance will be created using the exact
+        ``start_time`` and ``end_time`` values.
+        '''
+        print "add_occurrences in Series model"
+        rrule_params.setdefault('freq', rrule.DAILY)
+        
+        if 'count' not in rrule_params and 'until' not in rrule_params:
+            self.reading_set.create(start_time=start_time, end_time=end_time)
+        else:
+            delta = end_time - start_time
+            for ev in rrule.rrule(dtstart=start_time, **rrule_params):
+                super(Series, self).add_occurrences(start_time, end_time, **rrule_params)
+                self.reading_set.create(start_time=ev, end_time=ev + delta, event_id=self.id)
         
     def next_reading_day(self):
         """ 

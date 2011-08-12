@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{ block.super }} - {{ reading.seriesseries.title }} - {{ reading.date_and_time }}
+{{ block.super }} - {{ reading.series.title.title }} - {{ reading.date_and_time }}
 {% endblock title %}
 
 {% block content %}
 
 {% block name %}
 <div id="banner">
-<h1 class="reading_name">{{ reading.seriesseries.title }}</h1>
+<h1 class="reading_name">{{ reading.series.title.title }}</h1>
 
 </div>
 {% endblock %}
@@ -26,16 +26,14 @@
          <a href="{{ occurrence.event.get_absolute_url }}">{{ occurrence.title }}</a>
          &ndash;
          {% with occurrence.start_time as st  %}
-         <a href="{% url swingtime-daily-view st.year st.month st.day %}">
+         <a href="#">
             {{ st|date:"l, F jS P" }}</a>
         </h4>
         {% endwith %}
      <dl>
-         <dt>Event type:</dt>
-         <dd>{{ occurrence.event.event_type }}</dd>
          
          <dt>Description:</dt>
-         <dd>{{ occurrence.event.description|default:"None" }}</dd>
+         <dd>{{ occurrence.description|default:"None" }}</dd>
          
          <dt>Note(s:)</dt>
          <dd>
