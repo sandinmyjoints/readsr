@@ -87,7 +87,7 @@ class ReadingCalendar(HTMLCalendar):
 		return super(ReadingCalendar, self).formatmonth(year, month)
 
 	def group_by_day(self, readings):
-		field = lambda reading: reading.date_and_time.day
+		field = lambda reading: reading.start_time.day
 		return dict(
 			[(day, list(items)) for day, items in groupby(readings, field)]
 		)

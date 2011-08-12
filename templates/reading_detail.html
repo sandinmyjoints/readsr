@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{ block.super }} - {{ reading.series.title.title }} - {{ reading.date_and_time }}
+{{ block.super }} - {{ reading.series.title.title }} - {{ reading.start_time }}
 {% endblock title %}
 
 {% block content %}
@@ -14,7 +14,7 @@
 {% endblock %}
 
 <div class="series_info">
-	<h3>{{ reading.date_and_time }} - <a href="{{ reading.series.get_absolute_url }}">Full Series Schedule</a></h3>
+	<h3>{{ reading.start_time }} - <a href="{{ reading.series.get_absolute_url }}">Full Series Schedule</a></h3>
 	
 	<div id="{{ reading.id }}" class="edit_reading_description reading_description">
 		{% if reading.description %}

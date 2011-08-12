@@ -26,7 +26,7 @@ class Reading(Occurrence):
 #		self.description = description
 		
 	def __unicode__(self):
-		return "%s on %s at %s" % (self.series.title, self.date_and_time.date(), self.date_and_time.time())
+		return "%s on %s at %s" % (self.series.title, self.start_time.date(), self.start_time.time())
 		
 	def date(self):
 		return self.start_time.date()

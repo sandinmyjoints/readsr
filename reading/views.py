@@ -40,9 +40,9 @@ def calendar(request, year, month, series_id=None):
 	my_calendar_to_month = datetime(my_year, my_month, monthrange(my_year, my_month)[1])
 
 	if series_id:
-		my_reading_events = Reading.objects.filter(series=series_id).filter(date_and_time__gte=my_calendar_from_month).filter(date_and_time__lte=my_calendar_to_month)
+		my_reading_events = Reading.objects.filter(series=series_id).filter(start_time__gte=my_calendar_from_month).filter(start_time__lte=my_calendar_to_month)
 	else:
-		my_reading_events = Reading.objects.filter(date_and_time__gte=my_calendar_from_month).filter(date_and_time__lte=my_calendar_to_month)
+		my_reading_events = Reading.objects.filter(start_time__gte=my_calendar_from_month).filter(start_time__lte=my_calendar_to_month)
 
 	my_previous_year = my_year
 	my_previous_month = my_month - 1
@@ -82,9 +82,9 @@ def list_readings(request, series_id=None, start_date=datetime.today(), end_date
 	
 	try: 
 		if series_id:
-			reading_list = Reading.objects.filter(series=series_id).filter(date_and_time__gte=start_date).filter(date_and_time__lte=end_date).order_by("date_and_time")
+			reading_list = Reading.objects.filter(series=series_id).filter(start_time__gte=start_date).filter(start_time__lte=end_date).order_by("date_and_time")
 		else:
-			reading_list = Reading.objects.filter(date_and_time__gte=start_date).filter(date_and_time__lte=end_date).order_by("date_and_time")
+			reading_list = Reading.objects.filter(start_time__gte=start_date).filter(start_time__lte=end_date).order_by("date_and_time")
 			
 		return render_to_response('readings_index.html', {'reading_list': reading_list }, context_instance=RequestContext(request))
 	except ValueError:
@@ -96,7 +96,7 @@ def list_readings_month(request, series_id=None, num_months=1, ajax="0", index="
 	"""
 	
 	try: 
-		reading_list = Reading.objects.filter(date_and_time__gte=datetime.today()).filter(date_and_time__lte=datetime.today()+timedelta(31*int(num_months.rstrip('/')))).order_by("date_and_time")
+		reading_list = Reading.objects.filter(start_time__gte=datetime.today()).filter(start_time__lte=datetime.today()+timedelta(31*int(num_months.rstrip('/')))).order_by("date_and_time")
 		if index=="0":
 			whether_index = False
 		else:
@@ -116,7 +116,7 @@ def list_readings_date(request, year, month, date, series_id=None):
 	try: 
 		start_date = datetime(int(year), int(month), int(date), 0, 0, 0)
 		end_date = datetime(int(year), int(month), int(date), 23, 59, 59)
-		reading_list = Reading.objects.filter(date_and_time__gte=start_date).filter(date_and_time__lte=end_date).order_by("date_and_time")
+		reading_list = Reading.objects.filter(start_time__gte=start_date).filter(start_time__lte=end_date).order_by("date_and_time")
 		# .filter(series.site_id__eq=request.city_site.site_ptr_id)
 		return render_to_response('readings_index.html', {'reading_list': reading_list }, context_instance=RequestContext(request))
 	except ValueError:

@@ -368,7 +368,7 @@ class Series(Event):
 
         for reading_day in self.reading_days_ahead_by_month(12*years):
             r = reading.models.Reading()
-            r.date_and_time = datetime.combine(reading_day, self.time)
+            r.start_time = datetime.combine(reading_day, self.time)
             r.series = self
             new_reading_list.append(r)
 

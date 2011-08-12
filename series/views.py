@@ -591,6 +591,7 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
         else:
             list_view = True
 
+        # import pdb; pdb.set_trace()
         if not start=="" and not end=="":
             try:
                 if string.find(start, "-") > -1:
