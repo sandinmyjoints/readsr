@@ -74,7 +74,7 @@ def calendar(request, year, month, series_id=None):
 	
 
 
-def list_readings(request, series_id=None, start_date=datetime.today(), end_date=datetime.today()+timedelta(31)):
+def list_readings(request, series_id=None, start_date=datetime.today(), end_date=datetime.today()+dateutil.relativedelta.relativedelta(months=1)):
 	"""
 	Displays a list of all the readings in series series_id between start_date and end_date.
 	If series_id is None, list all readings.

@@ -1,6 +1,7 @@
 import copy
 import string
 import calendar
+import dateutil
 from datetime import datetime, timedelta
 from urlparse import urlparse
 
@@ -591,7 +592,6 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
         else:
             list_view = True
 
-        # import pdb; pdb.set_trace()
         if not start=="" and not end=="":
             try:
                 if string.find(start, "-") > -1:
@@ -611,13 +611,13 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
                 # the first of the month and the end date to
                 # one month after the start date.
                 start_date = start_date.replace(day=1)
-                end_date = end_date.replace(month=start_date.month, day=calendar.monthrange(start_date.year, start_date.month)[1], year=start_date.year)    
+                end_date = start_date + dateutil.relativedelta.relativedelta(months=1)
+                # end_date = end_date.replace(month=start_date.month, day=calendar.monthrange(start_date.year, start_date.month)[1], year=start_date.year)    
 
         else:
             # If neither dates are supplied, default to a range of today + one month.
             start_date = datetime.today()
-            td = timedelta(31)
-            end_date = start_date + td
+            end_date = start_date + dateutil.relativedelta.relativedelta(months=1)
 
         reading_list = Reading.objects.filter(series__site__exact=current_site.id).filter(start_time__gte=start_date).filter(start_time__lte=end_date)
 
