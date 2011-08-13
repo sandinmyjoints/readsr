@@ -19,7 +19,8 @@ def show_series_list(max_series=MAX_SERIES_SIDEBAR_LIST):
     """
     
     try:
-        series_list, more_series = Series.objects.filter(site__exact=settings.SITE_ID), 0
+        series_list = Series.objects.filter(site__exact=settings.SITE_ID)
+        more_series = 0
         if series_list.count() > max_series:
             more_series = series_list.count() - max_series
             series_list = series_list[:max_series]

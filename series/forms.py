@@ -72,6 +72,16 @@ class ReadingMultipleOccurrenceForm(MultipleOccurrenceForm):
         print "calling super.save in ReadingMultipleOccurrenceForm"
         event = super(ReadingMultipleOccurrenceForm, self).save(series)
         
+        # this code also appears in the super save method, but params is local so 
+        # we don't have access to it here. but we need params to save as part of the
+        # series.
+        if self.cleaned_data['repeats'] == 'no':
+             params = {}
+        else:
+             params = self._build_rrule_params()        # need to save params as part of the series to use when describing this series
+        series.params = params
+        series.save()
+        
         return event
 
 class ReadsrContactForm(forms.ModelForm):
