@@ -623,7 +623,7 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 
         if series_id:
             # we are in detail_series mode so filter the reading_list down to just the ones for this series_id
-            reading_list = reading_list.filter(series__id__exact=series_id)
+            reading_list = reading_list.filter(series__id=series_id)
             sr = Series.objects.get(pk=series_id)
         else:
             sr = None

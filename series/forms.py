@@ -69,7 +69,6 @@ class ReadingMultipleOccurrenceForm(MultipleOccurrenceForm):
         returns the Event these readings are associated with
         """
         
-        print "calling super.save in ReadingMultipleOccurrenceForm"
         event = super(ReadingMultipleOccurrenceForm, self).save(series)
         
         # this code also appears in the super save method, but params is local so 
@@ -79,7 +78,7 @@ class ReadingMultipleOccurrenceForm(MultipleOccurrenceForm):
              params = {}
         else:
              params = self._build_rrule_params()        # need to save params as part of the series to use when describing this series
-        series.params = params
+        series.rrule = params
         series.save()
         
         return event

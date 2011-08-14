@@ -8,6 +8,12 @@ ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 SWINGTIME_PATH = os.path.abspath(os.path.join(os.path.join(ROOT_PATH, ".."), "django-swingtime"))
 sys.path.insert(0, SWINGTIME_PATH)
 
+# to import rrule2text until I get it installable
+# TODO fix this
+RRULE2TEXT_PATH = os.path.abspath(os.path.join(os.path.join(ROOT_PATH, ".."), "rrule2text"))
+sys.path.insert(0, RRULE2TEXT_PATH)
+
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 

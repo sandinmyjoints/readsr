@@ -9,6 +9,8 @@ from django.db.models.signals import post_save
 
 from dateutil import rrule
 
+from picklefield.fields import PickledObjectField
+
 from swingtime.models import Event
 
 from city_site.models import CitySite
@@ -253,6 +255,7 @@ class Series(Event):
     #notes = models.CharField("Notes", max_length=300, blank=True, null=True)
     wiki_mode = models.BooleanField("Wiki Mode", default=True)
     site = models.ForeignKey(CitySite)
+    rrule = PickledObjectField("Recurrence Rule", blank=True, null=True) # Save the recurrence rule for this Series as a pickled object in the db
 
     def __unicode__(self):
         return self.title
