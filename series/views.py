@@ -637,7 +637,6 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
         pretty = sr.rrule.text()
         return render_to_response('series_detail.html', {
                                                             'series': sr, 
-                                                            'pretty_rrule': pretty,
                                                             'reading_list': reading_list,
                                                             'start_date': start_date.strftime("%m/%d/%Y"), 
                                                             'end_date': end_date.strftime("%m/%d/%Y"),

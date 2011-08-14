@@ -51,7 +51,7 @@ var end_date = "{{ end_date }}";
 		</dd>
 		<dt class="series_info">When</dt>
 		{% if series.regular %}
-			<dd class="series_info">{{ pretty_rrule }}</dd>
+			<dd class="series_info">{{ series.recurrence_rule|capfirst }}</dd>
 		{% else %}
 			<dd>{{ series.irregular_date_description }}</dd>
 		{% endif %}

@@ -264,6 +264,14 @@ class Series(Event):
     def get_absolute_url(self):
         return ('detail-series', (), { 'series_id': self.id } )
      
+    def recurrence_rule(self):
+        """
+        Returns a nice description of the recurrence rule for this Series.
+        """
+        
+        # drop the last two elements which are "until end_date"
+        return ' '.join(self.rrule.text()[:-2])
+        
     def add_occurrences(self, start_time, end_time, **rrule_params):
         '''
         Add one or more occurences to the event using a comparable API to 
