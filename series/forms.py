@@ -48,13 +48,13 @@ class SeriesForm(forms.ModelForm):
         }
         js = ('js/timePicker/jquery.timePicker.min.js',)
 
-class ReadingMultipleOccurrenceForm(MultipleOccurrenceForm):
+class MonthlyReadingMultipleOccurrenceForm(MultipleOccurrenceForm):
     """
     Defaults to monthly occurrences.
     """
     
     def __init__(self, *args, **kws):
-        super(ReadingMultipleOccurrenceForm, self).__init__(*args, **kws)
+        super(MonthlyReadingMultipleOccurrenceForm, self).__init__(*args, **kws)
 
         today = datetime.today().date()
         self.fields["until"].initial = datetime(today.year+5, today.month, today.day)
@@ -64,14 +64,16 @@ class ReadingMultipleOccurrenceForm(MultipleOccurrenceForm):
         self.fields["day"].label = _(u"Date of next reading")
         
     def clean(self):
-        return super(ReadingMultipleOccurrenceForm, self).clean()
+        return super(MonthlyReadingMultipleOccurrenceForm, self).clean()
 
     def save(self, series):        
         """
         returns the Event these readings are associated with
         """
         
-        event = super(ReadingMultipleOccurrenceForm, self).save(series)
+        # This creates the occurences and gives them the series as a foreign key. It does not
+        # save the series.
+        super(MonthlyReadingMultipleOccurrenceForm, self).save(series)
         
         # this code also appears in the super save method, but params is local so 
         # we don't have access to it here. but we need params to save as part of the
@@ -79,12 +81,14 @@ class ReadingMultipleOccurrenceForm(MultipleOccurrenceForm):
         if self.cleaned_data['repeats'] == 'no':
              params = {}
         else:
-             params = self._build_rrule_params()        # need to save params as part of the series to use when describing this series
-        import pdb; pdb.set_trace()
+             params = self._build_rrule_params()        
+             
+        # We need to use params to generate the rrule which we will save to the db
+        # as part of the series. We need it to use when describing this series.
         series.rrule = rr2t(dtstart=self.cleaned_data['start_time'], **params)
         series.save()
         
-        return event
+        return series
 
 class ReadsrContactForm(forms.ModelForm):
     """

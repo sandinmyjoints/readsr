@@ -141,6 +141,7 @@ INSTALLED_APPS = (
 	'debug_toolbar',
 )
 
+
 AUTH_PROFILE_MODULE = 'series.Contact'
 
 ACCOUNT_ACTIVATION_DAYS = 7

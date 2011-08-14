@@ -274,6 +274,9 @@ class Series(Event):
         
     def add_occurrences(self, start_time, end_time, **rrule_params):
         '''
+        Override the Event add_occurrences method to create Reading objects instead
+        of Occurrence objects.
+        
         Add one or more occurences to the event using a comparable API to 
         ``dateutil.rrule``. 
         
@@ -288,13 +291,11 @@ class Series(Event):
         only a single ``Occurrence`` instance will be created using the exact
         ``start_time`` and ``end_time`` values.
         '''
-        print "add_occurrences in Series model"
-        rrule_params.setdefault('freq', rrule.DAILY)
+        rrule_params.setdefault('freq', rrule.MONTHLY)
         
         if 'count' not in rrule_params and 'until' not in rrule_params:
             self.reading_set.create(start_time=start_time, end_time=end_time)
         else:
-            super(Series, self).add_occurrences(start_time, end_time, **rrule_params)
             delta = end_time - start_time
             for ev in rrule.rrule(dtstart=start_time, **rrule_params):
                 self.reading_set.create(start_time=ev, end_time=ev + delta, event_id=self.id)

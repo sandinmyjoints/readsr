@@ -35,7 +35,7 @@ from swingtime.views import event_view, add_event
 
 from series.util import get_tweepy_api
 from series.models import Series, Affiliate, Venue, Address, SeriesTweet
-from series.forms import SeriesForm, ReadsrContactForm, RemoveSeriesContactForm, VenueForm, AffiliateForm, AddressForm, ProfileForm, ReadingMultipleOccurrenceForm
+from series.forms import SeriesForm, ReadsrContactForm, RemoveSeriesContactForm, VenueForm, AffiliateForm, AddressForm, ProfileForm, MonthlyReadingMultipleOccurrenceForm
 from reading.models import Reading
 from city_site.models import CitySite
 from contact_form.forms import ContactForm
@@ -105,11 +105,10 @@ def create_series(request, extra_context=None):
 
     dtstart = None
     if request.method == 'POST':
-        print "POST. request.user.pk is %s, request.user is %s" % (request.user.pk, request.user)
         
         event_form = SeriesForm(request.POST) 
-        recurrence_form = ReadingMultipleOccurrenceForm(request.POST)
-        #import pdb; pdb.set_trace()
+        recurrence_form = MonthlyReadingMultipleOccurrenceForm(request.POST)
+
         if event_form.is_valid() and recurrence_form.is_valid():
             # We are creating a new reading series, so give it the current user as the contact
             sr = event_form.save(commit=False)
@@ -117,26 +116,22 @@ def create_series(request, extra_context=None):
             sr.event_type = EventType.objects.get(pk=1)
             sr.site = CitySite.objects.get(pk=settings.SITE_ID)
             sr.save()
-            recurrence_form.save(sr)
+            # Saving this form saves the Series (and its underlying Event) and
+            # creates the Readings (and their underlying Occurrences) with foreign keys
+            # back to the Series (and Event).
+            recurrence_form.save(sr)            
             
-            # We are creating a new reading series, so if it is a regular reading series,
-            # create all its reading events for a year.
-            new_reading_list = []
-            if sr.regular:
-                need_to_create_new_readings_list = True
-            # TODO fill this in using occurrences            
-            
-            
-            tweet_or_not = True 
             tweet_message = ["New series: %s!" % sr.title] 
             
-            if tweet_or_not:
-                send_tweet(request, sr=sr, tweet_message=tweet_message)
+            send_tweet(request, sr=sr, tweet_message=tweet_message)
             
             return HttpResponseRedirect(sr.get_absolute_url())
         else: # not valid
-            print "\n".join(["form is not valid.", "event_form errors = %s" % event_form.errors, "recurrence_form errors = %s" % recurrence_form.errors])
-    else: # not POST
+            # This is for logging only. The forms are already created and will be returned with errors for the user to correct.
+            # print "\n".join(["form is not valid.", "event_form errors = %s" % event_form.errors, "recurrence_form errors = %s" % recurrence_form.errors])
+            pass
+    else: 
+        # not POST, so we create blank forms with a default start time of 5 pm today.
         if 'dtstart' in request.GET:
             try:
                 dtstart = parser.parse(request.GET['dtstart'])
@@ -147,10 +142,8 @@ def create_series(request, extra_context=None):
             today = datetime.today().date()
             dtstart = datetime(today.year, today.month, today.day, 17, 0, 0)
 
-        print "not POST. request.user.pk is %s, request.user is %s, dtstart is %s" % (request.user.pk, request.user, dtstart)
         event_form = SeriesForm()
-        recurrence_form = ReadingMultipleOccurrenceForm(initial=dict(dtstart=dtstart))
-        #import pdb; pdb.set_trace()
+        recurrence_form = MonthlyReadingMultipleOccurrenceForm(initial=dict(dtstart=dtstart))
 
     if extra_context is None:
         extra_context = {}
@@ -198,7 +191,7 @@ def edit_series(request, series_id=None):
                 event_form.save(event)
                 return HttpResponseRedirect(request.path)
         elif '_add' in request.POST:
-            recurrence_form = ReadingMultipleOccurrenceForm(request.POST)
+            recurrence_form = MonthlyReadingMultipleOccurrenceForm(request.POST)
             if recurrence_form.is_valid():
                 recurrence_form.save(event)
                 return HttpResponseRedirect(request.path)
@@ -207,7 +200,7 @@ def edit_series(request, series_id=None):
 
     event_form = event_form or SeriesForm(instance=event)
     if not recurrence_form:
-        recurrence_form = ReadingMultipleOccurrenceForm(
+        recurrence_form = MonthlyReadingMultipleOccurrenceForm(
             initial=dict(dtstart=datetime.now())
         )
             
