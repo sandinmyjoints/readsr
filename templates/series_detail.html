@@ -77,15 +77,17 @@ var end_date = "{{ end_date }}";
 		<dt class="series_info">Website</dt>
 		<dd class="series_info">{{ series.website|urlizetrunc:22|default:"None available" }}</dd>
 
-		{% if series.notes %}
+		{% if series.notes.all %}
+		{% for note in series.notes.all %}
 		<dt class="series_info">Notes</dt>
-		<dd class="series_info">{{ series.notes|default:"None" }}</dd>
+		<dd class="series_info">{{ note|default:"None" }}</dd>
+		{% endfor %}
 		{% endif %}
 
 	</dl>
 	
 	<div class="map">
-		<iframe width="300" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://local.google.com/maps?q={{ series.venue.address.street_address}}+{{ series.venue.address.city_address}}&amp;f=q&amp;hl=en&amp;ie=UTF8&amp;hq={{ series.venue.address.street_address}}+{{ series.venue.address.city_address}}&amp;z=13&amp;iwloc=A&amp;output=embed"></iframe><br /><small><a href="http://local.google.com/maps?q={{ series.venue.address.street_address}}+{{ series.venue.address.city_address}}&amp;f=q&amp;hl=en&amp;ie=UTF8&amp;hq={{ series.venue.address.street_address}}+{{ series.venue.address.city_address}}&amp;z=13&amp;iwloc=A&amp;source=embed" style="color:#0000FF;text-align:left">View Larger Map</a></small>
+		<iframe width="300" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://local.google.com/maps?q={{ series.venue.address.street_address}}+{{ series.venue.address.city_address}}&amp;f=q&amp;hl=en&amp;ie=UTF8&amp;hq={{ series.venue.address.street_address}}+{{ series.venue.address.city_address}}&amp;z=13&amp;iwloc=A&amp;output=embed"></iframe><br /><a href="http://local.google.com/maps?q={{ series.venue.address.street_address}}+{{ series.venue.address.city_address}}&amp;f=q&amp;hl=en&amp;ie=UTF8&amp;hq={{ series.venue.address.street_address}}+{{ series.venue.address.city_address}}&amp;z=13&amp;iwloc=A&amp;source=embed">View Larger Map</a>
 		</div>
 	</div>	
 	
