@@ -116,6 +116,8 @@ def create_series(request, extra_context=None):
             sr.event_type = EventType.objects.get(pk=1)
             sr.site = CitySite.objects.get(pk=settings.SITE_ID)
             sr.save()
+            event_form.save_m2m()
+
             # Saving this form saves the Series (and its underlying Event) and
             # creates the Readings (and their underlying Occurrences) with foreign keys
             # back to the Series (and Event).
