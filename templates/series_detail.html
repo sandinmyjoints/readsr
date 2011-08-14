@@ -25,7 +25,7 @@ var end_date = "{{ end_date }}";
 
 	</div> <!-- banner -->
 
-	<div class="series_info">
+	<div class="series_info">		
 	<dl class="series_info">
 		<dt class="series_info first">Contact</dt>
 		<dd class="series_info"><a href="{% url detail-contact series.contact_id %}">{{ series.contact.first_name }} {{ series.contact.last_name }}</a></dd>
@@ -51,9 +51,7 @@ var end_date = "{{ end_date }}";
 		</dd>
 		<dt class="series_info">When</dt>
 		{% if series.regular %}
-			<dd class="series_info">{{ series.week_within_month.get_week_within_month_display }} {{ series.day_of_week.get_day_display }}s
-			<br /> 
-			{{ series.time }}</dd>
+			<dd class="series_info">{{ pretty_rrule }}</dd>
 		{% else %}
 			<dd>{{ series.irregular_date_description }}</dd>
 		{% endif %}

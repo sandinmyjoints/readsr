@@ -634,8 +634,10 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 
     if series_id:
         # we are in detail-series mode  
+        pretty = sr.rrule.text()
         return render_to_response('series_detail.html', {
                                                             'series': sr, 
+                                                            'pretty_rrule': pretty,
                                                             'reading_list': reading_list,
                                                             'start_date': start_date.strftime("%m/%d/%Y"), 
                                                             'end_date': end_date.strftime("%m/%d/%Y"),

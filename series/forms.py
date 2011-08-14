@@ -11,6 +11,8 @@ import swingtime
 from swingtime.models import EventType
 from swingtime.forms import MultipleOccurrenceForm
 
+from rrule2text import rrule2text as rr2t
+
 from series.models import Series, Venue, Affiliate, Address, Contact
 from contact_form.forms import ContactForm
 from registration.forms import RegistrationFormUniqueEmail
@@ -78,7 +80,8 @@ class ReadingMultipleOccurrenceForm(MultipleOccurrenceForm):
              params = {}
         else:
              params = self._build_rrule_params()        # need to save params as part of the series to use when describing this series
-        series.rrule = params
+        import pdb; pdb.set_trace()
+        series.rrule = rr2t(dtstart=self.cleaned_data['start_time'], **params)
         series.save()
         
         return event
