@@ -125,7 +125,7 @@ def create_series(request, extra_context=None):
             
             tweet_message = ["New series: %s!" % sr.title] 
             
-            send_tweet(request, sr=sr, tweet_message=tweet_message)
+            _send_tweet(request, sr=sr, tweet_message=tweet_message)
             
             return HttpResponseRedirect(sr.get_absolute_url())
         else: # not valid
@@ -161,12 +161,8 @@ def create_series(request, extra_context=None):
     
 @login_required 
 def edit_series(request, series_id=None):
-    """
-    Edits an existing series and its recurring occurrence.
-    """
+    """Edits an existing series and its recurring occurrence.
 
-
-    '''
     View an ``Event`` instance and optionally update either the event or its
     occurrences.
 
@@ -180,27 +176,54 @@ def edit_series(request, series_id=None):
         
     recurrence_form
         a form object for adding occurrences
-    '''
+    """
 	
-	# TODO add tweets back to this
-	
-    event = get_object_or_404(Series, pk=series_id)
+
+    series = get_object_or_404(Series, pk=series_id)
     event_form = recurrence_form = None
+
+    tweet_or_not = False # Start assuming we won't tweet, but if any of the changes occur that trigger a tweet, this value will change to true.
+    tweet_message = [] # Start with an empty tweet message.
+        
     if request.method == 'POST':
-        if '_update' in request.POST:
-            event_form = SeriesForm(request.POST, instance=event)
+        if '_update_event' in request.POST:
+            # _update_event is the input that updates the Series form
+            event_form = SeriesForm(request.POST, instance=series)
             if event_form.is_valid():
                 event_form.save(event)
                 return HttpResponseRedirect(request.path)
-        elif '_add' in request.POST:
+        elif '_add_occurrences' in request.POST:
+            # _add_occurrences is the input that adds new reading occurrences
             recurrence_form = MonthlyReadingMultipleOccurrenceForm(request.POST)
             if recurrence_form.is_valid():
-                recurrence_form.save(event)
+                # Check to see if title has changed.
+                
+                # Check to see if venue has changed.
+                
+                # Check to see if regular has changed.
+                
+                # Check to see if genre has changed.
+                
+                # Check to see if the submitted recurrence rule is different
+                # from the existing recurrence rule.
+                # If it isn't, no need for an update.
+                new_rr = recurrence_form.get_rrule()
+                
+                if new_rr != series.rrule:
+                    # Hose all the old occurrences for this Series
+                    Reading.objects.filter(series__pk=series.id).delete()
+                    
+                    # Create the new occurrences
+                    recurrence_form.save(series)
+                    
                 return HttpResponseRedirect(request.path)
+        elif '_delete' in request.POST:
+            pass
+            # TODO fill this in to delete particular occurrences within a series
         else:
             return HttpResponseBadRequest('Bad Request')
 
-    event_form = event_form or SeriesForm(instance=event)
+    event_form = event_form or SeriesForm(instance=series)
     if not recurrence_form:
         recurrence_form = MonthlyReadingMultipleOccurrenceForm(
             initial=dict(dtstart=datetime.now())
@@ -208,7 +231,7 @@ def edit_series(request, series_id=None):
             
     return render_to_response(
         "edit_series.html", 
-        dict(event=event, event_form=event_form, recurrence_form=recurrence_form),
+        dict(event=series, event_form=event_form, recurrence_form=recurrence_form),
         context_instance=RequestContext(request)
     )
 	
@@ -217,8 +240,6 @@ def edit_series(request, series_id=None):
     if request.method == 'POST': # If we are receiving POST data, then we're getting the result of a form submission, so we save it to the database and show the detail template
         form = SeriesForm(request.POST, instance=sr)
         recurrence_form = MultipleOccurrenceForm(request.POST, instance=event)
-        tweet_or_not = False # Start assuming we won't tweet, but if any of the changes occur that trigger a tweet, this value will change to true.
-        tweet_message = [] # Start with an empty tweet message.
         
         # For updating existing series, need to create a copy here because is_valid() will trigger 
         # model validation, which will update the model object with the new values
@@ -282,7 +303,7 @@ def edit_series(request, series_id=None):
                 #     reading.save()
 
                 if tweet_or_not:
-                    send_tweet(request, sr=sr, tweet_message=tweet_message)
+                    _send_tweet(request, sr=sr, tweet_message=tweet_message)
                 
             # Handle possible errors from tweep and bitly
             except ValueError, ex:
@@ -310,8 +331,9 @@ def edit_series(request, series_id=None):
     recurrence_form = MultipleOccurrenceForm(instance=event)
     return render_to_response('edit_series.html', { 'series_form': series_form, 'recurrence_form': recurrence_form, 'series': sr }, context_instance=RequestContext(request))
     
-def send_tweet(request, tweet_message=[], sr=None):
-    # Tweet and save the tweet to the db.
+def _send_tweet(request, tweet_message=[], sr=None):
+    """Utility function to tweet and save the tweet to the db."""
+    
     api = bitly.Api(settings.BITLY_USER, settings.BITLY_KEY) 
     url = request.build_absolute_uri().replace("/edit", "")
     res = api.shorten(url)
@@ -549,17 +571,16 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
     """
 
     current_site = Site.objects.get_current()
+    # If we're on the generic www.readsrs.com site, show the splash screen with
+    # a list of available cities.
+    if current_site.id == settings.WWW_SITE:
+        return splash(request)
 
     # Start assuming client's js is enabled. We will get a value that indicates otherwise
     # through the submitted form if it is not.
     # The template will use this value to decide whether to show some extra information
     # that would otherwise be shown using js (start date and end date).
     js_available = True
-
-    # If we're on the generic www.readsrs.com site, show the splash screen with
-    # a list of available cities.
-    if current_site.id == settings.WWW_SITE:
-        return splash(request)
 
     if request.method == "GET":
         # If request is get, then we can extract start and end dates from that.
@@ -614,7 +635,9 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
             start_date = datetime.today()
             end_date = start_date + dateutil.relativedelta.relativedelta(months=1)
 
-        reading_list = Reading.objects.filter(series__site__exact=current_site.id).filter(start_time__gte=start_date).filter(start_time__lte=end_date)
+        reading_list = Reading.objects.filter(series__site__exact=current_site.id) \
+                                        .filter(start_time__gte=start_date) \
+                                        .filter(start_time__lte=end_date)
 
         if series_id:
             # we are in detail_series mode so filter the reading_list down to just the ones for this series_id
@@ -629,7 +652,6 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
 
     if series_id:
         # we are in detail-series mode  
-        pretty = sr.rrule.text()
         return render_to_response('series_detail.html', {
                                                             'series': sr, 
                                                             'reading_list': reading_list,

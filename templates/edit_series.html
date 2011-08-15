@@ -200,24 +200,23 @@
 			</dd>
 		</dl>
 		<p class="clear">
-		You'll be listed as the point of contact for this event. Your email address will be listed, but in a form that prevents spammers from harvesting it. If that's not cool, hit cancel and we won't create this event.</p>
-		<div class="submit-row"><input type="submit" value="{% if event.title %}Update{% else %}Submit{% endif %}" class="button" name="_update" /><input type="button" id="cancel_button" value="Cancel" class="button" /></div>	
+		You'll be listed as the point of contact for this event. Your email address will be listed, but in a form that prevents spammers from harvesting it. If that's not cool, hit cancel and we won't create this reading series.</p>
+		<div class="submit-row"><input type="submit" value="{% if event.title %}Update{% else %}Submit{% endif %}" class="button" name="_update_event" /><input type="button" id="cancel_button" value="Cancel" class="button" /></div>	
 	</form>
 	<!-- end the event form -->
 	
-    <h4>Occurrences</h4>
+    <h4>Scheduled Readings</h4>
     {% if event.occurrence_set.count %}
-	<ol>
-        {% for o in event.occurrence_set.all %}
-        <li>
-			<!--<a href="{% url swingtime-occurrence event.id o.id %}">-->
-			<a href="{% url detail-reading o.id %}">
-                {{ o.start_time|date:"l, F jS, Y P" }} &ndash; 
-                {{ o.end_time|date:"l, F jS, Y P" }}</a>
-        </li>
-        {% endfor %}
-    </ol>
+		<ul>
+	        {% for o in event.occurrence_set.all %}
+	        <li>
+				<!--<a href="{% url swingtime-occurrence event.id o.id %}">-->
+				<a href="{% url detail-reading o.id %}">{{ o.start_time|date:"l, F jS, Y P" }}</a>
+	        </li>
+	        {% endfor %}
+	    </ul>
     {% else %}
+		None scheduled.
     {% endif %}
 	
 	<!-- begin recurring occurrence form -->
@@ -229,7 +228,7 @@
 			{% include "recurring_form_part.html" %}
 			</tbody>
 		</table>
-		<div class="submit-row"><input type="submit" value="Add events" class="button" name="_add" /><input type="button" id="cancel_button" value="Cancel" class="button" /></div>
+		<div class="submit-row"><input type="submit" value="Add events" class="button" name="_add_occurrences" /><input type="button" id="cancel_button" value="Cancel" class="button" /></div>
 	</form>
 
 {% endblock content %}

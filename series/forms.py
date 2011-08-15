@@ -89,6 +89,17 @@ class MonthlyReadingMultipleOccurrenceForm(MultipleOccurrenceForm):
         series.save()
         
         return series
+        
+    def get_rrule(self):
+        if not self.cleaned_data:
+            return None
+            
+        if self.cleaned_data.has_key("repeats") and self.cleaned_data["repeats"] == "no":
+            params = {}
+        else: 
+            params = self._build_rrule_params() 
+            
+        return rr2t(dtstart=self.cleaned_data['start_time'], **params)
 
 class ReadsrContactForm(forms.ModelForm):
     """
