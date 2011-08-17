@@ -300,95 +300,95 @@ class Series(Event):
             for ev in rrule.rrule(dtstart=start_time, **rrule_params):
                 self.reading_set.create(start_time=ev, end_time=ev + delta, event_id=self.id)
         
-    def next_reading_day(self):
-        """ 
-        Return the date of the next instance of this reading.
-        Series can only know this if it is a regular event that occurs on the same
-        day of each month.
-        """
-
-        if not self.regular:
-            raise UnknownNextReadingDayException, "Series %s is irregular. Cannot determine next reading date."
-
-        one_week = timedelta(7)
-        today = date.today()
-
-        # To find the next day that this series has a reading event, first we get 
-        # the date of the next occurence of the day of the week that this series
-        # happens on (e.g., the date of the next Monday if this series happens on 
-        # Mondays).
-        next_reading_day = self.day_of_week.next_my_day_of_week()
-        
-        # Next we need to find the right day of the right month--either this month 
-        # if the next reading day hasn't happened yet this month, or next month if it has.
-
-        # First, subtract until we get to the last reading day of the previous month as
-        # a starting point.
-        while next_reading_day.month == today.month:
-            next_reading_day = next_reading_day - one_week
-
-        # Next get the week within the month the reading day occurs 
-        # (e.g., the first week within the month).
-        which_week = int(self.week_within_month.week_within_month)
-
-        # Now add which_week weeks to get the day of the reading this month.
-        this_month_reading_day = next_reading_day = next_reading_day + timedelta(7*(which_week))
-
-        # If this month's reading day has passed, add time until we get to next month's reading day.
-        if this_month_reading_day < today:
-            # This loop gives us the first reading_day of the next month.
-            while next_reading_day.month == today.month:
-                next_reading_day = next_reading_day + one_week
-            # This addition us the which_weekth reading_day of the next month, which is what we want.
-            next_reading_day = next_reading_day + timedelta(7*(which_week-1))
-        
-        return next_reading_day
-        
-    def reading_days_ahead_by_month(self, months_ahead=0):
-        """ Returns a list of reading days up to months_ahead months ahead. If month_ahead is 0, returns the next reading day. """
-
-        my_next_reading_day = self.next_reading_day()
-        my_ahead_readings = [my_next_reading_day]
-        if months_ahead <= 0:
-            return my_ahead_readings 
-            
-        which_week = int(self.week_within_month.week_within_month)      
-        limit_date = datetime.today().date() + timedelta(months_ahead * 31)
-
-        while my_next_reading_day <= limit_date:
-            # Advance by week to get to the first occurence of the next month
-            cur_month = my_next_reading_day.month
-            while my_next_reading_day.month == cur_month: 
-                my_next_reading_day = my_next_reading_day + timedelta(7)
-
-            # Once we are at the first week of the right month, advance to the right week of this month
-            my_ahead_readings.append(my_next_reading_day + timedelta(7*(which_week-1)))
-
-        return my_ahead_readings
-
-    def get_future_readings(self, years=1):
-        """
-        Returns a list of Reading objects for a given Series for a number of years ahead.
-
-        ** Arguments **
-
-        ``years``
-            The number of years ahead to create Reading objects for for this series.
-        """
-
-        new_reading_list = []
-
-        for reading_day in self.reading_days_ahead_by_month(12*years):
-            r = reading.models.Reading()
-            r.start_time = datetime.combine(reading_day, self.time)
-            r.series = self
-            new_reading_list.append(r)
-
-        return new_reading_list
-                
-    class Meta:
-        ordering = ('title',)
-        verbose_name_plural = 'Series'
+    # def next_reading_day(self):
+    #     """ 
+    #     Return the date of the next instance of this reading.
+    #     Series can only know this if it is a regular event that occurs on the same
+    #     day of each month.
+    #     """
+    # 
+    #     if not self.regular:
+    #         raise UnknownNextReadingDayException, "Series %s is irregular. Cannot determine next reading date."
+    # 
+    #     one_week = timedelta(7)
+    #     today = date.today()
+    # 
+    #     # To find the next day that this series has a reading event, first we get 
+    #     # the date of the next occurence of the day of the week that this series
+    #     # happens on (e.g., the date of the next Monday if this series happens on 
+    #     # Mondays).
+    #     next_reading_day = self.day_of_week.next_my_day_of_week()
+    #     
+    #     # Next we need to find the right day of the right month--either this month 
+    #     # if the next reading day hasn't happened yet this month, or next month if it has.
+    # 
+    #     # First, subtract until we get to the last reading day of the previous month as
+    #     # a starting point.
+    #     while next_reading_day.month == today.month:
+    #         next_reading_day = next_reading_day - one_week
+    # 
+    #     # Next get the week within the month the reading day occurs 
+    #     # (e.g., the first week within the month).
+    #     which_week = int(self.week_within_month.week_within_month)
+    # 
+    #     # Now add which_week weeks to get the day of the reading this month.
+    #     this_month_reading_day = next_reading_day = next_reading_day + timedelta(7*(which_week))
+    # 
+    #     # If this month's reading day has passed, add time until we get to next month's reading day.
+    #     if this_month_reading_day < today:
+    #         # This loop gives us the first reading_day of the next month.
+    #         while next_reading_day.month == today.month:
+    #             next_reading_day = next_reading_day + one_week
+    #         # This addition us the which_weekth reading_day of the next month, which is what we want.
+    #         next_reading_day = next_reading_day + timedelta(7*(which_week-1))
+    #     
+    #     return next_reading_day
+    #     
+    # def reading_days_ahead_by_month(self, months_ahead=0):
+    #     """ Returns a list of reading days up to months_ahead months ahead. If month_ahead is 0, returns the next reading day. """
+    # 
+    #     my_next_reading_day = self.next_reading_day()
+    #     my_ahead_readings = [my_next_reading_day]
+    #     if months_ahead <= 0:
+    #         return my_ahead_readings 
+    #         
+    #     which_week = int(self.week_within_month.week_within_month)      
+    #     limit_date = datetime.today().date() + timedelta(months_ahead * 31)
+    # 
+    #     while my_next_reading_day <= limit_date:
+    #         # Advance by week to get to the first occurence of the next month
+    #         cur_month = my_next_reading_day.month
+    #         while my_next_reading_day.month == cur_month: 
+    #             my_next_reading_day = my_next_reading_day + timedelta(7)
+    # 
+    #         # Once we are at the first week of the right month, advance to the right week of this month
+    #         my_ahead_readings.append(my_next_reading_day + timedelta(7*(which_week-1)))
+    # 
+    #     return my_ahead_readings
+    # 
+    # def get_future_readings(self, years=1):
+    #     """
+    #     Returns a list of Reading objects for a given Series for a number of years ahead.
+    # 
+    #     ** Arguments **
+    # 
+    #     ``years``
+    #         The number of years ahead to create Reading objects for for this series.
+    #     """
+    # 
+    #     new_reading_list = []
+    # 
+    #     for reading_day in self.reading_days_ahead_by_month(12*years):
+    #         r = reading.models.Reading()
+    #         r.start_time = datetime.combine(reading_day, self.time)
+    #         r.series = self
+    #         new_reading_list.append(r)
+    # 
+    #     return new_reading_list
+    #             
+    # class Meta:
+    #     ordering = ('title',)
+    #     verbose_name_plural = 'Series'
     
 class SeriesTweet(ModelBase):
     """

@@ -138,6 +138,19 @@ twttr.anywhere(function (T) {
 	<script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
 	
 	<script type="text/javascript">
+	function addMessage(text, extra_tags) {
+		alert("got a message");
+	    var message = $('<li class="'+extra_tags+'">'+text+'</li>').hide();
+	    $("#messages").append(message);
+	    message.fadeIn(500);
+
+	    setTimeout(function() {
+	        message.fadeOut(500, function() {
+	            message.remove();
+	        });
+	    }, 3000);
+	}
+	
 	$(document).ready(function() {
 		{% if messages %}
 		// Display messages if there are any.
@@ -145,6 +158,22 @@ twttr.anywhere(function (T) {
 		$("#messages").delay(100).slideToggle().delay(2500).slideToggle();
 		{% endif %}
 	});
+	
+	$(document).ready(function() {
+	    $('#messages').ajaxComplete(function(e, xhr, settings) {
+			alert("ajax complete");
+	        var contentType = xhr.getResponseHeader("Content-Type");
+
+	        if (contentType == "application/javascript" || contentType == "application/json") {
+	            var json = $.evalJSON(xhr.responseText);
+
+	            $.each(json.django_messages, function (i, item) {
+	                addMessage(item.message, item.extra_tags);
+	            });
+	        }
+	    }).ajaxError(function(e, xhr, settings, exception) {
+	        addMessage("There was an error processing your request, please try again.", "error");
+    });
 	/*
 	$(document).ready(function() {
 		var $login_dialog = $('<div></div>')

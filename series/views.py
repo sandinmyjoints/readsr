@@ -190,7 +190,7 @@ def edit_series(request, series_id=None):
             # _update_event is the input that updates the Series form
             event_form = SeriesForm(request.POST, instance=series)
             if event_form.is_valid():
-                event_form.save(event)
+                event_form.save(series)
                 return HttpResponseRedirect(request.path)
         elif '_add_occurrences' in request.POST:
             # _add_occurrences is the input that adds new reading occurrences
