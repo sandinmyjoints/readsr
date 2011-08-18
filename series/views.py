@@ -130,8 +130,8 @@ def create_series(request, extra_context=None):
             return HttpResponseRedirect(sr.get_absolute_url())
         else: # not valid
             # This is for logging only. The forms are already created and will be returned with errors for the user to correct.
-            # print "\n".join(["form is not valid.", "event_form errors = %s" % event_form.errors, "recurrence_form errors = %s" % recurrence_form.errors])
-            pass
+            if settings.DEBUG:
+                print "\n".join(["form is not valid.", "event_form errors = %s" % event_form.errors, "recurrence_form errors = %s" % recurrence_form.errors])
     else: 
         # not POST, so we create blank forms with a default start time of 5 pm today.
         if 'dtstart' in request.GET:
@@ -154,7 +154,7 @@ def create_series(request, extra_context=None):
         context[key] = callable(value) and value() or value
         
     return render_to_response(
-        "add_series.html",
+        "create_series.html",
         dict(dtstart=dtstart, event_form=event_form, recurrence_form=recurrence_form),
         context_instance=context
     )

@@ -34,9 +34,13 @@
     {% if recurrence_form.errors %}
     <p>Please correct the recurrence error{{ recurrence_form.errors|pluralize }} below.</p>
 
-        {% for err in recurrence_form.errors %}
-        {{ err }}
+        <ul>
+        {% for field in recurrence_form %}
+        {% for err in field.errors %}
+        <li>{{ field.name }}: {{ err }}</li>
         {% endfor %}
+        {% endfor %}
+        </ul>
     {% endif %}
     <p>
     {{ event_form.non_field_errors }}
@@ -173,35 +177,17 @@
             </dd>
         </dl>
         <p class="clear">
-        You'll be listed as the point of contact for this event. Your email address will be listed, but in a form that prevents spammers from harvesting it. If that's not cool, hit cancel and we won't create this reading series.</p>
-        <div class="submit-row"><input type="submit" value="{% if event.title %}Update{% else %}Submit{% endif %}" class="button" name="_update_event" /><input type="button" id="cancel_button" value="Cancel" class="button" /></div>    
-    </form>
-    <!-- end the event form -->
-    
-    <h4>Scheduled Readings</h4>
-    {% if event.occurrence_set.count %}
-        <ul>
-            {% for o in event.occurrence_set.all %}
-            <li>
-                <a href="{% url detail-reading o.id %}">{{ o.start_time|date:"l, F jS, Y P" }}</a>
-            </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        None scheduled.
-    {% endif %}
-    
-    <!-- begin recurring occurrence form -->
-    <h4>Edit Schedule</h4>
-    <form action="" method="post">
-        {% csrf_token %}
-        <p class="clear">
+            
+        <h4>Schedule</h4>
         <table class="recurring_form">
             <tbody>
             {% include "recurring_form_part.html" %}
             </tbody>
         </table>
-        <div class="submit-row"><input type="submit" value="Add events" class="button" name="_add_occurrences" /><input type="button" id="cancel_button" value="Cancel" class="button" /></div>
+        <p class="clear">
+        You'll be listed as the point of contact for this event. Your email address will be listed, but in a form that prevents spammers from harvesting it. If that's not cool, hit cancel and we won't create this event.
+        </p>
+        <div class="submit-row"><input type="submit" value="Add events" class="button" name="_add" /><input type="button" id="cancel_button" value="Cancel" class="button" /></div>
     </form>
 
 {% endblock content %}

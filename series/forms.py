@@ -1,4 +1,4 @@
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from dateutil import rrule
 
 from django import forms
@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 
 import swingtime
 from swingtime.models import EventType
-from swingtime.forms import MultipleOccurrenceForm
+from swingtime.forms import MultipleOccurrenceForm, SECONDS_INTERVAL
 
 from rrule2text import rrule2text as rr2t
 
@@ -62,10 +62,25 @@ class MonthlyReadingMultipleOccurrenceForm(MultipleOccurrenceForm):
         self.fields["until"].initial = datetime(today.year+2, today.month, today.day)
         self.fields["repeats"].initial = "until"
         self.fields["freq"].initial = rrule.MONTHLY
+        self.fields["freq"].label = "What day?"
+        self.fields["start_time_delta"].label = "What time?"
+        self.fields["repeats"].label = "End date in mind?"
         self.fields["month_option"].initial = "on"
-        self.fields["day"].label = _(u"Date of next reading")        
+        self.fields["day"].label = _(u"Date of next reading")
+        self.fields["day"].required = False
+        self.fields["freq"].required = False
+        self.fields["month_option"].required = False
+        self.fields["year_month_ordinal"].required = False
+        self.fields["year_month_ordinal_day"].required = False
+        self.fields["end_time_delta"].required = False
         
     def clean(self):
+        self.cleaned_data["day"] = datetime.today().date()
+        offset = self.cleaned_data["start_time_delta"]
+        self.cleaned_data["end_time_delta"] = offset + SECONDS_INTERVAL
+        self.cleaned_data["freq"] = rrule.MONTHLY
+        self.cleaned_data["month_option"] = "on"
+        
         return super(MonthlyReadingMultipleOccurrenceForm, self).clean()
 
     def save(self, series):        

@@ -933,9 +933,9 @@ ul.series_info {
 }
 
 /* Swingtime recurrence form */
-table.recurring_form" { border-collapse: collapse; font-size: 1em; }
+table.recurring_form { border-collapse: collapse; font-size: 1em; }
 .recurring_form td, th { padding: 2px; border: 1px solid #ccc; }
-.recurring_form th { background-color: #bba; }
+.recurring_form th { background-color: #bba; vertical-align: top; width: 2em; }
 .recurring_form dt { font-weight: bold; }
 .recurring_form dt { font-weight: bold; }
 .recurring_form dd { margin-bottom: .5em; }
@@ -946,23 +946,22 @@ table.recurring_form" { border-collapse: collapse; font-size: 1em; }
 .recurring_form form tfoot td { text-align: center; background-color: #566; }
 .form-indent { margin-left: 2.5em; }
 .horizontal { width: 30em; }
-    .horizontal li { float: left; margin: 0; }
-    .horizontal li label { width: 4em; display: block; float: left; }
+.horizontal li { float: left; margin: 0; }
+.horizontal li label { width: 4em; display: block; float: left; }
 #recurrence-options { float: left; }
-    #recurrence-options li { margin-bottom: 4px; }
+#recurrence-options li { margin-bottom: 4px; }
 .calendar td, .calendar th { min-width: 10em; width: 10em; }
 .month-view td { vertical-align: top; height: 10em; min-height: 10em; }
-    .month-view td, .month-view th { min-width: 10em; width: 10em; }
-    .month-view .day-ordinal { font-weight: bold; font-size: 1.1em; 
-        text-align: right; }
-    .month-view ul { list-style: none; margin: 1px 2px; padding: 0; }
-    .month-view .today { background-color: #eed; }
+.month-view td, .month-view th { min-width: 10em; width: 10em; }
+.month-view .day-ordinal { font-weight: bold; font-size: 1.1em; text-align: right; }
+.month-view ul { list-style: none; margin: 1px 2px; padding: 0; }
+.month-view .today { background-color: #eed; }
 .month-divider th, .month-divider td { border-top: 3px double #888; }
 .evt-spc-odd, .evt-spc-even  { background-color: #3b5153; color: #fff; }
-    .evt-spc-odd a, .evt-spc-even a { color: #fff; }
-    .evt-open-even, .evt-open-odd { background-color: #ccd; }
-    .evt-adv-odd, .evt-adv-even { background-color: #cdd; }
-    .evt-bgn-even, .evt-bgn-odd { background-color: #dd8; }
-    .evt-bbc-odd, .evt-bbc-even { background-color: #aaa; }
-    .evt-prv-odd { background-color: #8a9; }
-    .evt-prv-even { background-color: #acb; }
+.evt-spc-odd a, .evt-spc-even a { color: #fff; }
+.evt-open-even, .evt-open-odd { background-color: #ccd; }
+.evt-adv-odd, .evt-adv-even { background-color: #cdd; }
+.evt-bgn-even, .evt-bgn-odd { background-color: #dd8; }
+.evt-bbc-odd, .evt-bbc-even { background-color: #aaa; }
+.evt-prv-odd { background-color: #8a9; }
+.evt-prv-even { background-color: #acb; }
