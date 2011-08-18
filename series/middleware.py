@@ -13,6 +13,7 @@ class AjaxMessaging(object):
 
                 django_messages = []
                 for message in messages.get_messages(request):
+                    print "appending msg to django_messages"
                     django_messages.append({
                         "level": message.level,
                         "message": message.message,
@@ -20,7 +21,9 @@ class AjaxMessaging(object):
                     })
                 # import pdb; pdb.set_trace()
 
-                content['django_messages'] = django_messages
+                print "request should be empty of messages now"
+                content['django_messages'] = django_messages  
+                print "len of django_messages is %i" % len(content['django_messages'])              
 
                 response.content = simplejson.dumps(content)
         return response

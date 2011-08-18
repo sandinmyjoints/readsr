@@ -136,18 +136,25 @@ twttr.anywhere(function (T) {
 	<script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
 	
 	<script type="text/javascript">
+	function showMessages() {
+		$("#messages").delay(100).slideToggle().delay(2500).slideToggle();
+		
+	}
+	
 	function addMessage(text, extra_tags) {
 	    var message = $('<li class="message '+extra_tags+'">'+text+'</li>');//.hide();
 		// alert("message is " + message.html());
 	    $("ul.messages").append(message);
-		$("#messages").delay(100).slideToggle().delay(2500).slideToggle();
-		}
+		//showMessages();
+		delay(2500);
+		// $("ul.messages").remove($("li"));
+	}
 	
 	$(document).ready(function() {
 		{% if messages %}
 		// Display messages if there are any.
 		$("#messages").hide();
-		$("#messages").delay(100).slideToggle().delay(2500).slideToggle();
+		showMessages();
 		{% endif %}
 	});
 	

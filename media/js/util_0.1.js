@@ -161,8 +161,12 @@ function bind_editable_descriptions(url) {
 				type: 'POST',
 				url: url,
 				data: { 'reading_id': this.id, 'description': data.value },
-				success: function() {	
-				    				
+                success: function(data, textStatus, jqXHR) { 
+                    var response = $.parseJSON(jqXHR.responseText);
+                    $("#" + response.id).text(response.description);                 
+                },
+				error: function(jqXHR, textStatus, errorThrown) {
+				    alert("in error, textSTatus is " + textStatus);
 				}
 			})
 	

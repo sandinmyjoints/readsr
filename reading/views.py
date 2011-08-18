@@ -138,6 +138,7 @@ def edit_reading(request, reading_id=None):
         reading_id = request.POST["reading_id"]
         r = get_object_or_404(Reading, pk=reading_id)
         if r.series.wiki_mode and r.series.contact != request.user:
+            print "add error mesg to messages"
             messages.error(request, "%s is not in wiki mode. Only the owner can edit readings." % r.series.title)
         else:
             try:
@@ -150,7 +151,9 @@ def edit_reading(request, reading_id=None):
                 messages.error(request, "There was an error validating your update.")
 
         # return render_to_response('index.html', {}, context_instance=RequestContext(request))
-        return HttpResponse(simplejson.dumps({}), mimetype='application/json')
+        # Don't need to return any response here because whatever the user typed in is in the box,
+        # except how to undo what they typed in is they were not authorized to do so?
+        return HttpResponse(simplejson.dumps({ "id": r.id, "description": r.description }), mimetype='application/json')
             
     else: # not AJAX
         created_new = True;
