@@ -54,14 +54,16 @@ class MonthlyReadingMultipleOccurrenceForm(MultipleOccurrenceForm):
     """
     
     def __init__(self, *args, **kws):
+        # TODO write a version of init that takes a Series and sets the form to the rrule values of that Series.
+        
         super(MonthlyReadingMultipleOccurrenceForm, self).__init__(*args, **kws)
 
         today = datetime.today().date()
-        self.fields["until"].initial = datetime(today.year+5, today.month, today.day)
+        self.fields["until"].initial = datetime(today.year+2, today.month, today.day)
         self.fields["repeats"].initial = "until"
         self.fields["freq"].initial = rrule.MONTHLY
         self.fields["month_option"].initial = "on"
-        self.fields["day"].label = _(u"Date of next reading")
+        self.fields["day"].label = _(u"Date of next reading")        
         
     def clean(self):
         return super(MonthlyReadingMultipleOccurrenceForm, self).clean()
@@ -71,7 +73,7 @@ class MonthlyReadingMultipleOccurrenceForm(MultipleOccurrenceForm):
         returns the Event these readings are associated with
         """
         
-        # This creates the occurences and gives them the series as a foreign key. It does not
+        # This creates the occurences by calling Event.add_occurrences and gives them the series as a foreign key. It does not
         # save the series.
         super(MonthlyReadingMultipleOccurrenceForm, self).save(series)
         

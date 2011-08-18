@@ -294,6 +294,7 @@ class Series(Event):
         rrule_params.setdefault('freq', rrule.MONTHLY)
         
         if 'count' not in rrule_params and 'until' not in rrule_params:
+            # This shouldn't happened. TODO change to an assertion
             self.reading_set.create(start_time=start_time, end_time=end_time)
         else:
             delta = end_time - start_time

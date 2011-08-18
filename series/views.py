@@ -179,31 +179,63 @@ def edit_series(request, series_id=None):
     """
 	
 
-    series = get_object_or_404(Series, pk=series_id)
+    series = get_object_or_404(Series, pk=series_id) # grab the existing series
     event_form = recurrence_form = None
 
     tweet_or_not = False # Start assuming we won't tweet, but if any of the changes occur that trigger a tweet, this value will change to true.
-    tweet_message = [] # Start with an empty tweet message.
+    tweet_message = ["%s has been updated!" % series.title]
         
     if request.method == 'POST':
         if '_update_event' in request.POST:
-            # _update_event is the input that updates the Series form
+            # _update_event is the input for the form that updates the Series info.
+            
+            # For updating existing series, need to create a copy here because is_valid() will trigger 
+            # model validation, which will update the model object with the new values
+            # and we won't be able to tell what changed to determine whether we should tweet or not.
+            # (A new series won't use old_sr for anything.)
+            old_sr = copy.deepcopy(series) 
+        
             event_form = SeriesForm(request.POST, instance=series)
             if event_form.is_valid():
-                event_form.save(series)
-                return HttpResponseRedirect(request.path)
+                
+                # If the name has changed, tweet about it:
+                if event_form.cleaned_data["title"] != old_sr.title:
+                    tweet_or_not = True
+                    tweet_message.append("New name: %s" % series.title)               
+
+                # If the location has changed, add that to the tweet.
+                if old_sr.venue.id != event_form.cleaned_data["venue"].id:                    
+                    tweet_or_not = True
+                    tweet_message.append("New venue: %s" % event_form.cleaned_data["venue"])                                  
+                
+                # TODO Check to see if genre has changed.
+                
+                try:
+                    event_form.save(series)
+                except ValueError, ex:
+                    messages.add_message(request, messages.ERROR, 'Problem updating %s. Value error %s. ' % (series.title, ex))
+                    # TODO log this error and report it to admin
+                    return HttpResponseRedirect(series.get_absolute_url())
+                else:
+                    messages.add_message(request, messages.SUCCESS, 'Updated %s. Thanks!' % (series.title,))               
+
+                if not old_sr.regular and series.regular:
+                    pass
+                    # TODO If series is going from irregular to regular, need to create new readings with the new rrule.
+                    # Need to call series.add_occurrences(), but where to get start_time and end_time? How to get new rrule?
+                
+                if tweet_or_not:
+                    _send_tweet(request, sr=series, tweet_message=tweet_message)                    
+                
+                return HttpResponseRedirect(series.get_absolute_url())               
+            else: # not valid
+                messages.error(request, "Please correct the errors below.")
+                return render_to_response('edit_series.html', { 'series_form': series_form, 'recurrence_form': recurrence_form or MonthlyReadingMultipleOccurrenceForm(initial=dict(dtstart=datetime.now())), 'series': sr }, context_instance=RequestContext(request))
+
         elif '_add_occurrences' in request.POST:
-            # _add_occurrences is the input that adds new reading occurrences
+            # _add_occurrences is the input for the form that adds new Reading occurrences to the Series.
             recurrence_form = MonthlyReadingMultipleOccurrenceForm(request.POST)
-            if recurrence_form.is_valid():
-                # Check to see if title has changed.
-                
-                # Check to see if venue has changed.
-                
-                # Check to see if regular has changed.
-                
-                # Check to see if genre has changed.
-                
+            if recurrence_form.is_valid():                
                 # Check to see if the submitted recurrence rule is different
                 # from the existing recurrence rule.
                 # If it isn't, no need for an update.
@@ -211,18 +243,35 @@ def edit_series(request, series_id=None):
                 
                 if new_rr != series.rrule:
                     # Hose all the old occurrences for this Series
-                    Reading.objects.filter(series__pk=series.id).delete()
+                    Reading.objects.filter(series=series.id).filter(start_time__gte=datetime.today()).delete()
                     
                     # Create the new occurrences
-                    recurrence_form.save(series)
+                    try:
+                        recurrence_form.save(series)
+                    except ValueError, ex:
+                        messages.add_message(request, messages.ERROR, 'Problem updating %s. Value error %s. ' % (series.title, ex))
+                        # TODO log this error and report it to admin
+                        return HttpResponseRedirect(series.get_absolute_url())
+                    else:
+                        messages.add_message(request, messages.SUCCESS, 'Updated %s. Thanks!' % (series.title,)) 
                     
-                return HttpResponseRedirect(request.path)
+                    tweet_or_not = True
+                    tweet_message.append("New time: %s" % new_rr.text())
+                    
+                if tweet_or_not:
+                    _send_tweet(request, sr=series, tweet_message=tweet_message)           
+                    
+                return HttpResponseRedirect(series.get_absolute_url())
+            else: # not valid
+                messages.error(request, "Please correct the errors below.")
+                return render_to_response('edit_series.html', { 'series_form': SeriesForm(instance=series), 'recurrence_form': recurrence_form, 'series': series }, context_instance=RequestContext(request))
         elif '_delete' in request.POST:
             pass
             # TODO fill this in to delete particular occurrences within a series
         else:
             return HttpResponseBadRequest('Bad Request')
 
+    # Show new forms
     event_form = event_form or SeriesForm(instance=series)
     if not recurrence_form:
         recurrence_form = MonthlyReadingMultipleOccurrenceForm(
@@ -234,102 +283,6 @@ def edit_series(request, series_id=None):
         dict(event=series, event_form=event_form, recurrence_form=recurrence_form),
         context_instance=RequestContext(request)
     )
-	
-	
-            
-    if request.method == 'POST': # If we are receiving POST data, then we're getting the result of a form submission, so we save it to the database and show the detail template
-        form = SeriesForm(request.POST, instance=sr)
-        recurrence_form = MultipleOccurrenceForm(request.POST, instance=event)
-        
-        # For updating existing series, need to create a copy here because is_valid() will trigger 
-        # model validation, which will update the model object with the new values
-        # and we won't be able to tell what changed to determine whether we should tweet or not.
-        # (A new series won't use old_sr for anything.)
-        old_sr = copy.deepcopy(sr) 
-
-        if form.is_valid():
-            print "form is valid"
-            new_reading_list = []
-            need_to_create_new_readings_list = False
-
-            # We are updating an existing series.                 
-            # Depending on what changed, we may want to tweet about it, so start constructing
-            # a tweet message.
-            tweet_message.append("%s has been updated!" % old_sr.title)
-            tweet_or_not = False # Only particular updates trigger a tweet, so set this to false for now.
-            
-            # If the name has changed, tweet about it:
-            if form.cleaned_data["title"] != old_sr.title:
-                tweet_or_not = True
-                tweet_message.append("New name: %s" % sr.title)
-            
-            # We are updating an existing reading series, so need to check if its time or regularity changed.               
-            # Loop through items in sr and compare them to items in form.cleaned_data
-            # to see if any of the date/times have changed.                 
-            if old_sr.regular != form.cleaned_data["regular"] \
-                or old_sr.day_of_week != form.cleaned_data["day_of_week"] \
-                or old_sr.week_within_month != form.cleaned_data["week_within_month"] \
-                or old_sr.irregular_date_description != form.cleaned_data["irregular_date_description"] \
-                or old_sr.time != form.cleaned_data["time"] :
-                # Hose all the reading events if the series changed regularity, day of week, week 
-                # within month, irregular date description, or time.
-                # Then insert new readings to replace them.
-                # Future enhancement: update readings more intelligently, 
-                # but would need to think about what that would entail.
-                future_readings = Reading.objects.filter(series=sr.id).filter(start_time__gte=datetime.today()).delete()
-                if sr.regular:
-                    need_to_create_new_readings_list = True
-                
-                tweet_or_not = True
-                tweet_message.append("New time.")
-
-            if old_sr.venue.id != form.cleaned_data["venue"].id:
-                # The location has changed, so add that to the tweet.
-                tweet_or_not = True
-                tweet_message.append("New venue: %s" % form.cleaned_data["venue"])                                    
-                
-            try:
-                # Commenting the below out pending changes now that we're using Swingtime
-                series_form.save()
-                occurrence_form.save()
-                # 
-                # # If the series has a regular time, day of the week, and week of the month, and
-                # # it is new or its time has changed, then create new reading objects for a year ahead.
-                # # TODO: Set a date at which to refresh the reading list for the next year, when 
-                # # the ones created here run out.
-                # if need_to_create_new_readings_list: 
-                #     new_reading_list = sr.get_future_readings(1)
-                # for reading in new_reading_list:
-                #     reading.save()
-
-                if tweet_or_not:
-                    _send_tweet(request, sr=sr, tweet_message=tweet_message)
-                
-            # Handle possible errors from tweep and bitly
-            except ValueError, ex:
-                messages.add_message(request, messages.ERROR, 'Value error %s %s. Error: %s' % (created_new and "creating" or "updating", sr.title, ex))
-                if sr.id:
-                    return HttpResponseRedirect(reverse('edit-series', args=(sr.id,)))
-                else:
-                    return HttpResponseRedirect(reverse('create-series'))
-            except IOError, ex:
-                messages.add_message(request, messages.ERROR, 'Error %s %s. Could not tweet: %s' % (created_new and "creating" or "updating", sr.title, ex))
-            finally:
-                # Add a successful series creation message. TODO this doesn't really come after the event has been saved now that we are using swingtime's add_event view 
-                messages.add_message(request, messages.SUCCESS, '%s %s. Thanks!' % (created_new and "Created" or "Updated", sr.title))
-
-                return HttpResponseRedirect(sr.get_absolute_url())
-
-        else:
-            print "form is not valid. errors = %s" % form.errors
-            messages.error(request, "Please correct the errors below.")
-            return render_to_response('edit_series.html', { 'series_form': series_form, 'recurrence_form': recurrence_form, 'series': sr }, context_instance=RequestContext(request))
-    
-    # Handle the case where the request method is not POST
-    print "edit_series not POST, series_id is %s" % (series_id, )
-    series_form = SeriesForm(instance=sr)
-    recurrence_form = MultipleOccurrenceForm(instance=event)
-    return render_to_response('edit_series.html', { 'series_form': series_form, 'recurrence_form': recurrence_form, 'series': sr }, context_instance=RequestContext(request))
     
 def _send_tweet(request, tweet_message=[], sr=None):
     """Utility function to tweet and save the tweet to the db."""
@@ -354,6 +307,12 @@ def _send_tweet(request, tweet_message=[], sr=None):
     except tweepy.TweepError as terror:
         if settings.DEBUG:
             print "tweep error: %s" % terror
+    except IOError, ex:
+        if settings.DEBUG:
+            print "IOError when calling _send_tweet: %s" % ex
+        # TODO log this error
+    finally:
+        return
     
 @login_required
 def remove_series(request, template_name="remove_series.html", series_id=None, success_url=None, extra_context=None, fail_silently=False, message_success=False):
@@ -581,7 +540,7 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
     # The template will use this value to decide whether to show some extra information
     # that would otherwise be shown using js (start date and end date).
     js_available = True
-
+    
     if request.method == "GET":
         # If request is get, then we can extract start and end dates from that.
         start = request.GET.get('start', "")
@@ -649,7 +608,7 @@ def index(request, series_id=None, genre_id=None, list_view=True, start_date=dat
     else:
         # not GET method
         raise Http404
-
+    
     if series_id:
         # we are in detail-series mode  
         return render_to_response('series_detail.html', {
