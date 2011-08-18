@@ -4,24 +4,24 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <html>
 <head>
-	<meta charset=UTF-8>
-	<link href='http://fonts.googleapis.com/css?family=EB+Garamond&v1' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" media="all" href="{{ MEDIA_URL }}css/reset.css" />
-	<link rel="stylesheet" type="text/css" media="all" href="{{ MEDIA_URL }}css/text.css" />
-	<!-- my stylesheet -->
+    <meta charset=UTF-8>
+    <link href='http://fonts.googleapis.com/css?family=EB+Garamond&v1' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" media="all" href="{{ MEDIA_URL }}css/reset.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="{{ MEDIA_URL }}css/text.css" />
+    <!-- my stylesheet -->
     <link rel="stylesheet" type="text/css" media="all" href="{{ MEDIA_URL }}css/style.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="{{ MEDIA_URL }}css/custom-theme/jquery-ui-1.8.10.custom.css">
-	<link rel="stylesheet" type="text/css" media="screen" href="{{ MEDIA_URL }}css/jquery.qtip.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ MEDIA_URL }}css/custom-theme/jquery-ui-1.8.10.custom.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ MEDIA_URL }}css/jquery.qtip.css">
 
 {% block styles %}
 {% endblock styles %}
 
 <title>
-	{% block title %}
-	Readsr
-	{% endblock %}
+    {% block title %}
+    Readsr
+    {% endblock %}
 </title>
-	
+    
 {% block headscript %}
 {% endblock headscript %}
 <script src="http://platform.twitter.com/anywhere.js?id=oZpnsipBP1jBhGbPp5eCUA&v=1" type="text/javascript"></script>
@@ -38,165 +38,165 @@ twttr.anywhere(function (T) {
 
 <body>
 
-	<div id="header">
-		
-		{% block header %}
-		<h1><a href="{% url index %}" id="header_link">{{ city_site.name }}</a></h1>
-		<h3>Literary reading series in and around 
-			<form name="choose_city" action="{% url site-redirect %}" class="city_chooser">
-			<select name="new_site" id="choose_city" class="city_chooser">
-				<option value="{{ city_site }}" selected="selected">{{ city_site.city }}, {{ city_site.state }}</option>
-				{% for a_city_site in all_city_sites %}
-					{% if a_city_site != city_site %}
-					<option value="{{ a_city_site }}">{{ a_city_site.city }}, {{ a_city_site.state }}</option>
-					{% endif %}
-					
-				{% endfor %}
-			</select>
-			<input type="submit" class="city_chooser" value="Go">
-			</form>
-		<!--
-		<ul id="citysite_menu">
-			<li class="dropdown"><a href="#" class="dropdown-link">{{ city_site.city }}, {{ city_site.state }}</a>.
-				<ul class="sub-menu all_cities">
-				{% for a_city_site in all_city_sites %}
-					<li><a href="#">{{ a_city_site.city }}, {{ a_city_site.state }}</a></li>
-				{% endfor %}
-				</ul>
-			</li>
-		</ul>
-		-->
+    <div id="header">
+        
+        {% block header %}
+        <h1><a href="{% url index %}" id="header_link">{{ city_site.name }}</a></h1>
+        <h3>Literary reading series in and around 
+            <form name="choose_city" action="{% url site-redirect %}" class="city_chooser">
+            <select name="new_site" id="choose_city" class="city_chooser">
+                <option value="{{ city_site }}" selected="selected">{{ city_site.city }}, {{ city_site.state }}</option>
+                {% for a_city_site in all_city_sites %}
+                    {% if a_city_site != city_site %}
+                    <option value="{{ a_city_site }}">{{ a_city_site.city }}, {{ a_city_site.state }}</option>
+                    {% endif %}
+                    
+                {% endfor %}
+            </select>
+            <input type="submit" class="city_chooser" value="Go">
+            </form>
+        <!--
+        <ul id="citysite_menu">
+            <li class="dropdown"><a href="#" class="dropdown-link">{{ city_site.city }}, {{ city_site.state }}</a>.
+                <ul class="sub-menu all_cities">
+                {% for a_city_site in all_city_sites %}
+                    <li><a href="#">{{ a_city_site.city }}, {{ a_city_site.state }}</a></li>
+                {% endfor %}
+                </ul>
+            </li>
+        </ul>
+        -->
 
-		</h3>
-		{% endblock header %}
-		
-	</div>
-	
-	<div id="page" class="">
-		
-	    <div id="navbar" class="">
-			{% block navbar %}
-			<ul>
-			    <li><a href="{% url index %}">Home</a></li>
-				<li><a href="{% url create-series %}">Add a Series</a></li>
-			    <li><a href="{% url about %}">About</a></li>
-				{% if user.is_authenticated %}
-				<li><a href="{{ contact.get_absolute_url }}">Profile</a></li>
-				<li><a href="{% url auth_logout %}" id="logout">Logout</a></li>
-				{% else %}
-				<!--<li><a href="#" id="opener">Login</a></li>-->
-				<li><a href="{% url auth_login %}" class="long_nav" id="login" >Login/Register</a></li>
-				{% endif %}
-			</ul>
-	        {% endblock navbar %}
-	    </div>
-		
-	    <div id="content">
-			<div id="messages">
-				{% block messages %}
-				<ul class="messages">
-				    {% for message in messages %}
-				    <li class="message {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
-				    {% endfor %}
-				</ul>
-				{% endblock messages %}
-			</div>
+        </h3>
+        {% endblock header %}
+        
+    </div>
+    
+    <div id="page" class="">
+        
+        <div id="navbar" class="">
+            {% block navbar %}
+            <ul>
+                <li><a href="{% url index %}">Home</a></li>
+                <li><a href="{% url create-series %}">Add a Series</a></li>
+                <li><a href="{% url about %}">About</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="{{ contact.get_absolute_url }}">Profile</a></li>
+                <li><a href="{% url auth_logout %}" id="logout">Logout</a></li>
+                {% else %}
+                <!--<li><a href="#" id="opener">Login</a></li>-->
+                <li><a href="{% url auth_login %}" class="long_nav" id="login" >Login/Register</a></li>
+                {% endif %}
+            </ul>
+            {% endblock navbar %}
+        </div>
+        
+        <div id="content">
+            <div id="messages">
+                {% block messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li class="message {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endblock messages %}
+            </div>
 
-	        {% block content %}
-			{% endblock content %}
-	    </div>
-	
-		<div id="sidebar">
-			{% block sidebar %}
-			<!-- Use an inclusion tag for getting the list of series -->
-			<div class="sidebar_element">
-				{% show_series_list 6 %}
-			</div>
-			<!-- Use a template which draws on objects set via the context processors to get the list of series -->
-<!--			<div class="sidebar_element">
-				{% include "sidebar_snippet.html" %}
-			</div>-->
-			<div class="sidebar_element">
-				{% include "tweet_snippet.html" %}
-			</div>
-			{% endblock sidebar %}
-		</div>
+            {% block content %}
+            {% endblock content %}
+        </div>
+    
+        <div id="sidebar">
+            {% block sidebar %}
+            <!-- Use an inclusion tag for getting the list of series -->
+            <div class="sidebar_element">
+                {% show_series_list 6 %}
+            </div>
+            <!-- Use a template which draws on objects set via the context processors to get the list of series -->
+<!--            <div class="sidebar_element">
+                {% include "sidebar_snippet.html" %}
+            </div>-->
+            <div class="sidebar_element">
+                {% include "tweet_snippet.html" %}
+            </div>
+            {% endblock sidebar %}
+        </div>
 
-		<div class="spacer"></div>
-		<div id="footer" class="">
-			{% block footer %}
-			Site by <a href="http://williamjohnbert.com">wjb</a>
-			<span style="float: right"><a href="http://twitter.com/Readsr" class="twitter-follow-button" data-show-count="false">Follow @Readsr</a></span>
-			{% endblock footer %}
-		</div>
-	
-	</div> <!-- end content -->
-	
-	<!-- begin script -->
-	<script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
-	
-	<script type="text/javascript">
-	function showMessages() {
-				
-		$("#messages").delay(100).slideToggle().delay(2500).slideToggle();
-		
-	}
-	
-	function addMessage(text, extra_tags) {
-		// clear previous messages
-		$("ul.messages").html("");
-		
-	    var message = $('<li class="message '+extra_tags+'">'+text+'</li>');
-		// alert("message is " + message.html());
-	    $("ul.messages").append(message);
-		showMessages();
-	}
-	
-	$(document).ready(function() {
-		{% if messages %}
-		// Display messages if there are any.
-		$("#messages").hide();
-		showMessages();
-		{% endif %}
-	});
-	
-	$(document).ready(function() {
-	    $('#messages').ajaxComplete(function(e, xhr, settings) {
-	        var contentType = xhr.getResponseHeader("Content-Type");
+        <div class="spacer"></div>
+        <div id="footer" class="">
+            {% block footer %}
+            Site by <a href="http://williamjohnbert.com">wjb</a>
+            <span style="float: right"><a href="http://twitter.com/Readsr" class="twitter-follow-button" data-show-count="false">Follow @Readsr</a></span>
+            {% endblock footer %}
+        </div>
+    
+    </div> <!-- end content -->
+    
+    <!-- begin script -->
+    <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
+    
+    <script type="text/javascript">
+    function showMessages() {
+                
+        $("#messages").delay(100).slideToggle().delay(2500).slideToggle();
+        
+    }
+    
+    function addMessage(text, extra_tags) {
+        // clear previous messages
+        $("ul.messages").html("");
+        
+        var message = $('<li class="message '+extra_tags+'">'+text+'</li>');
+        // alert("message is " + message.html());
+        $("ul.messages").append(message);
+        showMessages();
+    }
+    
+    $(document).ready(function() {
+        {% if messages %}
+        // Display messages if there are any.
+        $("#messages").hide();
+        showMessages();
+        {% endif %}
+    });
+    
+    $(document).ready(function() {
+        $('#messages').ajaxComplete(function(e, xhr, settings) {
+            var contentType = xhr.getResponseHeader("Content-Type");
 
-	        if (contentType == "application/javascript" || contentType == "application/json") {
-		
-	            var json = $.parseJSON(xhr.responseText);
-	            $.each(json.django_messages, function (i, item) {
-	                addMessage(item.message, item.extra_tags);
-	            });
-	        }
-	    }).ajaxError(function(e, xhr, settings, exception) {
-	        addMessage("There was an error processing your request, please try again.", "error");
-		})
+            if (contentType == "application/javascript" || contentType == "application/json") {
+        
+                var json = $.parseJSON(xhr.responseText);
+                $.each(json.django_messages, function (i, item) {
+                    addMessage(item.message, item.extra_tags);
+                });
+            }
+        }).ajaxError(function(e, xhr, settings, exception) {
+            addMessage("There was an error processing your request, please try again.", "error");
+        })
     });
 
-	/*
-	$(document).ready(function() {
-		var $login_dialog = $('<div></div>')
-		.html("Login")
-		.dialog({ 
-			autoOpen: false, 
-			title: 'Login Stuff',
-			modal: true,
-			width: 400
-		});
+    /*
+    $(document).ready(function() {
+        var $login_dialog = $('<div></div>')
+        .html("Login")
+        .dialog({ 
+            autoOpen: false, 
+            title: 'Login Stuff',
+            modal: true,
+            width: 400
+        });
 
-		$( "#opener" ).click(function() {
-			$login_dialog.dialog('open');
-			return false;
-		});
+        $( "#opener" ).click(function() {
+            $login_dialog.dialog('open');
+            return false;
+        });
 
-	});
-	*/
-	</script>
-	
-	{% block script %} 
-	{% endblock script %}
+    });
+    */
+    </script>
+    
+    {% block script %} 
+    {% endblock script %}
 </body>
 </html>
