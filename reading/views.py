@@ -13,6 +13,8 @@ from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 
+import simplejson 
+
 from reading.models import Reading
 from reading.forms import ReadingForm
 
@@ -135,9 +137,8 @@ def edit_reading(request, reading_id=None):
             
         reading_id = request.POST["reading_id"]
         r = get_object_or_404(Reading, pk=reading_id)
-        # import pdb; pdb.set_trace()
         if r.series.wiki_mode and r.series.contact != request.user:
-            messages.add_message(request, messages.ERROR, "This series is not in wiki mode. Only the owner can edit readings.")
+            messages.error(request, "%s is not in wiki mode. Only the owner can edit readings." % r.series.title)
         else:
             try:
                 r.description = request.POST["description"]
@@ -148,7 +149,8 @@ def edit_reading(request, reading_id=None):
                     print "error=%s" % error
                 messages.error(request, "There was an error validating your update.")
 
-        return render_to_response('index.html', {}, context_instance=RequestContext(request))
+        # return render_to_response('index.html', {}, context_instance=RequestContext(request))
+        return HttpResponse(simplejson.dumps({}), mimetype='application/json')
             
     else: # not AJAX
         created_new = True;

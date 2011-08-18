@@ -25,7 +25,7 @@
 {% block headscript %}
 {% endblock headscript %}
 <script src="http://platform.twitter.com/anywhere.js?id=oZpnsipBP1jBhGbPp5eCUA&v=1" type="text/javascript"></script>
-<script src="{{ MEDIA_URL }}js/jquery-1.4.4.min.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery-1.6.2.min.js"></script>
 <script src="{{ MEDIA_URL }}js/jquery-ui-1.8.10.custom.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/util_0.1.js"></script>
 <script src="{{ MEDIA_URL }}js/jquery.qtip.js" type="text/javascript"></script>
@@ -94,13 +94,11 @@ twttr.anywhere(function (T) {
 	    <div id="content">
 			<div id="messages">
 				{% block messages %}
-				{% if messages %}
 				<ul class="messages">
 				    {% for message in messages %}
 				    <li class="message {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
 				    {% endfor %}
 				</ul>
-				{% endif %}
 				{% endblock messages %}
 			</div>
 
@@ -139,17 +137,11 @@ twttr.anywhere(function (T) {
 	
 	<script type="text/javascript">
 	function addMessage(text, extra_tags) {
-		alert("got a message");
-	    var message = $('<li class="'+extra_tags+'">'+text+'</li>').hide();
-	    $("#messages").append(message);
-	    message.fadeIn(500);
-
-	    setTimeout(function() {
-	        message.fadeOut(500, function() {
-	            message.remove();
-	        });
-	    }, 3000);
-	}
+	    var message = $('<li class="message '+extra_tags+'">'+text+'</li>');//.hide();
+		// alert("message is " + message.html());
+	    $("ul.messages").append(message);
+		$("#messages").delay(100).slideToggle().delay(2500).slideToggle();
+		}
 	
 	$(document).ready(function() {
 		{% if messages %}
@@ -161,19 +153,20 @@ twttr.anywhere(function (T) {
 	
 	$(document).ready(function() {
 	    $('#messages').ajaxComplete(function(e, xhr, settings) {
-			alert("ajax complete");
 	        var contentType = xhr.getResponseHeader("Content-Type");
 
 	        if (contentType == "application/javascript" || contentType == "application/json") {
-	            var json = $.evalJSON(xhr.responseText);
-
+		
+	            var json = $.parseJSON(xhr.responseText);
 	            $.each(json.django_messages, function (i, item) {
 	                addMessage(item.message, item.extra_tags);
 	            });
 	        }
 	    }).ajaxError(function(e, xhr, settings, exception) {
 	        addMessage("There was an error processing your request, please try again.", "error");
+		})
     });
+
 	/*
 	$(document).ready(function() {
 		var $login_dialog = $('<div></div>')

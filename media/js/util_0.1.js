@@ -161,7 +161,8 @@ function bind_editable_descriptions(url) {
 				type: 'POST',
 				url: url,
 				data: { 'reading_id': this.id, 'description': data.value },
-				success: function() {					
+				success: function() {	
+				    				
 				}
 			})
 	
