@@ -155,20 +155,27 @@ function bind_editable_descriptions(url) {
 	// every time a page loads new data via ajax
 	$(".edit_reading_description").inlineEdit({
 		buttonText: 'Update',
-		placeholder: 'Add details about this reading.',
+		placeholder: '<i>Add details about this reading.</i>',
 	    save: function(e, data) {
+	        var response;
 			$.ajax({
 				type: 'POST',
 				url: url,
 				data: { 'reading_id': this.id, 'description': data.value },
                 success: function(data, textStatus, jqXHR) { 
-                    var response = $.parseJSON(jqXHR.responseText);
-                    $("#" + response.id).text(response.description);                 
+                    response = $.parseJSON(jqXHR.responseText);
+                    // Use the text that comes back from the response to set 
+                    // the text in the box because if the user wasn't 
+                    // authorized to edit it, this will reset it to what it 
+                    // was.
                 },
 				error: function(jqXHR, textStatus, errorThrown) {
-				    alert("in error, textSTatus is " + textStatus);
 				}
-			})
+			});
+            // $("#" + response.id).text(response.description);                 
+            if (!response.authorized) {
+                return false;
+            }
 	
 	    },
 		control: 'textarea',
