@@ -144,10 +144,10 @@ twttr.anywhere(function (T) {
 	function addMessage(text, extra_tags) {
 	    var message = $('<li class="message '+extra_tags+'">'+text+'</li>');//.hide();
 		// alert("message is " + message.html());
-	    $("ul.messages").append(message);
-		//showMessages();
-		delay(2500);
-		// $("ul.messages").remove($("li"));
+	    $("ul .messages").append(message);
+		showMessages();
+		// need to make this only happen after show messages completes
+		$("ul .messages").remove($("li"));
 	}
 	
 	$(document).ready(function() {
