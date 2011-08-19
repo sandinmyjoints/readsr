@@ -217,6 +217,16 @@ div.inside_banner {
 	padding: 4px 4px;
 }
 
+#splash_sidebar {
+	float: right;
+	width: 320px;
+	margin-right: .5em;
+}
+
+#splash_sidebar h1, #splash_sidebar h2, #splash_sidebar h3, #splash_sidebar h4, #banner h2 {
+	padding: 4px 4px;
+}
+
 #banner h1 {
 	padding: .5em .5em;
 }
@@ -925,12 +935,15 @@ ul.series_info {
 	float: right;
 }
 
-.take_tour {
+div.take_tour {
     float: right;
-    font-size: 2em;
-    padding-right: .5em;
     position: relative;
-    right: 18%;
+    right: 40px;
+}
+p.take_tour {
+    font-size: 2em;
+    text-align: center;
+    font-weight: bold; 
 }
 
 .splash_content {
