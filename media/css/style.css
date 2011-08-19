@@ -977,7 +977,10 @@ table.recurring_form { border-collapse: collapse; font-size: 1em; }
 
 .tour h1 {
     font-size: 2.5em;
-    padding: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 0em;
+    padding-top: 1em;
 }
 .tour #head h1 {
 }
@@ -1011,6 +1014,7 @@ table.recurring_form { border-collapse: collapse; font-size: 1em; }
 }
 
 #content.tour img {
+    border: 1px solid black;
 }
 
 #tour_footer {
