@@ -17,3 +17,4 @@ tweepy==1.7.1
 wsgiref==0.1.2
 -e hg+https://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
 -e git+https://github.com/dakrauth/django-swingtime.git/#egg=django-swingtime
+-e git+git@github.com:sandinmyjoints/rrule2text.git/#egg=rrule2text
