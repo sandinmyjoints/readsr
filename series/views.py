@@ -27,7 +27,7 @@ from profiles.views import create_profile as profile_create_profile
 from profiles.views import edit_profile as profile_edit_profile
 
 import tweepy
-from bitly import bitly
+import bitlyapi 
 
 from swingtime.models import Event, EventType
 #from swingtime.forms import MultipleOccurrenceForm
@@ -296,10 +296,10 @@ def edit_series(request, series_id=None):
 def _send_tweet(request, tweet_message=[], sr=None):
     """Utility function to tweet and save the tweet to the db."""
     
-    api = bitly.Api(settings.BITLY_USER, settings.BITLY_KEY) 
+    api = bitlyapi.BitLy(settings.BITLY_USER, settings.BITLY_KEY) 
     url = request.build_absolute_uri().replace("/edit", "")
-    res = api.shorten(url)
-    tweet_message.append("%s" % res)
+    res = api.shorten(longUrl=url)
+    tweet_message.append("%s" % res['url'])
     send_msg = ' '.join(tweet_message)
 
     try:
@@ -309,7 +309,7 @@ def _send_tweet(request, tweet_message=[], sr=None):
         SeriesTweet.objects.create(
             series = sr,
             tweet = send_msg,
-            bitly_url = res,
+            bitly_url = res['url'],
             twitter_status_id = last_msg.id
         )
 
