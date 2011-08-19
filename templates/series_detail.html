@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load taggit_extras %}
 
 {% block title %}
 {{ block.super }} - {{ series.title }}
@@ -24,7 +25,6 @@ var end_date = "{{ end_date }}";
 		{% endif %}</h1>
 
 	</div> <!-- banner -->
-
 	<div class="series_info">		
 	<dl class="series_info">
 		<dt class="series_info first">Contact</dt>
@@ -34,9 +34,11 @@ var end_date = "{{ end_date }}";
 		{% if series.tags.all %}
 		<dt class="series_info">Tags</dt>
 		<dd class="series_info">
-			{% for tag in series.tags.all %}
-			{{ tag }}
-			{% endfor %}
+			{# {% for tag in series.tags.all %} #}
+			{# {{ tag }} #}
+			{# {% endfor %} #}
+			{% include_taglist 'series.Series' %}
+			{# {% include_tagcloud 'series.Series' %} #}
 		</dd>
 		{% endif %}
 		<dt class="series_info">Genre{{ series.genre.all|pluralize }}</dt>

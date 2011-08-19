@@ -140,6 +140,7 @@ INSTALLED_APPS = (
 	'swingtime',
 	'south',
 	'taggit',
+	'taggit_templatetags',
 	'debug_toolbar',	
 )
 
