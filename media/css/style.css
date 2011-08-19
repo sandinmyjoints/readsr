@@ -1,4 +1,5 @@
 /* body and headers */
+html,body { height:100%; }
 body {
 	background-color: #FFF;
 	background: url("/media/adc3eb_bg.png");
@@ -924,6 +925,14 @@ ul.series_info {
 	float: right;
 }
 
+.take_tour {
+    float: right;
+    font-size: 2em;
+    padding-right: .5em;
+    position: relative;
+    right: 18%;
+}
+
 .splash_content {
 	width: 80%;
 }
@@ -965,3 +974,58 @@ table.recurring_form { border-collapse: collapse; font-size: 1em; }
 .evt-bbc-odd, .evt-bbc-even { background-color: #aaa; }
 .evt-prv-odd { background-color: #8a9; }
 .evt-prv-even { background-color: #acb; }
+
+.tour h1 {
+    font-size: 2.5em;
+    padding: 1em;
+}
+.tour #head h1 {
+}
+
+#container.tour {
+    width: 1000px;
+}
+
+#next.tour {
+    font-size: 2em;
+    padding-right: 1em;
+    height: 100px;
+    position: absolute;
+    top: 50%;
+    margin-top: -50px;
+}
+
+#next_parent.tour {
+   float: left;
+   width: 300px;
+}
+
+#content.tour {
+    float: left;
+    width: 650px;
+    padding: 1em;
+}
+
+#content.tour p {
+    padding-bottom: .5em;
+}
+
+#content.tour img {
+}
+
+#tour_footer {
+    clear: both;
+    border-top: 1px solid #BBB;
+    position: absolute;
+    bottom: 4px;
+    font-size: 90%;
+    width: 100%;
+/*    margin-right: auto;
+    margin-left: auto;*/
+}
+
+#inner_tour_footer {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
