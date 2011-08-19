@@ -1,18 +1,8 @@
 # Django settings for dcreadings project.
-import os, sys
+import os
 import tweepy
 
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
-
-# Add swingtime development version -- TODO need to find a better way of doing this
-SWINGTIME_PATH = os.path.abspath(os.path.join(os.path.join(ROOT_PATH, ".."), "django-swingtime"))
-sys.path.insert(0, SWINGTIME_PATH)
-
-# to import rrule2text until I get it installable
-# TODO fix this
-RRULE2TEXT_PATH = os.path.abspath(os.path.join(os.path.join(ROOT_PATH, ".."), "rrule2text"))
-sys.path.insert(0, RRULE2TEXT_PATH)
-
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -79,7 +69,7 @@ SECRET_KEY = '9(ff*vntzzm^v&lw69j2k5(6y&parqy-u4i9lcad_j-o38+zuz'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.filestem.Loader',
     'django.template.loaders.app_directories.Loader',
 #     'django.template.loaders.eggs.Loader',
 )
