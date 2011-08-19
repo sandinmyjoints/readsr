@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     url(r'^list/$', views.list_series, name="list-series"),
     url(r'^(?P<series_id>\d+)/readings/', include('reading.urls')),
     url(r'^(?P<series_id>\d+)/$', views.index, name="detail-series"),
+    url(r'^(?P<tag_slug>\w+)/$', views.list_by_tag, name="tag-list"),
     url(r'^edit/$', views.create_series, name="create-series"), 
     url(r'^(?P<series_id>\d+)/edit/$', views.edit_series, name="edit-series"),
     url(r'^(?P<series_id>\d+)/remove/$', views.remove_series, name="remove-series"),
@@ -28,7 +29,6 @@ urlpatterns = patterns('',
     url(r'^affiliate/(?P<affiliate_id>\d+)/edit/$', views.edit_affiliate, name="edit-affiliate"),
     url(r'^site/', views.site_redirect, name="site-redirect"),
     url(r'^$', views.index, name="index"),
-    url(r'^swingtime/', include('swingtime.urls')),
 )
 
 if settings.DEBUG:      

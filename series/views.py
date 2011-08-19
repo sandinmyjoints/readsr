@@ -96,7 +96,16 @@ def list_series(request):
     except Site.DoesNotExist:
         raise Http404
     
-
+def list_by_tag(request, tag_slug):
+    try:
+        series_list = Series.objects.filter(site__exact=settings.SITE_ID).filter(tags__slug=tag_slug)
+        tag = Series.tags.filter(slug=tag_slug)[0]
+        
+        return render_to_response("list_by_tag.html", { 'series_list': series_list, 'tag': tag }, context_instance=RequestContext(request))
+        
+    except Site.DoesNotExist:
+        raise Http404
+            
 @login_required
 def create_series(request, extra_context=None):
     """

@@ -1,0 +1,10 @@
+{% load taggit_extras %}
+
+<h2>Series Tags</h2>
+
+{% get_tagcloud as tags for 'series.Series' %}
+<ul style="padding: .5em">
+{% for tag in tags %}
+	<li><a href="{% url tag-list tag.slug %}">{{ tag.name }}</a> ({{ tag.num_times }})</li>
+{% endfor %}
+</ul>

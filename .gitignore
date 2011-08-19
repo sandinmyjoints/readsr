@@ -3,3 +3,4 @@ local_settings.py
 media/js/timePicker
 tweepy_cache
 readsr.db
+.livereload

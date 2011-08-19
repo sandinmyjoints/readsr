@@ -1,0 +1,13 @@
+{% extends "base.html" %} 
+
+{% block title %}{{ block.super }} - {{ city_site.city_and_state }}{% endblock title %}
+
+{% block content %}
+
+<div id="banner">
+<h1>All series tagged "{{ tag.name }}"</h1>
+</div>
+
+{% include "list_series.html" %}
+
+{% endblock %}

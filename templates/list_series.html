@@ -9,7 +9,7 @@
             {% endif %}
             <br />
             {% if series.regular %}
-                {{ series.week_within_month.get_week_within_month_display }} {{ series.day_of_week.get_day_display }}s, {{ series.time }}
+                {{ series.recurrence_rule|capfirst }}
             {% else %}
                 {{ series.irregular_date_description }}
             {% endif %}

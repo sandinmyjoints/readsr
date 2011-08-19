@@ -97,90 +97,90 @@ class Affiliate(ModelBase):
 class InvalidDayOfWeekError(Exception):
     pass
         
-class DayOfWeek(ModelBase):
-    """
-    Represents a day of the week (on which a reading series can take place). 
-    Because the dates of reading series are often designated by terms like 'first Monday'
-    or 'third Friday', this field is useful in determining on which dates individual
-    readings take place.
-    """
-
-    # The pk in the db is 1-indexed (Monday=1, Tuesday=2, etc), but python's days 
-    # of the week are 0-indexed if you use .weekday(), so we are using .isoweekday()
-    # instead. 
-    days =[ '', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
-           'Sunday' ]
-
-    DAYS_OF_WEEK_CHOICES = (
-    ('MO', days[1]),
-    ('TU', days[2]),
-    ('WE', days[3]),
-    ('TH', days[4]),
-    ('FR', days[5]),
-    ('SA', days[6]),
-    ('SU', days[7]),
-    )
-    
-    day = models.CharField(max_length=2, choices=DAYS_OF_WEEK_CHOICES)
-    
-    def __unicode__(self):
-        for daypair in self.DAYS_OF_WEEK_CHOICES:
-            if self.day in daypair:
-                return daypair[1]
-
-        # This shouldn't happen unless the days of the week were not loaded from the fixture.
-        raise InvalidDayOfWeekError, "self.day = %s, was not in DAY_OF_WEEK_CHOICES. Did you add all the days of the week to the database?" % self.day
-        
-    # next_my_day_of_week returns a datetime equal to the start (midnight+min) of the next day that is this instance's day of the week.
-    # It doesn't know what time the reading is, so if today is the day of the week the reading falls on,
-    # it simply returns today rather than checking whether the reading time has passed already.
-    # So we need to check for that outside of this method. 
-    def next_my_day_of_week(self):
-        """ 
-        Returns a date equal to the start of the next day that is this instance's day of the week. 
-        """
-        
-        # Find the number of the current day of the week
-        today_day = date.today().isoweekday() 
-        reading_day = self.days.index(self.__unicode__()) 
-        next_day = date.today() 
-        while next_day.isoweekday() != reading_day:
-            next_day = next_day + timedelta(1)
-                
-        return next_day
-    
-    class Meta(object):
-        verbose_name_plural = 'DaysOfWeek'
+# class DayOfWeek(ModelBase):
+#     """
+#     Represents a day of the week (on which a reading series can take place). 
+#     Because the dates of reading series are often designated by terms like 'first Monday'
+#     or 'third Friday', this field is useful in determining on which dates individual
+#     readings take place.
+#     """
+# 
+#     # The pk in the db is 1-indexed (Monday=1, Tuesday=2, etc), but python's days 
+#     # of the week are 0-indexed if you use .weekday(), so we are using .isoweekday()
+#     # instead. 
+#     days =[ '', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
+#            'Sunday' ]
+# 
+#     DAYS_OF_WEEK_CHOICES = (
+#     ('MO', days[1]),
+#     ('TU', days[2]),
+#     ('WE', days[3]),
+#     ('TH', days[4]),
+#     ('FR', days[5]),
+#     ('SA', days[6]),
+#     ('SU', days[7]),
+#     )
+#     
+#     day = models.CharField(max_length=2, choices=DAYS_OF_WEEK_CHOICES)
+#     
+#     def __unicode__(self):
+#         for daypair in self.DAYS_OF_WEEK_CHOICES:
+#             if self.day in daypair:
+#                 return daypair[1]
+# 
+#         # This shouldn't happen unless the days of the week were not loaded from the fixture.
+#         raise InvalidDayOfWeekError, "self.day = %s, was not in DAY_OF_WEEK_CHOICES. Did you add all the days of the week to the database?" % self.day
+#         
+#     # next_my_day_of_week returns a datetime equal to the start (midnight+min) of the next day that is this instance's day of the week.
+#     # It doesn't know what time the reading is, so if today is the day of the week the reading falls on,
+#     # it simply returns today rather than checking whether the reading time has passed already.
+#     # So we need to check for that outside of this method. 
+#     def next_my_day_of_week(self):
+#         """ 
+#         Returns a date equal to the start of the next day that is this instance's day of the week. 
+#         """
+#         
+#         # Find the number of the current day of the week
+#         today_day = date.today().isoweekday() 
+#         reading_day = self.days.index(self.__unicode__()) 
+#         next_day = date.today() 
+#         while next_day.isoweekday() != reading_day:
+#             next_day = next_day + timedelta(1)
+#                 
+#         return next_day
+#     
+#     class Meta(object):
+#         verbose_name_plural = 'DaysOfWeek'
 
 class InvalidWeekWithinMonthError(Exception):
     pass
     
-class WeekWithinMonth(ModelBase):
-    """
-    Represents a week within the month. See note under DayOfTheWeek for why this is 
-    useful for tracking when individual readings take place.
-    Fifth is exceedingly unlikely to be used by
-    any real reading series.
-    """
-    WEEK_WITHIN_MONTH_CHOICES = (
-    ('1', 'First'),
-    ('2', 'Second'),
-    ('3', 'Third'),
-    ('4', 'Fourth'),
-    ('5', 'Fifth'),
-    )
-    
-    week_within_month = models.CharField(max_length=1, choices=WEEK_WITHIN_MONTH_CHOICES)
-    def __unicode__(self):
-        for weekpair in self.WEEK_WITHIN_MONTH_CHOICES:
-            if self.week_within_month in weekpair:
-                return "The %s" % weekpair[1];
-
-        # This will only happen if all the choices haven't been added from the fixture.
-        raise InvalidWeekWithinMonthError, "self.week_within_month = %s, was not in WEEK_WITHIN_MONTH_CHOICES. Did you add all the weeks of the month to the database?" % self.week_within_month
-                
-    class Meta(object):
-        verbose_name_plural = 'WeeksWithinMonth'
+# class WeekWithinMonth(ModelBase):
+#     """
+#     Represents a week within the month. See note under DayOfTheWeek for why this is 
+#     useful for tracking when individual readings take place.
+#     Fifth is exceedingly unlikely to be used by
+#     any real reading series.
+#     """
+#     WEEK_WITHIN_MONTH_CHOICES = (
+#     ('1', 'First'),
+#     ('2', 'Second'),
+#     ('3', 'Third'),
+#     ('4', 'Fourth'),
+#     ('5', 'Fifth'),
+#     )
+#     
+#     week_within_month = models.CharField(max_length=1, choices=WEEK_WITHIN_MONTH_CHOICES)
+#     def __unicode__(self):
+#         for weekpair in self.WEEK_WITHIN_MONTH_CHOICES:
+#             if self.week_within_month in weekpair:
+#                 return "The %s" % weekpair[1];
+# 
+#         # This will only happen if all the choices haven't been added from the fixture.
+#         raise InvalidWeekWithinMonthError, "self.week_within_month = %s, was not in WEEK_WITHIN_MONTH_CHOICES. Did you add all the weeks of the month to the database?" % self.week_within_month
+#                 
+#     class Meta(object):
+#         verbose_name_plural = 'WeeksWithinMonth'
 
 class UnknownNextReadingDayException(Exception):
     pass
@@ -258,7 +258,7 @@ class Series(Event):
     wiki_mode = models.BooleanField("Wiki Mode", default=True)
     site = models.ForeignKey(CitySite)
     rrule = PickledObjectField("Recurrence Rule", blank=True, null=True) # Save the recurrence rule for this Series as a pickled object in the db
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     def __unicode__(self):
         return self.title

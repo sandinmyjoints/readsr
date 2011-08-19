@@ -34,11 +34,9 @@ var end_date = "{{ end_date }}";
 		{% if series.tags.all %}
 		<dt class="series_info">Tags</dt>
 		<dd class="series_info">
-			{# {% for tag in series.tags.all %} #}
-			{# {{ tag }} #}
-			{# {% endfor %} #}
-			{% include_taglist 'series.Series' %}
-			{# {% include_tagcloud 'series.Series' %} #}
+			{% for tag in series.tags.all %}
+				<a href="{% url tag-list tag.slug %}">{{ tag.name }}</a>
+			{% endfor %}
 		</dd>
 		{% endif %}
 		<dt class="series_info">Genre{{ series.genre.all|pluralize }}</dt>
