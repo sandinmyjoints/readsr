@@ -17,3 +17,4 @@ readline==6.2.0
 simplejson==2.1.6
 tweepy==1.7.1
 wsgiref==0.1.2
+-e git+https://github.com/dakrauth/django-swingtime.git/#egg=django-swingtime
