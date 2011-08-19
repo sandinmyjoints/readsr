@@ -6,8 +6,12 @@ django-debug-toolbar==0.8.5
 django-picklefield==0.1.9
 django-profiles==0.2
 django-registration==0.8-alpha-1
+django-taggit==0.9.3
+django-taggit-templatetags==0.4.6dev
+django-templatetag-sugar==0.1
 ipython==0.11
 python-dateutil==1.5
 readline==6.2.0
+simplejson==2.1.6
 tweepy==1.7.1
 wsgiref==0.1.2
