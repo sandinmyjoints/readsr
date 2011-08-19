@@ -31,6 +31,14 @@ var end_date = "{{ end_date }}";
 		<dd class="series_info"><a href="{% url detail-contact series.contact_id %}">{{ series.contact.first_name }} {{ series.contact.last_name }}</a></dd>
 		<dt class="series_info">About</dt>
 		<dd class="series_info">{{ series.description }}</dd>
+		{% if series.tags.all %}
+		<dt class="series_info">Tags</dt>
+		<dd class="series_info">
+			{% for tag in series.tags.all %}
+			{{ tag }}
+			{% endfor %}
+		</dd>
+		{% endif %}
 		<dt class="series_info">Genre{{ series.genre.all|pluralize }}</dt>
 		<dd class="series_info">
 		{% for genre in series.genre.all %}

@@ -76,6 +76,17 @@
                     </ol>
                 {% endif %}
             </dd>
+			<dt><label for="id_tags">Now enter some tags associated with the series.</dt>
+			<dd>
+				{{ event_form.tags }}
+				{% if event_form.tags.errors %}
+                    <ol class="errorlist">
+                    {% for error in event_form.tags.errors %}
+                        <li><strong>{{ error|escape }}</strong></li>
+                    {% endfor %}
+                    </ol>
+                {% endif %}
+			</dd>
             <dt><label for="id_genre">What genres are typically represented? (Hold shift to select more than one.)</label></dt>
             <dd>
                 {{ event_form.genre }} 

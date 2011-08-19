@@ -139,7 +139,8 @@ INSTALLED_APPS = (
 	'profiles',
 	'swingtime',
 	'south',
-	'debug_toolbar',
+	'taggit',
+	'debug_toolbar',	
 )
 
 

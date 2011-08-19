@@ -7,6 +7,8 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
+from taggit.managers import TaggableManager
+
 from dateutil import rrule
 
 from picklefield.fields import PickledObjectField
@@ -256,6 +258,7 @@ class Series(Event):
     wiki_mode = models.BooleanField("Wiki Mode", default=True)
     site = models.ForeignKey(CitySite)
     rrule = PickledObjectField("Recurrence Rule", blank=True, null=True) # Save the recurrence rule for this Series as a pickled object in the db
+    tags = TaggableManager()
 
     def __unicode__(self):
         return self.title
