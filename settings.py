@@ -92,6 +92,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'series.middleware.AjaxMessaging',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -126,6 +127,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
 	'django.contrib.humanize',
+	'django.contrib.flatpages',
 	'city_site',
 	'series',
 	'reading',
