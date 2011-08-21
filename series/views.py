@@ -239,7 +239,7 @@ def edit_series(request, series_id=None):
                 return HttpResponseRedirect(series.get_absolute_url())               
             else: # not valid
                 messages.error(request, "Please correct the errors below.")
-                return render_to_response('edit_series.html', { 'series_form': event_form, 'recurrence_form': recurrence_form or MonthlyReadingMultipleOccurrenceForm(initial=dict(dtstart=datetime.now())), 'series': series }, context_instance=RequestContext(request))
+                return render_to_response('edit_series.html', { 'event_form': event_form, 'recurrence_form': recurrence_form or MonthlyReadingMultipleOccurrenceForm(initial=dict(dtstart=datetime.now())), 'event': series }, context_instance=RequestContext(request))
 
         elif '_add_occurrences' in request.POST:
             # _add_occurrences is the input for the form that adds new Reading occurrences to the Series.
@@ -273,7 +273,7 @@ def edit_series(request, series_id=None):
                 return HttpResponseRedirect(series.get_absolute_url())
             else: # not valid
                 messages.error(request, "Please correct the errors below.")
-                return render_to_response('edit_series.html', { 'series_form': SeriesForm(instance=series), 'recurrence_form': recurrence_form, 'series': series }, context_instance=RequestContext(request))
+                return render_to_response('edit_series.html', { 'event_form': SeriesForm(instance=series), 'recurrence_form': recurrence_form, 'event': series }, context_instance=RequestContext(request))
         elif '_delete' in request.POST:
             pass
             # TODO fill this in to delete particular occurrences within a series
