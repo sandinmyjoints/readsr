@@ -7,7 +7,9 @@ ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = ()
+ADMINS = (
+    ('Your Name', 'your_email@domain.com'),
+)
 
 MANAGERS = ADMINS
 
