@@ -294,6 +294,9 @@ class Series(Event):
         only a single ``Occurrence`` instance will be created using the exact
         ``start_time`` and ``end_time`` values.
         '''
+        if settings.DEBUG:
+            print "add_occurrences in Series model"
+            
         rrule_params.setdefault('freq', rrule.MONTHLY)
         
         if 'count' not in rrule_params and 'until' not in rrule_params:
