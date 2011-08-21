@@ -12,7 +12,7 @@
 <h2>Your Readsrs</h2>
 <ul>
 	{% for series in user_series %}
-	<li><a href="{% url detail-series series.id %}">{{ series.primary_name }}</a></li>
+	<li><a href="{% url detail-series series.id %}">{{ series.title.title }}</a></li>
 	{% endfor %}
 </ul>
 {% else %}

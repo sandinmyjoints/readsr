@@ -15,4 +15,4 @@ readline==6.2.0
 simplejson==2.1.6
 tweepy==1.7.1
 wsgiref==0.1.2
--e hg+https://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
+-e hg+https://bitbucket.org/sandinmyjoints/django-registration#egg=django-registration
