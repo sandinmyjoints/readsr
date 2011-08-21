@@ -7,22 +7,11 @@ ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    ('William', 'william.bert@gmail.com'),
-)
+ADMINS = ()
 
 MANAGERS = ADMINS
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'django_db',                      # Or path to database file if using sqlite3.
-        'USER': 'django_db',                      # Not used with sqlite3.
-        'PASSWORD': 'Fqw3EtedHfrMPqZB',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-#		'HOST': '/var/mysql/mysql.sock',
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
 }
 
 # Local time zone for this installation. Choices can be found here:
@@ -65,7 +54,7 @@ ADMIN_MEDIA_PREFIX = '/media/admin/'
 STATIC_DOC_ROOT = os.path.join(ROOT_PATH, 'media')
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '9(ff*vntzzm^v&lw69j2k5(6y&parqy-u4i9lcad_j-o38+zuz'
+SECRET_KEY = ''
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -94,7 +83,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 	"django.core.context_processors.request",
 	"city_site.context_processors.city_site",
 	"city_site.context_processors.all_city_sites",
-    # "series.context_processors.series_list",
 	"series.context_processors.contact",
 	"series.context_processors.tweets",
 )
@@ -150,13 +138,13 @@ EMAIL_USE_TLS = True
 
 LOGIN_REDIRECT_URL = "/"
 
-TWITTER_CONSUMER_KEY = "oZpnsipBP1jBhGbPp5eCUA"
-TWITTER_CONSUMER_SECRET = "pi48qgRK2O0SmOlpWIDZtFsFh6AlaAcGY6IOyeY7IE"
-TWITTER_ACCESS_KEY = "307415363-Lb84FJbNjH6zyUSpDL0YYY9ovp8CQiIDXWbv5TcR"
-TWITTER_ACCESS_SECRET = "GXZBz82nLkytDbnFaU1nHrNhavCuhnKTFx3ACS59k"
+TWITTER_CONSUMER_KEY = ""
+TWITTER_CONSUMER_SECRET = ""
+TWITTER_ACCESS_KEY = ""
+TWITTER_ACCESS_SECRET = ""
 
-BITLY_USER = "readsr"
-BITLY_KEY = "R_8b4787749bdbc284709fc4dca825cc9b"
+BITLY_USER = ""
+BITLY_KEY = ""
 
 TWEEPY_CACHE_DIR = os.path.join(ROOT_PATH, 'tweepy_cache')
  
