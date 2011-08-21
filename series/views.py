@@ -239,7 +239,7 @@ def edit_series(request, series_id=None):
                 return HttpResponseRedirect(series.get_absolute_url())               
             else: # not valid
                 messages.error(request, "Please correct the errors below.")
-                return render_to_response('edit_series.html', { 'series_form': series_form, 'recurrence_form': recurrence_form or MonthlyReadingMultipleOccurrenceForm(initial=dict(dtstart=datetime.now())), 'series': sr }, context_instance=RequestContext(request))
+                return render_to_response('edit_series.html', { 'series_form': event_form, 'recurrence_form': recurrence_form or MonthlyReadingMultipleOccurrenceForm(initial=dict(dtstart=datetime.now())), 'series': sr }, context_instance=RequestContext(request))
 
         elif '_add_occurrences' in request.POST:
             # _add_occurrences is the input for the form that adds new Reading occurrences to the Series.
