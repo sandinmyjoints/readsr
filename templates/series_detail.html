@@ -28,7 +28,7 @@ var end_date = "{{ end_date }}";
 	</div> <!-- banner -->
 	<div class="series_info">		
 	<dl class="series_info">
-		<dt class="series_info">About</dt>
+		<dt class="series_info first">About</dt>
 		<dd class="series_info">{{ series.description }}</dd>
 		{% if series.tags.all %}
 		<dt class="series_info">Tags</dt>
@@ -84,7 +84,7 @@ var end_date = "{{ end_date }}";
 		<dt class="series_info">Website</dt>
 		<dd class="series_info">{{ series.website|urlizetrunc:22|default:"None available" }}</dd>
 
-		<dt class="series_info first">Contact</dt>
+		<dt class="series_info">Contact</dt>
 		<dd class="series_info"><a href="{% url detail-contact series.contact_id %}">{{ series.contact.first_name }} {{ series.contact.last_name }}</a></dd>
 
 		{% if series.notes.all %}

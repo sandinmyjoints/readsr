@@ -18,10 +18,16 @@ from contact_form.forms import ContactForm
 from registration.forms import RegistrationFormUniqueEmail
 from city_site.models import CitySite
 
-
+class DifferentlySizedTextarea(forms.Textarea):
+  def __init__(self, *args, **kwargs):
+    attrs = kwargs.setdefault('attrs', {})
+    attrs.setdefault('cols', 40)
+    attrs.setdefault('rows', 3)
+    super(DifferentlySizedTextarea, self).__init__(*args, **kwargs)
+    
 class SeriesForm(forms.ModelForm):
     regular = forms.BooleanField(required=False)
-    irregular_date_description = forms.CharField(required=False, widget=forms.Textarea)
+    irregular_date_description = forms.CharField(required=False, widget=DifferentlySizedTextarea)
     # time = forms.TimeField(
     #     input_formats=('%H:%M', '%I:%M %p', '%I %p', '%H.%M', '%I.%M %p'), 
     #     widget=forms.TimeInput(format=r"%I:%M %p",), 
@@ -36,7 +42,7 @@ class SeriesForm(forms.ModelForm):
     admission_description = forms.CharField(required=False)
     notes = forms.CharField(required=False)
     wiki_mode = forms.BooleanField(required=False)
-    description = forms.CharField(required=True, widget=forms.Textarea)
+    description = forms.CharField(required=True, widget=DifferentlySizedTextarea)
 
     class Meta:
         model = Series
