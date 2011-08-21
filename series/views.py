@@ -301,6 +301,8 @@ def _send_tweet(request, tweet_message=[], sr=None):
     res = api.shorten(longUrl=url)
     tweet_message.append("%s" % res['url'])
     send_msg = ' '.join(tweet_message)
+    
+    # TODO Check here to see if len(send_msg) > 140, then trim it somehow
 
     try:
         api = get_tweepy_api()
