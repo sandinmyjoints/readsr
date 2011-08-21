@@ -18,10 +18,10 @@
 	 </script>
 
 	<div class="splash_content">
-	<h2>Discover and share literary readings and reading series near you.</h2>
+	<h1 class="splash_content">Discover and share literary readings and reading series.</h1>
 		<p>Welcome to Readsr. We track literary reading series in various cities. You can see who's reading, what kinds of stuff they're reading, where, and when.</p>
 			<p>How do we stay up to date? With the help of users like you. You can add a new reading series, or update a current one with information about who's reading. You can also follow us on Twitter (@readsr) to get real-time updates. And you can <a href="{% url about %}">contact us</a> with suggestions or questions. </p>
-		<h3>Right now, we're tracking readings in these cities:</h3>
+		<h3>First time here? Learn <a href="/tour/">how it works</a>. Or check out a city where we're tracking readings:</h3>
 	<ul class="sites_list">
 	{% for site in sites_list %}
 	<li><h2><a href="http://{{ site.domain }}">{{ site.name }}</a></h2></li>
@@ -33,7 +33,7 @@
 {% endblock content %}
 
 {% block sidebar %}
-<img class="splash_image" src="{{ MEDIA_URL }}readsr_splash.jpg">
+<a href="/tour/"><img class="splash_image" src="{{ MEDIA_URL }}readsr_splash.jpg"></a>
 <div class="take_tour"><p class="take_tour"><a href="/tour/">How it works &#187;</a></p></div>
 {% endblock sidebar %}
 

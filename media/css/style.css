@@ -950,6 +950,10 @@ p.take_tour {
 	width: 80%;
 }
 
+h1.splash_content {
+    line-height: 1em;
+}
+
 .ui-tooltip-content {
 	font-size: 1.3em;
 }
@@ -1019,7 +1023,10 @@ table.recurring_form { border-collapse: collapse; font-size: 1em; }
 #content.tour {
     float: left;
     width: 650px;
-    padding: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-right: 1em;
+    padding-left: 2em;
 }
 
 #content.tour p {

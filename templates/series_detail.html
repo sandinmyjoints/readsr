@@ -23,6 +23,7 @@ var end_date = "{{ end_date }}";
 		<a href="edit/"><img src="{{ MEDIA_URL }}edit.png" alt="Edit" class="edit-icon"></a>
 		<a href="remove/"><img src="{{ MEDIA_URL }}delete.png" alt="Request removal" class="delete-icon"></a>
 		{% endif %}</h1>
+{% endblock name %}
 
 	</div> <!-- banner -->
 	<div class="series_info">		
@@ -101,9 +102,6 @@ var end_date = "{{ end_date }}";
 	</div>	
 	
 	{% include "choose_date_snippet.html" %}
-
-	{% endblock name %}
-	
 
 	<div id="reading_list">
 		<img id="load_image" alt="Loading." src="{{ MEDIA_URL }}spinner-large.gif">
