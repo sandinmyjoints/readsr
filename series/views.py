@@ -355,15 +355,6 @@ def remove_series(request, template_name="remove_series.html", series_id=None, s
 
     return render_to_response(template_name, { 'form': form, 'user': request.user }, context_instance=context)
         
-def contact_detail(request, contact_id):
-    """
-    Contact
-
-    Presents the details of a particular contact.
-    """
-    c = get_object_or_404(User, pk=contact_id)
-    return render_to_response('contact_detail.html', {'contact': c}, context_instance=RequestContext(request))
-    
 def venue_list(request):
     """
     Venue List
@@ -476,6 +467,18 @@ def site_redirect(request):
             new_site = "".join(["http://", new_site])
         return redirect(urlparse(new_site).geturl())
  
+
+@login_required
+def contact_detail(request, contact_id):
+    """
+    Contact
+
+    Presents the details of a particular contact.
+    """
+    c = get_object_or_404(User, pk=contact_id)
+    return profile_detail(request, c.username)
+    #return render_to_response('contact_detail.html', {'contact': c}, context_instance=RequestContext(request))
+
 @login_required
 def profile_detail(request, username):
     """
