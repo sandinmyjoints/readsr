@@ -1052,4 +1052,6 @@ table.recurring_form { border-collapse: collapse; font-size: 1em; }
 }
 
 .num_comments {
+    float: left;
+    padding-left: 6px;
 }

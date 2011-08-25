@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load taggit_extras %}
+{% load disqus_tags %}
 
 {% block title %}
 {{ block.super }} - {{ series.title }}
@@ -111,6 +112,13 @@ var end_date = "{{ end_date }}";
 			{% include "calendar_snippet.html" %}
 		{% endif %}
 	</div>
+	
+	<div class="disqus">
+	{% disqus_dev %}
+	{% set_disqus_identifier "series_" series.id %}
+	{% disqus_show_comments %}
+	</div>
+	
 	
 {% endblock content %}
 
