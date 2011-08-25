@@ -34,7 +34,7 @@
 				{% endif %}
 			</div>
 			<div class="num_comments">
-				<a href="{{ reading.get_absolute_url }}#disqus_thread" data-disqus-identifier="{{ reading.id }}">View Comments</a>
+				<a href="{{ reading.get_absolute_url }}#disqus_thread" data-disqus-identifier="reading_{{ reading.id }}">View Comments</a>
 				{% disqus_num_replies %}
 			</div>
 			<div class="clear"></div>
@@ -58,7 +58,7 @@
 				{% endfor %}
 			</h3>	
 			</div>	
-			<div class="edit_reading_description style_reading_description" id="{{ reading.id }}">
+			<div class="edit_reading_description style_reading_description" id="reading_{{ reading.id }}">
 				{% if reading.description %}
 				{{ reading.description }}
 				{% endif %}
