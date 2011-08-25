@@ -1,0 +1,18 @@
+{% load taggit_extras %}
+
+<h2>Series Tags</h2>
+{% if tag_list %}
+    <ul class="tag_list">
+		{% for tag in tag_list %}
+			<li><a href="">{{ tag.name }}</a> ({{ tag.num_times }})</li>
+		{% endfor %}
+    </ul>
+{% else %}
+    <div class="tag_list">
+        <p>No tags yet.</a></p>
+    </div>
+{% endif %}
+{% if more_tags %}
+<h3>View <a href="{% url list-tags %}">{{ more_tags }} additional tags</a>.</h3>
+<div style="text-align:center">&#10018;</div>
+{% endif %}

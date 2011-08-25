@@ -5,6 +5,6 @@
 {% get_taglist as tags for 'series.Series' %}
 <ul style="padding: .5em">
 {% for tag in tags %}
-	<li><a href="{% url tag-list tag.slug %}">{{ tag.name }}</a> ({{ tag.num_times }})</li>
+	<li><a href="{% url list-by-tag tag.slug %}">{{ tag.name }}</a> ({{ tag.num_times }})</li>
 {% endfor %}
 </ul>

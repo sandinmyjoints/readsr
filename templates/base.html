@@ -1,4 +1,5 @@
 {% load series_tags %}
+{% load reading_tags %}
 
 <!DOCTYPE html>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -117,7 +118,8 @@ twttr.anywhere(function (T) {
                 {% include "sidebar_snippet.html" %}
             </div>-->
 			<div class="sidebar_element">
-				{% include "tag_snippet.html" %}
+				{# {% include "tag_snippet.html" %} #}
+				{% show_tag_list 5 %}
 			</div>
 			
             <div class="sidebar_element">

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% load taggit_extras %}
+
+{% block content %}
+	{% get_taglist as tags for 'series.Series' %}
+	{% for tag in tags %}
+		<li><a href="{% url list-by-tag tag.slug %}">{{ tag.name }}</a> ({{ tag.num_times }})</li>
+	{% endfor %}
+	
+{% endblock %}

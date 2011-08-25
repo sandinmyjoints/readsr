@@ -35,7 +35,7 @@ var end_date = "{{ end_date }}";
 		<dt class="series_info">Tags</dt>
 		<dd class="series_info">
 			{% for tag in series.tags.all %}
-				<a href="{% url tag-list tag.slug %}">{{ tag.name }}</a>
+				<a href="{% url list-by-tag tag.slug %}">{{ tag.name }}</a>
 			{% endfor %}
 		</dd>
 		{% endif %}

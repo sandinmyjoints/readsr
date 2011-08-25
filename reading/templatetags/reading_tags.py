@@ -5,8 +5,10 @@ from itertools import groupby
 
 from django.utils.html import conditional_escape as esc
 
-register = template.Library()
+from reading.models import Reading
 
+register = template.Library()
+        
 def do_reading_calendar(parser, token):
 	"""
 	The template tag's syntax is {% reading_calendar year month reading_list %}

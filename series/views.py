@@ -95,7 +95,10 @@ def list_series(request):
         
     except Site.DoesNotExist:
         raise Http404
-    
+
+# def list_tags(request):
+#     return render_to_response("list_tags.html", {}, context_instance=RequestContext(request))
+                
 def list_by_tag(request, tag_slug):
     try:
         series_list = Series.objects.filter(site__exact=settings.SITE_ID).filter(tags__slug=tag_slug)
@@ -694,4 +697,3 @@ def edit_user_series(request, contact_id=None):
     formset = SeriesFormSet(queryset=Series.objects.filter(contact__exact=contact_id))
     
     return render_to_response("edit_all_series.html", { 'formset': formset }, context_instance=RequestContext(request))
-    

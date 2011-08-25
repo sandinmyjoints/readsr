@@ -183,3 +183,6 @@ def edit_reading(request, reading_id=None):
     
 def index(request, series_id=None):
     return HttpResponse("index")
+    
+def list_tags(request):
+    pass
