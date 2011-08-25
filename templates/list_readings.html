@@ -1,4 +1,6 @@
 {% load humanize %}
+{% load disqus_tags %}
+
 {% if reading_list %}
 
     <ul class="reading_list">
@@ -31,6 +33,10 @@
 				{{ reading.description }}
 				{% endif %}
 			</div>
+			<div class="num_comments">
+				<a href="{{ reading.get_absolute_url }}#disqus_thread" data-disqus-identifier="{{ reading.id }}">View Comments</a>
+				{% disqus_num_replies %}
+			</div>
 			<div class="clear"></div>
 			
 			{% else %} <!-- if not index ******************************** -->
@@ -56,6 +62,10 @@
 				{% if reading.description %}
 				{{ reading.description }}
 				{% endif %}
+			</div>
+			<div class="num_comments">
+				<a href="{{ reading.get_absolute_url }}#disqus_thread" data-disqus-identifier="{{ reading.id }}">View Comments</a>
+				{% disqus_num_replies %}
 			</div>
 			
 			<div class="clear"></div>
