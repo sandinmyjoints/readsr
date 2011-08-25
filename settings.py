@@ -8,17 +8,17 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('William', 'william.bert@gmail.com'),
+    ('yourname', 'your@email.com'),
 )
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'django_db',                      # Or path to database file if using sqlite3.
-        'USER': 'django_db',                      # Not used with sqlite3.
-        'PASSWORD': 'Fqw3EtedHfrMPqZB',                  # Not used with sqlite3.
+        'ENGINE': '', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '',                      # Or path to database file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
 #		'HOST': '/var/mysql/mysql.sock',
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
@@ -133,6 +133,7 @@ INSTALLED_APPS = (
 	'south',
 	'taggit',
 	'taggit_templatetags',
+	'disqus',
 	'debug_toolbar',	
 )
 
@@ -150,17 +151,20 @@ EMAIL_USE_TLS = True
 
 LOGIN_REDIRECT_URL = "/"
 
-TWITTER_CONSUMER_KEY = "oZpnsipBP1jBhGbPp5eCUA"
-TWITTER_CONSUMER_SECRET = "pi48qgRK2O0SmOlpWIDZtFsFh6AlaAcGY6IOyeY7IE"
-TWITTER_ACCESS_KEY = "307415363-Lb84FJbNjH6zyUSpDL0YYY9ovp8CQiIDXWbv5TcR"
-TWITTER_ACCESS_SECRET = "GXZBz82nLkytDbnFaU1nHrNhavCuhnKTFx3ACS59k"
+TWITTER_CONSUMER_KEY = ""
+TWITTER_CONSUMER_SECRET = ""
+TWITTER_ACCESS_KEY = ""
+TWITTER_ACCESS_SECRET = ""
 
-BITLY_USER = "readsr"
-BITLY_KEY = "R_8b4787749bdbc284709fc4dca825cc9b"
+BITLY_USER = ""
+BITLY_KEY = ""
 
 TWEEPY_CACHE_DIR = os.path.join(ROOT_PATH, 'tweepy_cache')
  
 TWEEPY_CACHE = tweepy.cache.FileCache(TWEEPY_CACHE_DIR, 3600)
+
+DISQUS_API_KEY = ''
+DISQUS_WEBSITE_SHORTNAME = ''
 
 # Override the absolute url for django user objects to use the profiles app
 # detail page, per the instructions in the django-registration simple-backend docs.
