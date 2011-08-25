@@ -14,6 +14,15 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
+    'default': {
+        'ENGINE': '', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '',                      # Or path to database file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+#		'HOST': '/var/mysql/mysql.sock',
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
 }
 
 # Local time zone for this installation. Choices can be found here:
@@ -123,6 +132,7 @@ INSTALLED_APPS = (
 	'south',
 	'taggit',
 	'taggit_templatetags',
+	'disqus',
 	'debug_toolbar',	
 )
 
@@ -151,6 +161,9 @@ BITLY_KEY = ""
 TWEEPY_CACHE_DIR = os.path.join(ROOT_PATH, 'tweepy_cache')
  
 TWEEPY_CACHE = tweepy.cache.FileCache(TWEEPY_CACHE_DIR, 3600)
+
+DISQUS_API_KEY = ''
+DISQUS_WEBSITE_SHORTNAME = ''
 
 # Override the absolute url for django user objects to use the profiles app
 # detail page, per the instructions in the django-registration simple-backend docs.

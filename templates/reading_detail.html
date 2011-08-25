@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load disqus_tags %}
+{% disqus_dev %}
 
 {% block title %}
 {{ block.super }} - {{ reading.series.title.title }} - {{ reading.start_time }}
@@ -23,6 +25,10 @@
     </div>
 </div>
 
+{% set_disqus_developer 0 %}
+{% set_disqus_url reading.get_absolute_url %}
+{% set_disqus_identifier reading.id %}
+{% disqus_show_comments %}
  
 {% endblock content %}
 
