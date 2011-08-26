@@ -41,6 +41,7 @@ urlpatterns = patterns('',
 
     # Include the urls for the series app.
     (r'^', include('series.urls')),
+    url(r'', include('social_auth.urls')),
     
 )
 
