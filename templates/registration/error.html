@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block heading %}Error!{% endblock %}
+
+{% block content %}
+<div>
+  <p>Sorry but some error prevented you from logging in that way.</p>
+  {% if error_msg %}
+    <p>Details:</p>
+    <p class="error">{{ error_msg }}</p>
+  {% endif %}
+  <p>Please try again. <a href="{% url index %}">Home</a></p>
+</div>
+{% endblock %}

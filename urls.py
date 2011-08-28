@@ -4,6 +4,7 @@ from django.contrib.auth.views import login, logout
 from registration import backends, views
 
 from series.forms import FullNameRegistrationForm
+from series.views import error as series_error
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -20,6 +21,7 @@ urlpatterns = patterns('',
         views.register,
         { 'backend': 'registration.backends.default.DefaultBackend', 'form_class': FullNameRegistrationForm },
         name='registration_register' ),
+    url(r'^accounts/error/$', series_error),
 
     # Include the URLs from django-registration.
     (r'^accounts/', include('registration.backends.default.urls')),

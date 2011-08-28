@@ -697,3 +697,11 @@ def edit_user_series(request, contact_id=None):
     formset = SeriesFormSet(queryset=Series.objects.filter(contact__exact=contact_id))
     
     return render_to_response("edit_all_series.html", { 'formset': formset }, context_instance=RequestContext(request))
+
+def error(request):
+    """Error view for logging in. TODO this should probably go somewhere else."""
+    error_msg = request.session.pop(settings.SOCIAL_AUTH_ERROR_KEY, None)
+    from social_auth import __version__ as version
+    return render_to_response('registration/error.html', {'version': version,
+                                             'error_msg': error_msg},
+                              RequestContext(request))
