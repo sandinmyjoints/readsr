@@ -133,6 +133,7 @@ INSTALLED_APPS = (
 	'swingtime',
 	'south',
 	'taggit',
+	'tastypie',
 	'taggit_templatetags',
 	'disqus',
 	'debug_toolbar',	

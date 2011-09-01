@@ -3,12 +3,23 @@ from django.contrib.auth.views import login, logout
 
 from registration import backends, views
 
+from tastypie.api import Api
+
 from series.forms import FullNameRegistrationForm
 from series.views import error as series_error
+from reading.api import ReadingResource
+from series.api import SeriesResource, UserResource, ContactResource
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
+
+v1_api = Api(api_name='v1')
+v1_api.register(ReadingResource())
+v1_api.register(ContactResource())
+v1_api.register(UserResource())
+v1_api.register(SeriesResource())
+
 
 urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
@@ -44,6 +55,7 @@ urlpatterns = patterns('',
     # Include the urls for the series app.
     (r'^', include('series.urls')),
     url(r'', include('social_auth.urls')),
+    url(r'^api/', include(v1_api.urls)),
     
 )
 
