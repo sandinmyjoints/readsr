@@ -10,7 +10,7 @@
 </div>
 
 <p>This site strives to be a <strong>comprehensive list of all literary reading series in and around {{ city_site.city }}, {{ city_site.state }}</strong>. If you know of a reading
-series that isn't listed here, please <a href="../edit/">add it</a>. Or if one of the reading series needs to be updated, go ahead and do that. We're counting on your help!</p>
+series that isn't listed here, please <a href="{% url create-series %}">add it</a>. Or if one of the reading series needs to be updated, go ahead and do that. We're counting on your help!</p>
 <p>Please contact us with any questions.</p>
 	<form action="" method="post">
 		{% csrf_token %}
@@ -24,5 +24,17 @@ series that isn't listed here, please <a href="../edit/">add it</a>. Or if one o
 	{% if message_success %}
 	Thanks for sending your message.
 	{% endif %}
+	<hr style="margin: 1em" />
+	<h2>API</h2>
+	<p>Readsr offers an API for retrieving information about Series and Readings. Currently, <span class="url">GET</span> requests are supported, and the API is read-only.</p>
+	<ul class="api">
+	<li>The Series endpoint is <span class="url">api/v1/series/&lt;series id&gt;/</span>. </li>
+	<li>The Reading endpoint is <span class="url">api/v1/reading/&lt;reading id&gt;/</span>.</li>
+	</ul>
+	<p>Formats can be requested through the <span class="url">format</span> parameter. Valid formats are:</p>
+	<ul class="api">
+		<li><span class="url">json</span></li>
+		<li><span class="url">xml</span></li>
+	</ul>
 {% endblock content %}
 

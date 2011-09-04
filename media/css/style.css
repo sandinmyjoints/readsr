@@ -1055,3 +1055,18 @@ table.recurring_form { border-collapse: collapse; font-size: 1em; }
     float: left;
     padding-left: 6px;
 }
+
+ul.api {
+    list-style-type: circle;
+    padding: .5em;
+}
+
+ul.api li {
+    list-style-type: circle;
+    position: relative;
+    left: 1.5em;
+}
+
+.url {
+    font-family: "Courier new", courier;
+}
