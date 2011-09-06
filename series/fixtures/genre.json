@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "series.genre", "fields": {"genre": "F", "updated_on": null, "created_on": null}}, {"pk": 2, "model": "series.genre", "fields": {"genre": "P", "updated_on": null, "created_on": null}}, {"pk": 3, "model": "series.genre", "fields": {"genre": "N", "updated_on": null, "created_on": null}}]

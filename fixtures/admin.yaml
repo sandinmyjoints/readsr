@@ -1,0 +1,8 @@
+- model: auth.user
+  pk: 1
+  fields:
+    first_name: Admin
+    last_name: User
+    username: admin
+    email: william.bert@gmail.com
+    password: ""

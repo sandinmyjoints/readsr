@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "sites.site", "fields": {"domain": "127.0.0.1:8000", "name": "Test, DC"}}, {"pk": 3, "model": "sites.site", "fields": {"domain": "dc.readsrs.com", "name": "Washington, DC"}}, {"pk": 4, "model": "sites.site", "fields": {"domain": "ny.readsrs.com", "name": "New York, NY"}}, {"pk": 2, "model": "sites.site", "fields": {"domain": "readsrs.com", "name": "WWW"}}]
